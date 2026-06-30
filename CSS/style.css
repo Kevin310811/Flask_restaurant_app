@@ -1,0 +1,526 @@
+/* =====================
+   HERO
+   ===================== */
+.image-layering {
+    position: relative;
+    text-align: center;
+    color: var(--color);
+}
+
+.hero-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    background-color: var(--background-color);
+    border-bottom: var(--border);
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    margin-bottom: 48px;
+}
+
+.text-content-hero > h1 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    width: 100%;
+    backdrop-filter: blur(2px);
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+}
+
+.text-content-hero > p {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    width: 75%;
+    backdrop-filter: blur(2px);
+    font-weight: var(--font-weight-paragraph);
+}
+
+.text-content-hero > a {
+    position: absolute;
+    font-size: 18px;
+    font-weight: var(--font-weight-paragraph);
+    border: var(--border);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+    color: var(--color);
+    transition: ease box-shadow .3s;
+    backdrop-filter: blur(2px);
+}
+
+@media (hover: hover) {
+    .text-content-hero > a:hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .text-content-hero > a:active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+/* =====================
+   UTILITIES
+   ===================== */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    pointer-events: none;
+}
+
+/* =====================
+   FOOD GALLERY
+   ===================== */
+.food-gallery {
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    gap: 20px;
+    margin-bottom: 48px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: var(--border);
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.card > img {
+    height: 300px;
+    object-fit: cover;
+    image-rendering: optimizeSpeed;
+}
+
+.card-content {
+    color: var(--color);
+    padding: 16px;
+}
+
+.card-content > h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: var(--font-weight-heading);
+    font-family: var(--font-family-heading);
+    color: #f5c542;
+}
+
+.card-content > p {
+    font-size: 18px;
+    margin: 0;
+    font-weight: var(--font-weight-paragraph);
+}
+
+/* =====================
+   DINE WITH US
+   ===================== */
+.dine-with-us {
+    color: var(--color);
+    margin: 0 20px 48px;
+}
+
+.dine-with-us > h1 {
+    font-size: 36px;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+    margin-bottom: 16px;
+    color: #f5c542;
+}
+
+.content-dinewithus {
+    display: flex;
+    position: relative;
+}
+
+.content-dinewithus > img {
+    width: 100%;
+    object-fit: cover;
+    border: var(--border);
+    border-radius: 12px;
+    height: 500px;
+    object-position: 0px -1250px;
+    image-rendering: optimizeSpeed;
+}
+
+.content-dinewithus > p {
+    font-size: 18px;
+    border: var(--border);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin-bottom: 0;
+    bottom: 0;
+    padding: 10px;
+    position: absolute;
+    backdrop-filter: blur(2px);
+    font-weight: var(--font-weight-paragraph);
+}
+
+.menu-cta {
+    margin: 16px;
+    font-size: 18px;
+    font-weight: var(--font-weight-paragraph);
+    border: var(--border);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: ease box-shadow 0.3s;
+    position: absolute;
+    text-decoration: none;
+    color: var(--color);
+}
+
+@media (hover: hover) {
+    .menu-cta:hover {
+        box-shadow: 3px 3px white;
+        backdrop-filter: blur(2px);
+    }
+}
+
+@media (hover: none) {
+    .menu-cta:active {
+        box-shadow: 3px 3px white;
+        backdrop-filter: blur(2px);
+    }
+}
+
+/* =====================
+   LOCATIONS
+   ===================== */
+.locations {
+    color: var(--color);
+    margin: 0 20px 48px;
+}
+
+.locations > h1 {
+    font-size: 36px;
+    font-weight: var(--font-weight-heading);
+    font-family: var(--font-family-heading);
+    margin-bottom: 16px;
+    color: #f5c542;
+}
+
+.location-content {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+}
+
+.location-content > iframe {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 450px;
+    border-radius: 12px;
+    border: var(--border);
+}
+
+.address {
+    flex: 0 0 calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.address > p {
+    font-size: 18px;
+    font-weight: var(--font-weight-paragraph);
+    border: var(--border);
+    padding: 10px;
+    border-radius: 12px;
+    margin: 0;
+}
+
+.address > p > b {
+    color: #f5c542;
+}
+
+/* =====================
+   FOOTER
+   ===================== */
+footer {
+    position: relative;
+    color: var(--color);
+    overflow: hidden;
+}
+
+footer > img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: 0px -400px;
+    border-top: 2px solid white;
+    image-rendering: optimizeSpeed;
+    filter: blur(4px);
+}
+
+footer > h1 {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    padding-left: 16px;
+    border-bottom: var(--border);
+    font-size: 64px;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+}
+
+.quick-links {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    padding-left: 16px;
+    border-bottom: var(--border);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding-bottom: 24px;
+    width: 50%;
+}
+
+.quick-links > a {
+    text-decoration: none;
+    font-size: 24px;
+    margin: 2px;
+    font-weight: var(--font-weight-paragraph);
+    color: var(--color);
+    transition: color 0.3s ease;
+}
+
+@media (hover: hover) {
+    .quick-links > a:hover {
+        color: #f5c542;
+    }
+}
+
+@media (hover: none) {
+    .quick-links > a:active {
+        color: #f5c542;
+    }
+}
+
+.quick-links-2 {
+    position: absolute;
+    top: 35%;
+    right: 0;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    padding-bottom: 24px;
+    width: 50%;
+    border-bottom: var(--border);
+}
+
+.quick-links-2 > a {
+    text-decoration: none;
+    font-size: 24px;
+    margin: 2px;
+    font-weight: var(--font-weight-paragraph);
+    color: var(--color);
+    transition: color 0.3s ease;
+}
+
+@media (hover: hover) {
+    .quick-links-2 > a:hover {
+        color: #f5c542;
+    }
+}
+
+@media (hover: none) {
+    .quick-links-2 > a:active {
+        color: #f5c542;
+    }
+}
+
+/* =====================
+   RESPONSIVE — TABLET (max 1024px)
+   ===================== */
+@media screen and (max-width: 1024px) {
+    .text-content-hero > h1 {
+        font-size: 64px;
+    }
+
+    .text-content-hero > p {
+        font-size: 20px;
+        width: 85%;
+    }
+
+    .text-content-hero > a {
+        font-size: 16px;
+    }
+
+    .card-content > h1 {
+        font-size: 24px;
+    }
+
+    .card-content > p {
+        font-size: 16px;
+    }
+
+    .dine-with-us > h1,
+    .locations > h1 {
+        font-size: 30px;
+    }
+
+    .content-dinewithus > p {
+        font-size: 16px;
+    }
+
+    .address > p {
+        font-size: 16px;
+    }
+
+    footer > h1 {
+        font-size: 48px;
+    }
+
+    .quick-links > a,
+    .quick-links-2 > a {
+        font-size: 20px;
+    }
+
+    .content-dinewithus {
+        height: 420px;
+    }
+
+    .content-dinewithus > img {
+        height: 420px;
+        object-position: 0px -600px;
+    }
+
+    footer {
+        height: 300px;
+    }
+
+    footer > img {
+        height: 300px;
+    }
+}
+
+/* =====================
+   RESPONSIVE — MOBILE (max 768px)
+   ===================== */
+@media screen and (max-width: 768px) {
+    /* Hero */
+    .text-content-hero > h1 {
+        font-size: 48px;
+        top: 35%;
+    }
+
+    .text-content-hero > p {
+        font-size: 16px;
+        width: 90%;
+        top: 62%;
+    }
+
+    .text-content-hero > a {
+        font-size: 14px;
+        padding: 8px 16px;
+        top: 78%;
+    }
+
+    /* Food gallery — single column */
+    .food-gallery {
+        flex-direction: column;
+        padding: 0 12px;
+    }
+
+    .card > img {
+        height: 220px;
+    }
+
+    /* Dine with us */
+    .dine-with-us {
+        margin: 0 12px 32px;
+    }
+
+    .dine-with-us > h1,
+    .locations > h1 {
+        font-size: 28px;
+    }
+
+    .content-dinewithus {
+        height: 360px;
+    }
+
+    .content-dinewithus > img {
+        height: 360px;
+        object-position: 0px -100px;
+    }
+
+    .content-dinewithus > p {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .menu-cta {
+        font-size: 14px;
+        padding: 8px 14px;
+    }
+
+    /* Locations */
+    .locations {
+        margin: 0 12px 32px;
+    }
+
+    .location-content {
+        flex-direction: column;
+    }
+
+    .location-content > iframe {
+        flex: none;
+        width: 100%;
+        height: 300px;
+    }
+
+    .address {
+        flex: none;
+        width: 100%;
+    }
+
+    .address > p {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    /* Footer */
+    footer > img {
+        height: 300px;
+        object-position: -30px 0;
+    }
+
+    footer > h1 {
+        font-size: 36px;
+    }
+
+    .quick-links > a,
+    .quick-links-2 > a {
+        font-size: 16px;
+    }
+}

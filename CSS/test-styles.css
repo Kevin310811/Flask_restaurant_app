@@ -1,0 +1,127 @@
+:root {
+    --post-nav-padding: 160px;
+}
+
+.menu {
+    padding-top: var(--post-nav-padding);
+    color: var(--color);
+}
+
+.filter-list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 30px;
+    gap: 12px;
+    list-style-type: none;
+}
+
+.filter {
+    color: var(--color);
+    padding: 12px;
+    border-radius: 12px;
+    border: var(--border);
+    font-weight: 600;
+    font-family: var(--font-family-heading);
+    font-size: 18px;
+    background-color: var(--background-color);
+}
+
+.filter input {
+  accent-color: #000000; 
+}
+
+.filter input:hover {
+    cursor: pointer;
+}
+
+.filter:has(input:checked) {
+  background-color: var(--color);
+  color: var(--background-color);
+}
+
+/* .filter:hover {
+    background-color: var(--color);
+    color: var(--background-color);
+} */
+
+.menu-sidebar {
+    background-color: var(--background-color);
+    border-right: 1px solid var(--color);
+    color: var(--color);
+    height: 100vh;
+    width: 20vw;
+    position: fixed;
+    top: 0;
+    padding-top: var(--post-nav-padding);
+}
+
+.menu-title {
+    font-family: var(--font-family-paragraph);
+    font-weight: var(--font-family-paragraph);
+    /* font-style: italic; */
+}
+
+.item-cards {
+    margin-left: 22vw;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2vw;
+    gap: 10px;
+    justify-content: space-evenly;
+}
+
+.item {
+    color: white;
+    border: 1px solid white;
+    border-radius: 12px;
+    width: min-content;
+    margin-bottom: 1vh;
+}
+
+.item-text h1 {
+    font-family: var(--font-family-heading);
+    font-size: 40px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.item-text p {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.item img {
+    width: 20vw;
+    height: 20vw;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.qty-btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin: 10px;
+}
+
+.qty-btn button {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    color: var(--color);
+    background-color: var(--background-color);
+    border: var(--border);
+    border-radius: 4px;
+}
+
+.qty-btn button:active {
+    background-color: var(--color);
+    color: var(--background-color);
+} 
+
+.qty-btn p {
+    font-family: var(--font-family-heading);
+    margin-bottom: 10px;
+}

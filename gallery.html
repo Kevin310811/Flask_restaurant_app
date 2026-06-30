@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="CSS/nav-styles.css">
+    <link rel="stylesheet" href="CSS/gallery-styles.css">
+    <link rel="icon" type="image/x-icon" href="Images/favicon.png">
+</head>
+
+<body>
+    <nav>
+        <h1 class="logo"><a href="index.html">Restaurant Logo</a></h1>
+        <ul>
+            <li class="page-label"><a href="reservations.html">Reservations</a></li>
+            <li class="page-label"><a href="order.html">Order</a></li>
+            <li class="page-label"><a href="gallery.html">Gallery</a></li>
+            <li class="page-label"><a href="#">About</a></li>
+            <li onclick=showSidebar() class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
+                        viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                        <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
+                    </svg></a></li>
+        </ul>
+
+        <div class="sidebar">
+            <ul>
+                <li onclick=hideSidebar() class="sidebar-item"><a href="#"><svg xmlns="http://www.w3.org/2000/svg"
+                            height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                            <path
+                                d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
+                        </svg></a></li>
+                <li class="sidebar-item"><a href="reservations.html">Reservations</a></li>
+                <li class="sidebar-item"><a href="order.html">Order</a></li>
+                <li class="sidebar-item"><a href="#">Gallery</a></li>
+                <li class="sidebar-item"><a href="#">About</a></li>
+            </ul>
+        </div>
+
+    </nav>
+
+    <section class="gallery">
+        <h1>Our Best Moments</h1>
+        <div class="carousels">
+            <div class="carousel">
+                <div class="image-set">
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h1>Our Food</h1>
+        <div class="carousels">
+            <div class="carousel">
+                <div class="image-set">
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h1>Our Restaurant</h1>
+        <div class="carousels">
+            <div class="carousel">
+                <div class="image-set">
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden>
+                    <div class="carousel-item">
+                        <img src="Images/chai.jpg" alt="">
+                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/lassi.jpg" alt="">
+                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/gulabjamun.jpg" alt="">
+                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Images/rasgulla.jpg" alt="">
+                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <img src="Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg" alt="food" class="no-select">
+        <h1>Restaurant Logo</h1>
+        <div class="quick-links">
+            <a href="reservations.html">Reservations</a>
+            <a href="order.html">Menu</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="#">About</a>
+        </div>
+        <div class="quick-links-2">
+            <a href="https://youtube.com">Youtube</a>
+            <a href="https://instagram.com">Instagram</a>
+            <a href="https://facebook.com">Facebook</a>
+            <a href="#" target="_blank">Link 4</a>
+        </div>
+    </footer>
+    <script src="JS/gallery.js"></script>
+</body>
+
+</html>

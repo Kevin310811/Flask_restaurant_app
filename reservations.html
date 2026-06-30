@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/reservations.css">
+    <link rel="stylesheet" href="CSS/nav-styles.css">
+    <link rel="icon" type="image/x-icon" href="Images/favicon.png">
+</head>
+<body>
+
+    <div class="blur-filter">
+        <!-- <div class="card-modal">
+            <h1 class="card-title">Reservation for ${fullName}</h1>
+            <ul class="card-details">
+                <li class="card-details-li" id="dateTime">Time: ${formattedDate}</li>
+                <li class="card-details-li" id="phone">Phone Number: ${phoneNumber}</li>
+                <li class="card-details-li" id="qty-people">Number of people: ${numberOfPeople}</li>
+                <li class="card-details-li" id="email-add">Email: ${emailAddress}</li>
+            </ul>
+            <button id="confirm">Confirm</button>
+            <button id="deny">Deny</button> 
+        </div> -->
+    </div>
+   <nav>
+        <h1 class="logo"><a href="index.html">Restaurant Logo</a></h1>
+        <ul>
+            <li class="page-label"><a href="reservations.html">Reservations</a></li>
+            <li class="page-label"><a href="order.html">Order</a></li>
+            <li class="page-label"><a href="gallery.html">Gallery</a></li>
+            <li class="page-label"><a href="#">About</a></li>
+            <li onclick=showSidebar() class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF"><path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"/></svg></a></li>
+        </ul>
+
+        <div class="sidebar">
+            <ul>
+            <li onclick=hideSidebar() class="sidebar-item"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg></a></li>    
+            <li class="sidebar-item"><a href="reservations.html">Reservations</a></li>
+            <li class="sidebar-item"><a href="order.html">Order</a></li>
+            <li class="sidebar-item"><a href="gallery.html">Gallery</a></li>
+            <li class="sidebar-item"><a href="#">About</a></li>
+        </ul>
+        </div>
+        
+    </nav>
+
+    <hero>
+        <div class="image-layering">
+        <img src="Images/piotr-szulawski-DCmUhk54F6M-unsplash.jpg" alt="food" class="hero-img" class="no-select">
+        <div class="text-content-hero">
+        <h1>Reservations</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur temporibus sit voluptatem, eum odit doloremque tempore facere aliquid, nam dolores blanditiis quae.</p>
+        </div>
+    </div>
+    </hero>
+
+    <section class="reserve-now">
+        <h1>Make a reservation now:</h1>
+        <form method="POST" name="reserve" id="form" netlify>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" placeholder="Your first name"required><br>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" placeholder="Your last name" required><br>
+            <label for="phoneNumber">Enter your phone number:</label>
+            <input type="tel" id="phoneNumber" placeholder="123-456-789" required><br>
+            <label for="numberOfPeople">Number of people:</label>
+            <input type="number" min="1" max="12" id="numberOfPeople" value="1" required><br>
+            <label for="time">Enter the time:</label>
+            <input type="datetime-local" id="time" max="2025-10-31T17:00" min="2025-09-30T09:00" required><br>
+            <label for="email">Enter your Email:</label>
+            <input type="email" id="email" placeholder="__________@email.com" required><br>
+            <button type="submit" id="submit">Submit</button>
+        </form>
+
+        <h1>Upcoming Reservations</h1>
+        <div class="upcoming-reservations">
+            <p id="has-reservation">No Reservations yet</p>
+
+            
+        <div id="reservations">
+            <!-- <div class="reservation-card">
+                <h1 class="card-title">Reservation for ${fullName}</h1>
+                <ul class="card-details">
+                    <li class="card-details-li" id="dateTime">Time: ${formattedDate}</li>
+                    <li class="card-details-li" id="phone">Phone Number: ${phoneNumber}</li>
+                    <li class="card-details-li" id="qty-people">Number of people: ${numberOfPeople}</li>
+                    <li class="card-details-li" id="email-add">Email: ${emailAddress}</li>
+                </ul>
+            </div> -->
+        </div>
+        </div>
+
+        </div>
+
+    </section>
+
+    <section class="locations">
+        <h1>Our locations:</h1>
+        <div class="location-content">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="address">
+                    <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
+                    <p><b>Location 2:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
+                    <p><b>Location 3:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
+                </div>
+            </div>
+    </section>
+
+    <footer>
+        <img src="Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg" alt="food" class="no-select">
+        <h1>Restaurant Logo</h1>
+        <div class="quick-links">
+            <a href="reservations.html">Reservations</a>
+            <a href="order.html">Menu</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="#">About</a>
+        </div>
+        <div class="quick-links-2">
+            <a href="https://youtube.com" target="_blank">Youtube</a>
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+            <a href="#" target="_blank">Link 4</a>
+        </div>
+    </footer>
+
+
+
+    <script src="JS/main.js"></script>
+
+</body>
+</html>
