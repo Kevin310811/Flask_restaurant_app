@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurant{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/nav-styles.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+    <nav>
+        <h1 class="logo"><a href="{{ url_for('main.index') }}">Restaurant Logo</a></h1>
+        <ul>
+            <li class="page-label"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
+            <li class="page-label"><a href="{{ url_for('menu.order') }}">Order</a></li>
+            <li class="page-label"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
+            <li class="page-label"><a href="#">About</a></li>
+            <li onclick="showSidebar()" class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
+                        viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                        <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
+                    </svg></a></li>
+        </ul>
+
+        <div class="sidebar">
+            <ul>
+                <li onclick="hideSidebar()" class="sidebar-item"><a href="#"><svg xmlns="http://www.w3.org/2000/svg"
+                            height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                            <path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
+                        </svg></a></li>
+                <li class="sidebar-item"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
+                <li class="sidebar-item"><a href="{{ url_for('menu.order') }}">Order</a></li>
+                <li class="sidebar-item"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
+                <li class="sidebar-item"><a href="#">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="food" class="no-select">
+        <h1>Restaurant Logo</h1>
+        <div class="quick-links">
+            <a href="{{ url_for('main.reservations') }}">Reservations</a>
+            <a href="{{ url_for('menu.order') }}">Menu</a>
+            <a href="{{ url_for('main.gallery') }}">Gallery</a>
+            <a href="#">About</a>
+        </div>
+        <div class="quick-links-2">
+            <a href="#">Youtube</a>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
