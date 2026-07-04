@@ -1,51 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/nav-styles.css">
-    <link rel="stylesheet" href="CSS/payment-style.css">
-    <link rel="icon" type="image/x-icon" href="Images/favicon.png">
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <nav>
-        <h1 class="logo"><a href="index.html">Restaurant Logo</a></h1>
-        <ul>
-            <li class="page-label"><a href="reservations.html">Reservations</a></li>
-            <li class="page-label"><a href="order.html">Order</a></li>
-            <li class="page-label"><a href="gallery.html">Gallery</a></li>
-            <li class="page-label"><a href="#">About</a></li>
-            <li onclick=showSidebar() class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
-                        viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
-                        <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
-                    </svg></a></li>
-        </ul>
+{% block title %}Payment{% endblock %}
 
-        <div class="sidebar">
-            <ul>
-                <li onclick=hideSidebar() class="sidebar-item"><a href="#"><svg xmlns="http://www.w3.org/2000/svg"
-                            height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
-                            <path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
-                        </svg></a></li>
-                <li class="sidebar-item"><a href="reservations.html">Reservations</a></li>
-                <li class="sidebar-item"><a href="order.html">Order</a></li>
-                <li class="sidebar-item"><a href="#">Gallery</a></li>
-                <li class="sidebar-item"><a href="#">About</a></li>
-            </ul>
-        </div>
-    </nav>
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/payment-style.css') }}">
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
+{% endblock %}
+    
+{% block content %}
 
     <section class="payment-page">
         <div class="payment-box">
 
             <!-- Order Summary -->
             <h2 class="payment-title">Order Summary</h2>
-            <ul id="payment-items"></ul>
+            <ul id="payment-items">
+                {% for item in items %}
+                <li>
+                    <span>{{ item.title }} x{{ item.qty }}</span>
+                    <span>₹{{ "%.2f"|format(item.subtotal) }}</span>
+                </li>
+                {% endfor %}
+            </ul>
 
             <div class="payment-divider"></div>
 
@@ -68,7 +44,7 @@
             <div class="payment-breakdown">
                 <div class="breakdown-row">
                     <span>Subtotal</span>
-                    <span id="payment-subtotal">₹0.00</span>
+                    <span id="payment-subtotal">₹{{ "%.2f"|format(subtotal) }}</span>
                 </div>
                 <div class="breakdown-row">
                     <span>Tip</span>
@@ -76,7 +52,7 @@
                 </div>
                 <div class="breakdown-row breakdown-total">
                     <span>Total</span>
-                    <span id="payment-total">₹0.00</span>
+                    <span id="payment-total">₹{{ "%.2f"|format(subtotal) }}</span>
                 </div>
             </div>
 
@@ -84,31 +60,16 @@
 
             <!-- Action Buttons -->
             <div class="payment-actions">
-                <button id="edit-order-btn">Edit Order</button>
-                <button id="pay-btn">Pay Now</button>
+                <button id="edit-order-btn" onclick="window.location.href='{{ url_for('menu.order') }}'">Edit Order</button>
+                <button id="pay-btn" data-subtotal="{{ subtotal }}">Pay Now</button>
             </div>
 
         </div>
     </section>
 
-    <footer>
-        <img src="Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg" alt="food" class="no-select">
-        <h1>Restaurant Logo</h1>
-        <div class="quick-links">
-            <a href="#">Reservations</a>
-            <a href="#">Menu</a>
-            <a href="#">Gallery</a>
-            <a href="#">About</a>
-        </div>
-        <div class="quick-links-2">
-            <a href="#">Youtube</a>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="">link 4</a>
-        </div>
-    </footer>
+{% endblock %}
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="JS/payment.js"></script>
-</body>
-</html>
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{{ url_for('static', filename='JS/payment.js') }}" defer></script>
+{% endblock %}

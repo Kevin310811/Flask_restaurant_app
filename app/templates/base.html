@@ -41,22 +41,23 @@
 
     {% block content %}{% endblock %}
 
-    <footer>
-        <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="food" class="no-select">
-        <h1>Restaurant Logo</h1>
-        <div class="quick-links">
-            <a href="{{ url_for('main.reservations') }}">Reservations</a>
-            <a href="{{ url_for('menu.order') }}">Menu</a>
-            <a href="{{ url_for('main.gallery') }}">Gallery</a>
-            <a href="#">About</a>
-        </div>
-        <div class="quick-links-2">
-            <a href="#">Youtube</a>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-        </div>
-    </footer>
-
+{% block footer %}
+<footer>
+    <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="food" class="no-select">
+    <h1>Restaurant Logo</h1>
+    <div class="quick-links">
+        <a href="{{ url_for('main.reservations') }}">Reservations</a>
+        <a href="{{ url_for('menu.order') }}">Menu</a>
+        <a href="{{ url_for('main.gallery') }}">Gallery</a>
+        <a href="#">About</a>
+    </div>
+    <div class="quick-links-2">
+        <a href="#">Youtube</a>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+    </div>
+</footer>
+{% endblock %}
     <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
