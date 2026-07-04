@@ -79,7 +79,12 @@ function display_food() {
         const card = document.createElement("div");
         card.className = "item";
         card.innerHTML = `
-            <img src="/static/${item.image}" alt="">
+            <div class="item-image" style="background-image: url('/static/${item.image}')">
+                <div class="item-image-overlay">
+                    <p class="item-image-category">${item.category.toUpperCase()}</p>
+                    ${item.type ? `<p class="item-image-type ${item.type}">${item.type}</p>` : ''}
+                </div>
+            </div>
             <div class="item-text">
                 <h1>${item.title}</h1>
                 <p>${item.desc}</p>
