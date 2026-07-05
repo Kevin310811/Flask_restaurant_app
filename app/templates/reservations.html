@@ -23,21 +23,59 @@
 
     <section class="reserve-now">
         <h1>Make a reservation now:</h1>
-        <form method="POST" name="reserve" id="form">
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" placeholder="Your first name" required><br>
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" placeholder="Your last name" required><br>
-            <label for="phoneNumber">Phone:</label>
-            <input type="tel" id="phoneNumber" placeholder="123-456-789" required><br>
-            <label for="numberOfPeople">Number of people:</label>
-            <input type="number" min="1" max="12" id="numberOfPeople" value="1" required><br>
-            <label for="time">Time:</label>
-            <input type="datetime-local" id="time" required><br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="__________@email.com" required><br>
-            <button type="submit" id="submit">Submit</button>
-        </form>
+        <div class="reservation-form-wrapper">
+
+            <!-- Left: Personal Details -->
+            <div class="form-left">
+                <form id="form">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="Your first name" required>
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" placeholder="Your last name" required>
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" placeholder="123-456-789" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="__________@email.com" required>
+                    <label for="numberOfPeople">Number of People</label>
+                    <input type="number" min="1" max="12" id="numberOfPeople" value="1" required>
+                    <button type="submit" id="submit">Reserve Now</button>
+                </form>
+            </div>
+
+            <!-- Right: Time Slot Picker -->
+            <div class="form-right">
+                <div class="slot-card">
+
+                    <!-- Date Picker -->
+                    <div class="slot-date-picker">
+                        <button id="prev-day" type="button">&#8592;</button>
+                        <div class="slot-date-display">
+                            <p id="slot-date-label">Select a date</p>
+                            <input type="date" id="slot-date-input">
+                        </div>
+                        <button id="next-day" type="button">&#8594;</button>
+                    </div>
+
+                    <!-- AM/PM Toggle -->
+                    <div class="slot-period-toggle">
+                        <button class="period-btn active" id="btn-am" type="button">AM</button>
+                        <button class="period-btn" id="btn-pm" type="button">PM</button>
+                    </div>
+
+                    <!-- Slot Grid -->
+                    <div class="slot-grid" id="slot-grid">
+                        <p class="slot-placeholder">Pick a date to see available slots</p>
+                    </div>
+
+                    <!-- Selected slot display -->
+                    <div class="slot-selected" id="slot-selected" style="display:none;">
+                        <p>Selected: <span id="slot-selected-label"></span></p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
 
         <h1>Upcoming Reservations</h1>
         <div class="upcoming-reservations">
@@ -60,7 +98,6 @@
                 <div id="reservations"></div>
             {% endif %}
         </div>
-
     </section>
 
     <section class="locations">
@@ -68,9 +105,9 @@
         <div class="location-content">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="address">
-                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae.</p>
-                <p><b>Location 2:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi?</p>
-                <p><b>Location 3:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi?</p>
+                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
+                <p><b>Location 2:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
+                <p><b>Location 3:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
             </div>
         </div>
     </section>

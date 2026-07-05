@@ -1,15 +1,15 @@
 from flask import Blueprint, render_template, request, jsonify, session
 from app.models import db, Reservation
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 main_bp = Blueprint('main', __name__)
 
-SLOT_INTERVAL_MINUTES = 15
+SLOT_INTERVAL_MINUTES = 20
 MAX_RESERVATIONS_PER_SLOT = 2
 MAX_PEOPLE_PER_SLOT = 10
 OPENING_HOUR = 8
-OPENING_MINUTE = 30
+OPENING_MINUTE = 40
 CLOSING_HOUR = 23
 
 def get_session_id():
@@ -36,6 +36,51 @@ def is_slot_available(slot_time, people):
 
     return True, None
 
+@main_bp.route('/api/slots')
+def get_slots():
+    date_str = request.args.get('date')
+    period = request.args.get('period', 'AM')
+
+    try:
+        selected_date = datetime.strptime(date_str, '%Y-%m-%d')
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid date"}), 400
+
+    if period == 'AM':
+        start = selected_date.replace(hour=8, minute=40, second=0, microsecond=0)
+        end = selected_date.replace(hour=12, minute=0, second=0, microsecond=0)
+    else:
+        start = selected_date.replace(hour=12, minute=0, second=0, microsecond=0)
+        end = selected_date.replace(hour=23, minute=0, second=0, microsecond=0)
+
+    slots = []
+    current = start
+
+    while current < end:
+        existing = Reservation.query.filter_by(
+            slot_time=current,
+            status='confirmed'
+        ).all()
+
+        total_people = sum(r.people for r in existing)
+        reservations_count = len(existing)
+
+        available = (
+            reservations_count < MAX_RESERVATIONS_PER_SLOT and
+            total_people < MAX_PEOPLE_PER_SLOT
+        )
+
+        slots.append({
+            "time": current.strftime('%H:%M'),
+            "display": current.strftime('%I:%M %p'),
+            "available": available,
+            "spots_left": MAX_PEOPLE_PER_SLOT - total_people
+        })
+
+        current += timedelta(minutes=SLOT_INTERVAL_MINUTES)
+
+    return jsonify(slots)
+
 @main_bp.route('/')
 def index():
     return render_template('index.html')
@@ -61,7 +106,7 @@ def reservations():
         closing_minutes = CLOSING_HOUR * 60
 
         if slot_minutes < opening_minutes or slot_minutes >= closing_minutes:
-            return jsonify({"success": False, "error": "Reservations are only available between 8:30 AM and 11:00 PM."}), 400
+            return jsonify({"success": False, "error": "Reservations are only available between 8:40 AM and 11:00 PM."}), 400
 
         if slot_time < datetime.now():
             return jsonify({"success": False, "error": "Please select a future date and time."}), 400
@@ -93,7 +138,6 @@ def reservations():
             "reservation": reservation.to_dict()
         })
 
-    # GET — load existing reservations for this session
     session_id = get_session_id()
     existing_reservations = Reservation.query.filter_by(
         session_id=session_id,

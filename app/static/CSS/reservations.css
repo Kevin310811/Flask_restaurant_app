@@ -519,3 +519,276 @@ footer > h1 {
         font-size: 16px;
     }
 }
+
+
+/* =====================
+   RESERVATION FORM LAYOUT
+   ===================== */
+.reservation-form-wrapper {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 48px;
+    align-items: flex-start;
+}
+
+.form-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-left form {
+    display: flex;
+    flex-direction: column;
+    border: var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 0;
+}
+
+.form-left form label {
+    font-family: var(--font-family-paragraph);
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.form-left form input {
+    font-family: var(--font-family-heading);
+    font-size: 18px;
+    background-color: var(--background-color);
+    color: var(--color);
+    border: var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 16px;
+}
+
+.form-left form button {
+    background-color: var(--background-color);
+    color: var(--color);
+    border: var(--border);
+    font-size: 18px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    align-self: center;
+    margin-top: 8px;
+}
+
+@media (hover: hover) {
+    .form-left form button:hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .form-left form button:active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+.form-right {
+    flex: 1;
+}
+
+/* =====================
+   SLOT CARD
+   ===================== */
+.slot-card {
+    border: var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Date Picker */
+.slot-date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.slot-date-picker button {
+    background: var(--background-color);
+    color: var(--color);
+    border: var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    flex-shrink: 0;
+}
+
+@media (hover: hover) {
+    .slot-date-picker button:hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .slot-date-picker button:active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+.slot-date-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+#slot-date-label {
+    font-family: var(--font-family-heading);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+}
+
+#slot-date-input {
+    background: var(--background-color);
+    color: var(--color);
+    border: var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: var(--font-family-heading);
+    cursor: pointer;
+}
+
+/* AM/PM Toggle */
+.slot-period-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.period-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    font-family: var(--font-family-heading);
+    font-weight: 700;
+    border: var(--border);
+    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--color);
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    letter-spacing: 1px;
+}
+
+.period-btn.active {
+    background: var(--color);
+    color: var(--background-color);
+}
+
+@media (hover: hover) {
+    .period-btn:hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .period-btn:active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+/* Slot Grid */
+.slot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.slot-placeholder {
+    font-size: 16px;
+    opacity: 0.6;
+    font-family: var(--font-family-paragraph);
+    margin: 0;
+}
+
+.slot-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: var(--font-family-heading);
+    border: var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    background: var(--background-color);
+    color: var(--color);
+}
+
+.slot-btn.unavailable {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.slot-btn.selected {
+    background: var(--color);
+    color: var(--background-color);
+}
+
+@media (hover: hover) {
+    .slot-btn:not(.unavailable):hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .slot-btn:not(.unavailable):active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+/* Selected Slot Display */
+.slot-selected {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    border-top: var(--border);
+    padding-top: 12px;
+    color: #f5c542;
+}
+
+.slot-selected p {
+    margin: 0;
+}
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media screen and (max-width: 1024px) {
+    .reservation-form-wrapper {
+        flex-direction: column;
+    }
+
+    .form-right {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .slot-card {
+        padding: 14px;
+    }
+
+    #slot-date-label {
+        font-size: 15px;
+    }
+
+    .slot-btn {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
