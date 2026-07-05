@@ -48,6 +48,10 @@
     background-color: var(--background-color);
 }
 
+.filter:hover {
+    cursor: pointer;
+}
+
 .filter input {
     accent-color: #000000;
 }

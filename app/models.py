@@ -95,3 +95,30 @@ class OrderItem(db.Model):
             "qty": self.qty,
             "subtotal": float(self.price) * self.qty
         }
+
+
+class Reservation(db.Model):
+    __tablename__ = 'reservations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(64), nullable=False, index=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    people = db.Column(db.Integer, nullable=False)
+    slot_time = db.Column(db.DateTime, nullable=False, index=True)
+    status = db.Column(db.String(20), nullable=False, default='confirmed')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "phone": self.phone,
+            "email": self.email,
+            "people": self.people,
+            "slot_time": self.slot_time.strftime('%d %b %Y, %I:%M %p'),
+            "status": self.status
+        }

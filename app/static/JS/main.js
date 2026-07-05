@@ -8,11 +8,9 @@ function hideSidebar() {
     sidebar.style.display = 'none';
 }
 
-// Reservations — only runs on reservations page
 const form = document.getElementById('form');
 if (form) {
 
-    // Set min/max datetime
     const timeInput = document.getElementById('time');
 
     function formatDateForInput(date) {
@@ -35,7 +33,6 @@ if (form) {
     timeInput.min = formatDateForInput(tomorrow);
     timeInput.max = formatDateForInput(maxDate);
 
-    const bookedTimes = [];
     const blurFilter = document.querySelector('.blur-filter');
     const reservationsContainer = document.getElementById('reservations');
     const hasReservation = document.getElementById('has-reservation');
@@ -63,81 +60,96 @@ if (form) {
             return;
         }
 
-        if (bookedTimes.includes(timeValue)) {
-            alert('This time slot is already booked. Please choose another time.');
-            return;
-        }
+        // Preview snapped time in modal
+        const snappedMinutes = Math.floor(selectedTime.getMinutes() / 15) * 15;
+        const snappedTime = new Date(selectedTime);
+        snappedTime.setMinutes(snappedMinutes, 0, 0);
 
-        const fullName = `${firstName} ${lastName}`;
-        const formattedDate = selectedTime.toLocaleString('en-IN', {
+        const formattedDate = snappedTime.toLocaleString('en-IN', {
             dateStyle: 'medium',
             timeStyle: 'short'
         });
 
-        // Show confirmation modal
         blurFilter.style.visibility = 'visible';
         blurFilter.innerHTML = '';
 
         const modal = document.createElement('div');
         modal.className = 'card-modal';
         modal.innerHTML = `
-            <h1 class="card-title">Reservation for ${fullName}</h1>
+            <h1 class="card-title">Reservation for ${firstName} ${lastName}</h1>
             <ul class="card-details">
                 <li class="card-details-li">Time: ${formattedDate}</li>
                 <li class="card-details-li">Phone Number: ${phoneNumber}</li>
                 <li class="card-details-li">Number of people: ${numberOfPeople}</li>
                 <li class="card-details-li">Email: ${emailAddress}</li>
             </ul>
+            <p style="font-size:13px; opacity:0.7; margin-bottom:12px;">
+                Your reservation will be snapped to the nearest 15-minute slot.
+            </p>
             <button class="confirm-btn">Confirm</button>
-            <button class="deny-btn">Deny</button>
+            <button class="deny-btn">Cancel</button>
         `;
 
         blurFilter.appendChild(modal);
 
         modal.querySelector('.confirm-btn').addEventListener('click', async () => {
-            // Save to Flask backend
-            await fetch('/reservations', {
+            const confirmBtn = modal.querySelector('.confirm-btn');
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Saving...';
+
+            const res = await fetch('/reservations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     first_name: firstName,
                     last_name: lastName,
                     phone: phoneNumber,
-                    people: numberOfPeople,
+                    people: parseInt(numberOfPeople),
                     time: timeValue,
                     email: emailAddress
                 })
             });
 
-            bookedTimes.push(timeValue);
+            const data = await res.json();
 
-            const card = document.createElement('div');
-            card.className = 'reservation-card';
-            card.innerHTML = `
-                <h1 class="card-title">Reservation for ${fullName}</h1>
-                <ul class="card-details">
-                    <li class="card-details-li">Time: ${formattedDate}</li>
-                    <li class="card-details-li">Phone: ${phoneNumber}</li>
-                    <li class="card-details-li">People: ${numberOfPeople}</li>
-                    <li class="card-details-li">Email: ${emailAddress}</li>
-                </ul>
-            `;
+            if (data.success) {
+                const r = data.reservation;
 
-            if (hasReservation) hasReservation.style.display = 'none';
-            reservationsContainer.appendChild(card);
+                // Append new card to DOM
+                const card = document.createElement('div');
+                card.className = 'reservation-card';
+                card.innerHTML = `
+                    <h1 class="card-title">Reservation for ${r.first_name} ${r.last_name}</h1>
+                    <ul class="card-details">
+                        <li class="card-details-li">Time: ${r.slot_time}</li>
+                        <li class="card-details-li">Phone: ${r.phone}</li>
+                        <li class="card-details-li">People: ${r.people}</li>
+                        <li class="card-details-li">Email: ${r.email}</li>
+                    </ul>
+                `;
 
-            blurFilter.style.visibility = 'hidden';
-            blurFilter.innerHTML = '';
-            form.reset();
+                if (hasReservation) hasReservation.style.display = 'none';
+                reservationsContainer.appendChild(card);
+
+                blurFilter.style.visibility = 'hidden';
+                blurFilter.innerHTML = '';
+                form.reset();
+            } else {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Confirm';
+                const existing = modal.querySelector('.error-msg');
+                if (existing) existing.remove();
+                const errMsg = document.createElement('p');
+                errMsg.className = 'error-msg';
+                errMsg.style.cssText = 'color: #ff6b6b; font-size:14px; margin-top:10px;';
+                errMsg.textContent = data.error;
+                modal.appendChild(errMsg);
+            }
         });
 
         modal.querySelector('.deny-btn').addEventListener('click', () => {
             blurFilter.style.visibility = 'hidden';
             blurFilter.innerHTML = '';
-
-            if (reservationsContainer.children.length === 0) {
-                if (hasReservation) hasReservation.style.display = 'block';
-            }
         });
     });
 }

@@ -28,21 +28,37 @@
             <input type="text" id="firstName" placeholder="Your first name" required><br>
             <label for="lastName">Last Name:</label>
             <input type="text" id="lastName" placeholder="Your last name" required><br>
-            <label for="phoneNumber">Enter your phone number:</label>
+            <label for="phoneNumber">Phone:</label>
             <input type="tel" id="phoneNumber" placeholder="123-456-789" required><br>
             <label for="numberOfPeople">Number of people:</label>
             <input type="number" min="1" max="12" id="numberOfPeople" value="1" required><br>
-            <label for="time">Enter the time:</label>
+            <label for="time">Time:</label>
             <input type="datetime-local" id="time" required><br>
-            <label for="email">Enter your Email:</label>
+            <label for="email">Email:</label>
             <input type="email" id="email" placeholder="__________@email.com" required><br>
             <button type="submit" id="submit">Submit</button>
         </form>
 
         <h1>Upcoming Reservations</h1>
         <div class="upcoming-reservations">
-            <p id="has-reservation">No Reservations yet</p>
-            <div id="reservations"></div>
+            {% if reservations %}
+                <div id="reservations">
+                    {% for r in reservations %}
+                    <div class="reservation-card">
+                        <h1 class="card-title">Reservation for {{ r.first_name }} {{ r.last_name }}</h1>
+                        <ul class="card-details">
+                            <li class="card-details-li">Time: {{ r.slot_time }}</li>
+                            <li class="card-details-li">Phone: {{ r.phone }}</li>
+                            <li class="card-details-li">People: {{ r.people }}</li>
+                            <li class="card-details-li">Email: {{ r.email }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p id="has-reservation">No Reservations yet</p>
+                <div id="reservations"></div>
+            {% endif %}
         </div>
 
     </section>
@@ -52,9 +68,9 @@
         <div class="location-content">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="address">
-                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
-                <p><b>Location 2:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
-                <p><b>Location 3:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
+                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae.</p>
+                <p><b>Location 2:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi?</p>
+                <p><b>Location 3:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi?</p>
             </div>
         </div>
     </section>
