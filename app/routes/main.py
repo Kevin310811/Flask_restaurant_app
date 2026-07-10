@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify
+from flask_login import login_required, current_user
 from app.models import db, Reservation
 from datetime import datetime, timedelta
-import uuid
 
 main_bp = Blueprint('main', __name__)
 
@@ -12,14 +12,11 @@ OPENING_HOUR = 8
 OPENING_MINUTE = 40
 CLOSING_HOUR = 23
 
-def get_session_id():
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-    return session['session_id']
 
 def snap_to_slot(dt):
     minutes = (dt.minute // SLOT_INTERVAL_MINUTES) * SLOT_INTERVAL_MINUTES
     return dt.replace(minute=minutes, second=0, microsecond=0)
+
 
 def is_slot_available(slot_time, people):
     existing = Reservation.query.filter_by(
@@ -35,6 +32,17 @@ def is_slot_available(slot_time, people):
         return False, f"This time slot can only accommodate {MAX_PEOPLE_PER_SLOT - sum(r.people for r in existing)} more people."
 
     return True, None
+
+
+@main_bp.route('/')
+def index():
+    return render_template('index.html')
+
+
+@main_bp.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
+
 
 @main_bp.route('/api/slots')
 def get_slots():
@@ -81,15 +89,9 @@ def get_slots():
 
     return jsonify(slots)
 
-@main_bp.route('/')
-def index():
-    return render_template('index.html')
-
-@main_bp.route('/gallery')
-def gallery():
-    return render_template('gallery.html')
 
 @main_bp.route('/reservations', methods=['GET', 'POST'])
+@login_required
 def reservations():
     if request.method == 'POST':
         data = request.get_json()
@@ -120,7 +122,7 @@ def reservations():
             return jsonify({"success": False, "error": error}), 409
 
         reservation = Reservation(
-            session_id=get_session_id(),
+            user_id=current_user.id,
             first_name=data.get('first_name', '').strip(),
             last_name=data.get('last_name', '').strip(),
             phone=data.get('phone', '').strip(),
@@ -138,9 +140,8 @@ def reservations():
             "reservation": reservation.to_dict()
         })
 
-    session_id = get_session_id()
     existing_reservations = Reservation.query.filter_by(
-        session_id=session_id,
+        user_id=current_user.id,
         status='confirmed'
     ).order_by(Reservation.slot_time).all()
 

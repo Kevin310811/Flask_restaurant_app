@@ -27,6 +27,12 @@ async function fetchMenu() {
     }
 
     const res = await fetch(`/api/menu?${params.toString()}`);
+
+    if (res.status === 401 || res.redirected) {
+        window.location.href = '/login';
+        return;
+    }
+
     foodItems = await res.json();
     display_food();
 }

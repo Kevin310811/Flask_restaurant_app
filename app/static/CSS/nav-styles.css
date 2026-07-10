@@ -38,7 +38,6 @@ nav > h1 {
     position: absolute;
     left: 20px;
     font-size: 42px;
-    color: var(--color);
 }
 
 nav > h1 > a {
@@ -62,24 +61,30 @@ nav > h1 > a {
 nav > ul {
     list-style-type: none;
     display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    margin: 0;
 }
 
+/* =====================
+   PAGE LABELS
+   ===================== */
 .page-label {
-    margin: 18px;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: var(--font-weight-paragraph);
     border: var(--border);
-    padding: 12px;
+    padding: 10px 14px;
     border-radius: 8px;
     cursor: pointer;
     transition: ease box-shadow 0.2s;
     font-style: italic;
+    margin: 12px 6px;
 }
 
 .page-label > a {
     text-decoration: none;
     color: var(--color);
-    /* Make the anchor fill the entire box so clicking anywhere works */
     display: block;
     width: 100%;
     height: 100%;
@@ -97,6 +102,61 @@ nav > ul {
     }
 }
 
+/* =====================
+   NAV PROFILE (far right)
+   ===================== */
+.nav-profile {
+    position: absolute;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color);
+    transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+    .nav-profile:hover {
+        opacity: 0.75;
+    }
+}
+
+@media (hover: none) {
+    .nav-profile:active {
+        opacity: 0.75;
+    }
+}
+
+.nav-profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nav-profile-name {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color);
+}
+
+.nav-profile-sub {
+    font-family: var(--font-family-paragraph);
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* Hide on mobile/tablet — sidebar handles it */
+@media (max-width: 1224px) {
+    .nav-profile {
+        display: none;
+    }
+}
+
+/* =====================
+   SIDEBAR
+   ===================== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -107,37 +167,80 @@ nav > ul {
     background-color: var(--background-color);
     display: none;
     flex-direction: column;
+    border-left: var(--border);
 }
 
 .sidebar > ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-/* Make the anchor fill the entire sidebar item box */
-.sidebar-item:nth-child(2) > a,
-.sidebar-item:nth-child(3) > a,
-.sidebar-item:nth-child(4) > a,
-.sidebar-item:nth-child(5) > a {
+.sidebar-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    cursor: pointer;
+}
+
+.sidebar-close > a {
     display: block;
-    width: 100%;
-    height: 100%;
-    color: var(--color);
+}
+
+/* Profile row at top of sidebar */
+.sidebar-profile {
+    padding: 16px;
+    border-bottom: var(--border);
+    margin-bottom: 8px;
+}
+
+.sidebar-profile > a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
-    font-size: 24px;
+    color: var(--color);
+    transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+    .sidebar-profile > a:hover {
+        opacity: 0.75;
+    }
+}
+
+@media (hover: none) {
+    .sidebar-profile > a:active {
+        opacity: 0.75;
+    }
+}
+
+.sidebar-profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-profile-name {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.sidebar-profile-sub {
+    font-family: var(--font-family-paragraph);
+    font-size: 12px;
+    opacity: 0.6;
 }
 
 .sidebar > ul > li > a {
     color: var(--color);
     text-decoration: none;
-    font-size: 24px;
+    font-size: 20px;
 }
 
-.sidebar-item:nth-child(2),
-.sidebar-item:nth-child(3),
-.sidebar-item:nth-child(4),
-.sidebar-item:nth-child(5) {
-    margin: 16px;
+.sidebar-item {
+    margin: 10px 16px;
     padding: 12px;
     border: var(--border);
     border-radius: 12px;
@@ -145,20 +248,23 @@ nav > ul {
     cursor: pointer;
 }
 
+.sidebar-item > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--color);
+    text-decoration: none;
+    font-size: 20px;
+}
+
 @media (hover: hover) {
-    .sidebar-item:nth-child(2):hover,
-    .sidebar-item:nth-child(3):hover,
-    .sidebar-item:nth-child(4):hover,
-    .sidebar-item:nth-child(5):hover {
+    .sidebar-item:hover {
         box-shadow: 4px 4px white;
     }
 }
 
 @media (hover: none) {
-    .sidebar-item:nth-child(2):active,
-    .sidebar-item:nth-child(3):active,
-    .sidebar-item:nth-child(4):active,
-    .sidebar-item:nth-child(5):active {
+    .sidebar-item:active {
         box-shadow: 4px 4px white;
     }
 }
@@ -167,20 +273,27 @@ nav > ul {
     display: none;
 }
 
-.sidebar > h1 {
-    color: var(--color);
-    font-family: var(--font-family-heading);
-    font-size: 42px;
-    padding: 20px;
-}
-
+/* =====================
+   RESPONSIVE — MOBILE (max 450px)
+   ===================== */
 @media (min-width: 310px) and (max-width: 450px) {
     nav {
         height: 70px;
         justify-content: normal;
     }
 
-    nav > ul:nth-child(2) > li:nth-child(5) {
+    .logo {
+        left: 12px;
+        margin: 0;
+        font-size: 28px;
+        font-family: var(--font-family-heading);
+    }
+
+    .page-label {
+        display: none;
+    }
+
+    .ham-menu {
         display: block;
         border: none;
         position: absolute;
@@ -188,10 +301,18 @@ nav > ul {
         right: 0;
         padding-right: 20px;
     }
+}
+
+/* =====================
+   RESPONSIVE — TABLET (max 769px)
+   ===================== */
+@media (min-width: 451px) and (max-width: 769px) {
+    nav {
+        height: 70px;
+        justify-content: normal;
+    }
 
     .logo {
-        color: var(--color);
-        text-align: left;
         left: 12px;
         margin: 0;
         font-size: 32px;
@@ -201,15 +322,8 @@ nav > ul {
     .page-label {
         display: none;
     }
-}
 
-@media (min-width: 451px) and (max-width: 769px) {
-    nav {
-        height: 70px;
-        justify-content: normal;
-    }
-
-    nav > ul:nth-child(2) > li:nth-child(5) {
+    .ham-menu {
         display: block;
         border: none;
         position: absolute;
@@ -217,21 +331,11 @@ nav > ul {
         right: 0;
         padding-right: 20px;
     }
-
-    .logo {
-        color: var(--color);
-        text-align: left;
-        left: 12px;
-        margin: 0;
-        font-size: 36px;
-        font-family: var(--font-family-heading);
-    }
-
-    .page-label {
-        display: none;
-    }
 }
 
+/* =====================
+   RESPONSIVE — LARGE TABLET (max 1224px)
+   ===================== */
 @media (min-width: 770px) and (max-width: 1224px) {
     nav {
         height: 100px;
@@ -239,24 +343,22 @@ nav > ul {
     }
 
     .logo {
-        color: var(--color);
-        text-align: left;
         left: 12px;
         margin: 0;
         font-size: 36px;
         font-family: var(--font-family-heading);
     }
 
-    nav > ul:nth-child(2) > li:nth-child(5) {
+    .page-label {
+        display: none;
+    }
+
+    .ham-menu {
         display: block;
         border: none;
         position: absolute;
         top: 30%;
         right: 0;
         padding-right: 20px;
-    }
-
-    .page-label {
-        display: none;
     }
 }

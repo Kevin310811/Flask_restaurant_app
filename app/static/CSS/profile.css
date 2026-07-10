@@ -1,0 +1,355 @@
+.profile-page {
+    padding-top: 140px;
+    padding-bottom: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
+    color: var(--color);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* =====================
+   PROFILE HEADER
+   ===================== */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    border-bottom: var(--border);
+    padding-bottom: 32px;
+}
+
+.profile-header svg {
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.profile-header-text h1 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+    font-size: 36px;
+    color: #f5c542;
+    margin: 0 0 6px;
+}
+
+.profile-header-text p {
+    font-family: var(--font-family-paragraph);
+    font-size: 18px;
+    margin: 0 0 4px;
+    opacity: 0.8;
+}
+
+.profile-since {
+    font-size: 14px !important;
+    opacity: 0.5 !important;
+}
+
+/* =====================
+   GRID
+   ===================== */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* =====================
+   PROFILE BOX
+   ===================== */
+.profile-box {
+    border: var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-box-title {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
+    font-size: 22px;
+    color: #f5c542;
+    margin: 0;
+}
+
+.profile-divider {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* =====================
+   FLASH MESSAGES
+   ===================== */
+.profile-flash {
+    font-family: var(--font-family-heading);
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0;
+}
+
+.profile-flash.success {
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.profile-flash.error {
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+/* =====================
+   PROFILE FORM
+   ===================== */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.profile-form label {
+    font-family: var(--font-family-heading);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.profile-form input {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    background-color: var(--background-color);
+    color: var(--color);
+    border: var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* =====================
+   BUTTONS
+   ===================== */
+.profile-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    border: var(--border);
+    background-color: var(--background-color);
+    color: var(--color);
+}
+
+.profile-form button {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s box-shadow ease;
+    border: var(--border);
+    background-color: var(--color);
+    color: var(--background-color);
+    margin-top: 4px;
+}
+
+@media (hover: hover) {
+    .profile-btn:hover,
+    .profile-form button:hover {
+        box-shadow: 3px 3px white;
+    }
+}
+
+@media (hover: none) {
+    .profile-btn:active,
+    .profile-form button:active {
+        box-shadow: 3px 3px white;
+    }
+}
+
+.profile-btn-secondary {
+    background-color: var(--background-color);
+    color: var(--color);
+}
+
+.profile-btn-danger {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    background-color: var(--background-color);
+    width: 100%;
+}
+
+@media (hover: hover) {
+    .profile-btn-danger:hover {
+        box-shadow: 3px 3px #ff6b6b;
+    }
+}
+
+@media (hover: none) {
+    .profile-btn-danger:active {
+        box-shadow: 3px 3px #ff6b6b;
+    }
+}
+
+.profile-danger-label {
+    font-family: var(--font-family-heading);
+    font-size: 13px;
+    color: #ff6b6b;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* =====================
+   ORDER HISTORY
+   ===================== */
+.order-card {
+    border: var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.order-id {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: #f5c542;
+}
+
+.order-date {
+    font-family: var(--font-family-paragraph);
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.order-status {
+    font-family: var(--font-family-heading);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-status.paid {
+    background-color: #2d6a2d;
+    color: white;
+}
+
+.order-status.pending {
+    background-color: #7a5c00;
+    color: white;
+}
+
+.order-status.cancelled {
+    background-color: #8b0000;
+    color: white;
+}
+
+.order-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-items-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-family: var(--font-family-paragraph);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.order-tip {
+    font-family: var(--font-family-paragraph);
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.order-total {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: #f5c542;
+}
+
+.profile-empty {
+    font-family: var(--font-family-paragraph);
+    font-size: 16px;
+    opacity: 0.7;
+    margin: 0;
+}
+
+.profile-empty a {
+    color: #f5c542;
+    text-decoration: none;
+}
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media screen and (max-width: 1024px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header-text h1 {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile-page {
+        padding-top: 100px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-header-text h1 {
+        font-size: 24px;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

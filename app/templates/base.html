@@ -12,34 +12,83 @@
 </head>
 <body>
 
-    <nav>
-        <h1 class="logo"><a href="{{ url_for('main.index') }}">Restaurant Logo</a></h1>
-        <ul>
-            <li class="page-label"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
-            <li class="page-label"><a href="{{ url_for('menu.order') }}">Order</a></li>
-            <li class="page-label"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
-            <li class="page-label"><a href="#">About</a></li>
-            <li onclick="showSidebar()" class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
-                        viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
-                        <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
-                    </svg></a></li>
-        </ul>
+<nav>
+    <h1 class="logo"><a href="{{ url_for('main.index') }}">Restaurant Logo</a></h1>
 
-        <div class="sidebar">
-            <ul>
-                <li onclick="hideSidebar()" class="sidebar-item"><a href="#"><svg xmlns="http://www.w3.org/2000/svg"
-                            height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
-                            <path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
-                        </svg></a></li>
-                <li class="sidebar-item"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
-                <li class="sidebar-item"><a href="{{ url_for('menu.order') }}">Order</a></li>
-                <li class="sidebar-item"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
-                <li class="sidebar-item"><a href="#">About</a></li>
-            </ul>
+    <ul>
+        <li class="page-label"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
+        <li class="page-label"><a href="{{ url_for('menu.order') }}">Order</a></li>
+        <li class="page-label"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
+        <li class="page-label"><a href="#">About</a></li>
+        <li onclick="showSidebar()" class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
+                    viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                    <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
+                </svg></a></li>
+    </ul>
+
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('auth.profile') }}" class="nav-profile">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="#FFFFFF">
+            <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
+        </svg>
+        <div class="nav-profile-text">
+            <span class="nav-profile-name">{{ current_user.first_name }}</span>
+            <span class="nav-profile-sub">View Profile</span>
         </div>
-    </nav>
+    </a>
+    {% else %}
+    <a href="{{ url_for('auth.login') }}" class="nav-profile">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="#FFFFFF">
+            <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
+        </svg>
+        <div class="nav-profile-text">
+            <span class="nav-profile-name">Login</span>
+        </div>
+    </a>
+    {% endif %}
 
-    {% block content %}{% endblock %}
+    <div class="sidebar">
+        <ul>
+            <li onclick="hideSidebar()" class="sidebar-close">
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                        <path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
+                    </svg>
+                </a>
+            </li>
+
+            <li class="sidebar-profile">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.profile') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="#FFFFFF">
+                            <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
+                        </svg>
+                        <div class="sidebar-profile-text">
+                            <span class="sidebar-profile-name">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                            <span class="sidebar-profile-sub">View Profile</span>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="#FFFFFF">
+                            <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
+                        </svg>
+                        <div class="sidebar-profile-text">
+                            <span class="sidebar-profile-name">Login</span>
+                        </div>
+                    </a>
+                {% endif %}
+            </li>
+
+            <li class="sidebar-item"><a href="{{ url_for('main.reservations') }}">Reservations</a></li>
+            <li class="sidebar-item"><a href="{{ url_for('menu.order') }}">Order</a></li>
+            <li class="sidebar-item"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
+            <li class="sidebar-item"><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
 
 {% block footer %}
 <footer>
@@ -59,7 +108,8 @@
     </div>
 </footer>
 {% endblock %}
-    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
-    {% block scripts %}{% endblock %}
+
+<script src="{{ url_for('static', filename='JS/main.js') }}"></script>
+{% block scripts %}{% endblock %}
 </body>
 </html>

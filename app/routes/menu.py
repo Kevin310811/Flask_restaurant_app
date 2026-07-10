@@ -1,13 +1,18 @@
 from flask import Blueprint, render_template, jsonify, request
+from flask_login import login_required, current_user
 from app.models import MenuItem
 
 menu_bp = Blueprint('menu', __name__)
 
+
 @menu_bp.route('/order')
+@login_required
 def order():
     return render_template('order.html')
 
+
 @menu_bp.route('/api/menu')
+@login_required
 def get_menu():
     category = request.args.get('category')
     food_type = request.args.get('type')

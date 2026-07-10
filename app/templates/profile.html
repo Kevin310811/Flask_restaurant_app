@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
+{% endblock %}
+
+{% block content %}
+<section class="profile-page">
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 0 512 512" fill="#FFFFFF">
+            <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
+        </svg>
+        <div class="profile-header-text">
+            <h1>{{ current_user.first_name }} {{ current_user.last_name }}</h1>
+            <p>{{ current_user.email }}</p>
+            <p class="profile-since">Member since {{ current_user.created_at.strftime('%B %Y') }}</p>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+
+        <!-- Left: Account Settings -->
+        <div class="profile-box">
+            <h2 class="profile-box-title">Account Settings</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="profile-flash {{ category }}">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Update Name -->
+            <form method="POST" action="{{ url_for('auth.profile') }}" class="profile-form">
+                <input type="hidden" name="action" value="update_name">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="{{ current_user.first_name }}" required>
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="{{ current_user.last_name }}" required>
+                <button type="submit">Update Name</button>
+            </form>
+
+            <div class="profile-divider"></div>
+
+            <!-- Logout -->
+            <a href="{{ url_for('auth.logout') }}" class="profile-btn profile-btn-secondary">Log Out</a>
+
+            <div class="profile-divider"></div>
+
+            <!-- Delete Account -->
+            <p class="profile-danger-label">Danger Zone</p>
+            <form method="POST" action="{{ url_for('auth.profile') }}" class="profile-form"
+                onsubmit="return confirm('Are you sure? This will permanently delete your account and all your data.')">
+                <input type="hidden" name="action" value="delete_account">
+                <button type="submit" class="profile-btn profile-btn-danger">Delete Account</button>
+            </form>
+        </div>
+
+        <!-- Right: Order History -->
+        <div class="profile-box">
+            <h2 class="profile-box-title">Order History</h2>
+
+            {% if orders %}
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <span class="order-id">#{{ order.id }}</span>
+                        <span class="order-date">{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</span>
+                        <span class="order-status {{ order.status }}">{{ order.status }}</span>
+                    </div>
+                    <ul class="order-items-list">
+                        {% for item in order.items %}
+                        <li>
+                            <span>{{ item.title }} x{{ item.qty }}</span>
+                            <span>₹{{ "%.2f"|format(item.price * item.qty) }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="order-card-footer">
+                        {% if order.tip > 0 %}
+                        <span class="order-tip">Tip: ₹{{ "%.2f"|format(order.tip) }}</span>
+                        {% endif %}
+                        <span class="order-total">Total: ₹{{ "%.2f"|format(order.total) }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="profile-empty">No orders yet. <a href="{{ url_for('menu.order') }}">Order something!</a></p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</section>
+{% endblock %}
+{% block footer %}{% endblock %}

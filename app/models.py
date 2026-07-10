@@ -1,7 +1,32 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from datetime import datetime
 
 db = SQLAlchemy()
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True, index=True)
+    password_hash = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    cart_items = db.relationship('CartItem', backref='user', cascade='all, delete-orphan')
+    orders = db.relationship('Order', backref='user', cascade='all, delete-orphan')
+    reservations = db.relationship('Reservation', backref='user', cascade='all, delete-orphan')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "created_at": self.created_at.isoformat()
+        }
 
 
 class MenuItem(db.Model):
@@ -33,7 +58,7 @@ class CartItem(db.Model):
     __tablename__ = 'cart_items'
 
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(64), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), nullable=False)
     qty = db.Column(db.Integer, nullable=False, default=1)
 
@@ -54,7 +79,7 @@ class Order(db.Model):
     __tablename__ = 'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(64), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     subtotal = db.Column(db.Numeric(10, 2), nullable=False)
     tip = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     total = db.Column(db.Numeric(10, 2), nullable=False)
@@ -101,7 +126,7 @@ class Reservation(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.String(64), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20), nullable=False)

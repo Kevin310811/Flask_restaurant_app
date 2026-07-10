@@ -1,27 +1,24 @@
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request
+from flask_login import login_required, current_user
 from app.models import db, CartItem, MenuItem
-import uuid
 
 cart_bp = Blueprint('cart', __name__)
 
-def get_session_id():
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-    return session['session_id']
 
 @cart_bp.route('/api/cart', methods=['GET'])
+@login_required
 def get_cart():
-    session_id = get_session_id()
-    items = CartItem.query.filter_by(session_id=session_id).all()
+    items = CartItem.query.filter_by(user_id=current_user.id).all()
     total = sum(item.menu_item.price * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
     })
 
+
 @cart_bp.route('/api/cart/add', methods=['POST'])
+@login_required
 def add_to_cart():
-    session_id = get_session_id()
     data = request.get_json()
     menu_item_id = data.get('menu_item_id')
     qty = data.get('qty', 1)
@@ -34,7 +31,7 @@ def add_to_cart():
         return jsonify({"error": "Item not found"}), 404
 
     cart_item = CartItem.query.filter_by(
-        session_id=session_id,
+        user_id=current_user.id,
         menu_item_id=menu_item_id
     ).first()
 
@@ -45,7 +42,7 @@ def add_to_cart():
     else:
         if qty > 0:
             cart_item = CartItem(
-                session_id=session_id,
+                user_id=current_user.id,
                 menu_item_id=menu_item_id,
                 qty=qty
             )
@@ -53,21 +50,22 @@ def add_to_cart():
 
     db.session.commit()
 
-    items = CartItem.query.filter_by(session_id=session_id).all()
+    items = CartItem.query.filter_by(user_id=current_user.id).all()
     total = sum(item.menu_item.price * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
     })
 
+
 @cart_bp.route('/api/cart/remove', methods=['POST'])
+@login_required
 def remove_from_cart():
-    session_id = get_session_id()
     data = request.get_json()
     menu_item_id = data.get('menu_item_id')
 
     cart_item = CartItem.query.filter_by(
-        session_id=session_id,
+        user_id=current_user.id,
         menu_item_id=menu_item_id
     ).first()
 
@@ -75,16 +73,17 @@ def remove_from_cart():
         db.session.delete(cart_item)
         db.session.commit()
 
-    items = CartItem.query.filter_by(session_id=session_id).all()
+    items = CartItem.query.filter_by(user_id=current_user.id).all()
     total = sum(item.menu_item.price * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
     })
 
+
 @cart_bp.route('/api/cart/clear', methods=['POST'])
+@login_required
 def clear_cart():
-    session_id = get_session_id()
-    CartItem.query.filter_by(session_id=session_id).delete()
+    CartItem.query.filter_by(user_id=current_user.id).delete()
     db.session.commit()
     return jsonify({"success": True})
