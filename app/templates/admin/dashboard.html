@@ -1,0 +1,50 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-stats">
+    <div class="stat-card">
+        <p class="stat-value">{{ total_users }}</p>
+        <p class="stat-label">Total Users</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ total_orders }}</p>
+        <p class="stat-label">Total Orders</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">₹{{ "%.2f"|format(total_revenue) }}</p>
+        <p class="stat-label">Total Revenue</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-value">{{ total_reservations }}</p>
+        <p class="stat-label">Total Reservations</p>
+    </div>
+</div>
+
+<div class="admin-section">
+    <h2 class="admin-section-title">Recent Orders</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                <td>₹{{ "%.2f"|format(order.total) }}</td>
+                <td><span class="status-badge {{ order.status }}">{{ order.status }}</span></td>
+                <td>{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

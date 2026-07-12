@@ -1,0 +1,45 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Users{% endblock %}
+{% block page_title %}Users{% endblock %}
+
+{% block content %}
+<div class="admin-section">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Orders</th>
+                <th>Reservations</th>
+                <th>Joined</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{% if user.is_admin %}<span class="status-badge paid">Yes</span>{% else %}—{% endif %}</td>
+                <td>{{ user.orders | length }}</td>
+                <td>{{ user.reservations | length }}</td>
+                <td>{{ user.created_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    {% if not user.is_admin %}
+                    <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                        onsubmit="return confirm('Delete {{ user.email }}? This cannot be undone.')">
+                        <button type="submit" class="admin-btn admin-btn-danger">Delete</button>
+                    </form>
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

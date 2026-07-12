@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default='false')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     cart_items = db.relationship('CartItem', backref='user', cascade='all, delete-orphan')
@@ -25,9 +26,9 @@ class User(db.Model, UserMixin):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
+            "is_admin": self.is_admin,
             "created_at": self.created_at.isoformat()
         }
-
 
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
