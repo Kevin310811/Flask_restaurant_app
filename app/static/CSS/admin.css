@@ -10,7 +10,7 @@ body {
     padding: 0;
     background-color: #000;
     color: #fff;
-    font-family: Inter, sans-serif;
+    font-family: 'Playfair Display', serif;
 }
 
 .admin-layout {
@@ -22,10 +22,10 @@ body {
    SIDEBAR
    ===================== */
 .admin-sidebar {
-    width: 220px;
+    width: 240px;
     min-height: 100vh;
-    background-color: #0a0a0a;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #000;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -34,23 +34,30 @@ body {
 }
 
 .admin-sidebar-logo {
-    padding: 24px 20px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .admin-sidebar-logo a {
-    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
     font-weight: 800;
     color: #fff;
     text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.admin-sidebar-logo a:hover {
+    color: #f5c542;
 }
 
 .admin-sidebar-logo span {
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: #f5c542;
     font-weight: 700;
@@ -59,45 +66,48 @@ body {
 .admin-nav {
     display: flex;
     flex-direction: column;
-    padding: 16px 12px;
+    padding: 20px 12px;
     gap: 4px;
     flex: 1;
 }
 
 .admin-nav-item {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 15px;
-    font-weight: 500;
-    padding: 10px 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    padding: 12px 14px;
     border-radius: 8px;
-    transition: background 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
 .admin-nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.06);
     color: #fff;
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .admin-nav-item.active {
-    background-color: rgba(245, 197, 66, 0.12);
     color: #f5c542;
-    font-weight: 700;
+    border-color: rgba(245, 197, 66, 0.3);
+    background-color: rgba(245, 197, 66, 0.05);
 }
 
 .admin-sidebar-footer {
     padding: 16px 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .admin-back-link,
 .admin-logout-link {
     text-decoration: none;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
     padding: 8px 12px;
     border-radius: 8px;
     transition: color 0.2s ease;
@@ -115,41 +125,45 @@ body {
    MAIN CONTENT
    ===================== */
 .admin-main {
-    margin-left: 220px;
+    margin-left: 240px;
     flex: 1;
-    padding: 32px;
+    padding: 36px;
     min-height: 100vh;
 }
 
 .admin-topbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 16px;
+    align-items: baseline;
+    margin-bottom: 36px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 20px;
 }
 
 .admin-page-title {
-    font-size: 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
     font-weight: 800;
     margin: 0;
     color: #f5c542;
 }
 
 .admin-user {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 /* =====================
    FLASH MESSAGES
    ===================== */
 .admin-flash {
+    font-family: 'Inter', sans-serif;
     padding: 12px 16px;
     border-radius: 8px;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .admin-flash.success {
@@ -169,43 +183,51 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .stat-card {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 24px;
+    padding: 28px 20px;
     text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: rgba(245, 197, 66, 0.4);
 }
 
 .stat-value {
-    font-size: 32px;
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
     font-weight: 800;
     color: #f5c542;
     margin: 0 0 8px;
 }
 
 .stat-label {
-    font-size: 13px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
     color: rgba(255, 255, 255, 0.5);
     margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 /* =====================
    SECTIONS & TABLES
    ===================== */
 .admin-section {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
 }
 
 .admin-section-title {
+    font-family: 'Inter', sans-serif;
     font-size: 18px;
     font-weight: 700;
-    margin: 0 0 16px;
+    margin: 0 0 20px;
     color: #fff;
+    letter-spacing: 0.5px;
 }
 
 .admin-table {
@@ -216,24 +238,27 @@ body {
 
 .admin-table th {
     text-align: left;
-    padding: 10px 12px;
+    padding: 10px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 600;
-    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .admin-table td {
-    padding: 12px;
+    padding: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.85);
-    vertical-align: top;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    vertical-align: middle;
 }
 
 .admin-table tr:hover td {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* =====================
@@ -243,6 +268,7 @@ body {
     display: inline-block;
     padding: 3px 10px;
     border-radius: 20px;
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -251,21 +277,71 @@ body {
 
 .status-badge.paid,
 .status-badge.confirmed {
-    background-color: rgba(45, 106, 45, 0.3);
+    background-color: rgba(45, 106, 45, 0.2);
     color: #4caf50;
     border: 1px solid #4caf50;
 }
 
 .status-badge.pending {
-    background-color: rgba(122, 92, 0, 0.3);
+    background-color: rgba(122, 92, 0, 0.2);
     color: #f5c542;
     border: 1px solid #f5c542;
 }
 
 .status-badge.cancelled {
-    background-color: rgba(139, 0, 0, 0.3);
+    background-color: rgba(139, 0, 0, 0.2);
     color: #ff6b6b;
     border: 1px solid #ff6b6b;
+}
+
+/* =====================
+   VEG / NON-VEG BADGES
+   ===================== */
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.type-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.type-badge.veg {
+    background-color: rgba(45, 106, 45, 0.2);
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.type-badge.veg::before {
+    background-color: #4caf50;
+}
+
+.type-badge.non-veg {
+    background-color: rgba(139, 0, 0, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+.type-badge.non-veg::before {
+    background-color: #ff6b6b;
+}
+
+.type-badge.none {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* =====================
@@ -274,18 +350,19 @@ body {
 .admin-filters {
     display: flex;
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
 }
 
 .filter-btn {
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     transition: all 0.2s ease;
 }
 
@@ -298,35 +375,41 @@ body {
     background-color: #f5c542;
     color: #000;
     border-color: #f5c542;
+    font-style: normal;
+    font-weight: 700;
 }
 
 /* =====================
    BUTTONS
    ===================== */
 .admin-btn {
-    padding: 6px 14px;
+    padding: 7px 16px;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
     background-color: transparent;
     color: #fff;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: Inter, sans-serif;
 }
 
 .admin-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 2px 2px white;
 }
 
 .admin-btn-danger {
-    border-color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.4);
     color: #ff6b6b;
 }
 
 .admin-btn-danger:hover {
-    background-color: rgba(255, 107, 107, 0.1);
+    border-color: #ff6b6b;
+    background-color: rgba(255, 107, 107, 0.05);
+    box-shadow: 2px 2px #ff6b6b;
 }
 
 /* =====================
@@ -336,9 +419,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 20px;
+    padding: 24px;
 }
 
 .admin-form-row {
@@ -356,23 +439,32 @@ body {
 }
 
 .admin-form-field label {
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .admin-form-field input,
 .admin-form-field select,
 .admin-select {
-    background-color: #0a0a0a;
+    background-color: #000;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    padding: 8px 10px;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
-    font-family: Inter, sans-serif;
+    transition: border-color 0.2s ease;
+}
+
+.admin-form-field input:focus,
+.admin-form-field select:focus,
+.admin-select:focus {
+    outline: none;
+    border-color: rgba(245, 197, 66, 0.5);
 }
 
 .admin-actions {
@@ -393,14 +485,278 @@ body {
 
 .admin-inline-form input,
 .admin-inline-form select {
-    background-color: #0a0a0a;
+    background-color: #000;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 6px;
     padding: 6px 8px;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
-    font-family: Inter, sans-serif;
-    max-width: 120px;
+}
+
+/* =====================
+   MENU CARDS
+   ===================== */
+.menu-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.menu-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-card-image {
+    width: 90px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.menu-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.menu-card-image-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-card-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.menu-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.menu-card-id {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.menu-card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.menu-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
+}
+
+.menu-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.menu-card-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #f5c542;
+}
+
+.menu-meta-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.35);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.menu-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.menu-card-actions form {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* =====================
+   ADMIN MODALS
+   ===================== */
+.admin-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.admin-modal-overlay.active {
+    display: flex;
+}
+
+.admin-modal {
+    background-color: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 32px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.admin-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.admin-modal-close:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+.admin-modal-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #f5c542;
+    margin: 0 0 24px;
+}
+
+/* Preview Modal */
+.preview-modal-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.preview-modal-image {
+    width: 180px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-modal-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.preview-modal-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+}
+
+.preview-modal-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.preview-modal-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.preview-modal-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #f5c542;
+}
+
+/* Edit Modal Textarea */
+.admin-textarea {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.admin-textarea:focus {
+    outline: none;
+    border-color: rgba(245, 197, 66, 0.5);
 }
 
 /* =====================
@@ -419,14 +775,18 @@ body {
 
     .admin-main {
         margin-left: 0;
-        padding: 16px;
+        padding: 20px;
     }
 
     .admin-stats {
         grid-template-columns: 1fr 1fr;
     }
 
+    .admin-page-title {
+        font-size: 24px;
+    }
+
     .admin-table {
-        font-size: 12px;
+        font-size: 13px;
     }
 }

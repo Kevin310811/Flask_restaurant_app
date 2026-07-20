@@ -56,62 +56,222 @@
     </form>
 </div>
 
-<!-- Menu Items Table -->
+<!-- Menu Items -->
 <div class="admin-section">
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Flavour</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.title }}</td>
-                <td>{{ item.category }}</td>
-                <td>{{ item.type or '—' }}</td>
-                <td>{{ item.flavour }}</td>
-                <td>₹{{ "%.2f"|format(item.price) }}</td>
-                <td class="admin-actions">
-                    <!-- Edit -->
-                    <form method="POST" action="{{ url_for('admin.edit_menu_item', item_id=item.id) }}" class="admin-inline-form">
-                        <input type="text" name="title" value="{{ item.title }}" required>
-                        <input type="text" name="desc" value="{{ item.desc }}" required>
-                        <select name="category">
-                            <option value="sabji" {% if item.category == 'sabji' %}selected{% endif %}>Sabji</option>
-                            <option value="bread" {% if item.category == 'bread' %}selected{% endif %}>Bread</option>
-                            <option value="drink" {% if item.category == 'drink' %}selected{% endif %}>Drink</option>
-                            <option value="dessert" {% if item.category == 'dessert' %}selected{% endif %}>Dessert</option>
-                        </select>
-                        <select name="type">
-                            <option value="" {% if not item.type %}selected{% endif %}>— None —</option>
-                            <option value="veg" {% if item.type == 'veg' %}selected{% endif %}>Veg</option>
-                            <option value="non-veg" {% if item.type == 'non-veg' %}selected{% endif %}>Non-Veg</option>
-                        </select>
-                        <select name="flavour">
-                            <option value="spicy" {% if item.flavour == 'spicy' %}selected{% endif %}>Spicy</option>
-                            <option value="non-spicy" {% if item.flavour == 'non-spicy' %}selected{% endif %}>Non-Spicy</option>
-                        </select>
-                        <input type="number" name="price" value="{{ item.price }}" step="0.01" required>
-                        <input type="text" name="image" value="{{ item.image }}" required>
-                        <button type="submit" class="admin-btn">Save</button>
-                    </form>
-                    <!-- Delete -->
-                    <form method="POST" action="{{ url_for('admin.delete_menu_item', item_id=item.id) }}"
-                        onsubmit="return confirm('Delete {{ item.title }}?')">
-                        <button type="submit" class="admin-btn admin-btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2 class="admin-section-title">All Items ({{ items|length }})</h2>
+
+    <div class="menu-cards">
+        {% for item in items %}
+        <div class="menu-card"
+            data-id="{{ item.id }}"
+            data-title="{{ item.title | e }}"
+            data-desc="{{ item.desc | e }}"
+            data-category="{{ item.category }}"
+            data-type="{{ item.type or '' }}"
+            data-flavour="{{ item.flavour }}"
+            data-price="{{ item.price }}"
+            data-image="{{ item.image | e }}">
+
+            <!-- Left: Image Thumbnail -->
+            <div class="menu-card-image">
+                <img src="/static/{{ item.image }}" alt="{{ item.title | e }}"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="menu-card-image-fallback">No Image</div>
+            </div>
+
+            <!-- Middle: Details -->
+            <div class="menu-card-details">
+                <div class="menu-card-header">
+                    <span class="menu-card-id">#{{ item.id }}</span>
+                    <h3 class="menu-card-title">{{ item.title }}</h3>
+                    {% if item.type == 'veg' %}
+                        <span class="type-badge veg">Veg</span>
+                    {% elif item.type == 'non-veg' %}
+                        <span class="type-badge non-veg">Non-Veg</span>
+                    {% else %}
+                        <span class="type-badge none">—</span>
+                    {% endif %}
+                </div>
+                <p class="menu-card-desc">{{ item.desc }}</p>
+                <div class="menu-card-meta">
+                    <span class="menu-card-price">₹{{ "%.2f"|format(item.price) }}</span>
+                    <span class="menu-meta-tag">{{ item.category }}</span>
+                    <span class="menu-meta-tag">{{ item.flavour }}</span>
+                </div>
+            </div>
+
+            <!-- Right: Actions -->
+            <div class="menu-card-actions">
+                <button class="admin-btn btn-preview">Preview</button>
+                <button class="admin-btn btn-edit">Edit</button>
+                <form method="POST" action="{{ url_for('admin.delete_menu_item', item_id=item.id) }}"
+                    onsubmit="return confirm('Are you sure you want to delete this item?')">
+                    <button type="submit" class="admin-btn admin-btn-danger">Delete</button>
+                </form>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
+<!-- Preview Modal -->
+<div class="admin-modal-overlay" id="preview-modal">
+    <div class="admin-modal">
+        <button class="admin-modal-close" id="preview-close">✕</button>
+        <div class="preview-modal-content">
+            <img id="preview-image" src="" alt="" class="preview-modal-image"
+                onerror="this.style.display='none';">
+            <div class="preview-modal-info">
+                <h2 id="preview-title" class="preview-modal-title"></h2>
+                <p id="preview-desc" class="preview-modal-desc"></p>
+                <div class="preview-modal-meta">
+                    <span id="preview-price" class="preview-modal-price"></span>
+                    <span id="preview-category" class="menu-meta-tag"></span>
+                    <span id="preview-flavour" class="menu-meta-tag"></span>
+                    <span id="preview-type" class="type-badge"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="admin-modal-overlay" id="edit-modal">
+    <div class="admin-modal">
+        <button class="admin-modal-close" id="edit-close">✕</button>
+        <h2 class="admin-modal-title">Edit Item</h2>
+
+        <form method="POST" id="edit-form" class="admin-form" style="border:none; padding:0;">
+            <div class="admin-form-row">
+                <div class="admin-form-field">
+                    <label>Title</label>
+                    <input type="text" name="title" id="edit-title" required>
+                </div>
+                <div class="admin-form-field">
+                    <label>Price (₹)</label>
+                    <input type="number" name="price" id="edit-price" step="0.01" required>
+                </div>
+            </div>
+
+            <div class="admin-form-field">
+                <label>Description</label>
+                <textarea name="desc" id="edit-desc" required class="admin-textarea"></textarea>
+            </div>
+
+            <div class="admin-form-row">
+                <div class="admin-form-field">
+                    <label>Category</label>
+                    <select name="category" id="edit-category">
+                        <option value="sabji">Sabji</option>
+                        <option value="bread">Bread</option>
+                        <option value="drink">Drink</option>
+                        <option value="dessert">Dessert</option>
+                    </select>
+                </div>
+                <div class="admin-form-field">
+                    <label>Type</label>
+                    <select name="type" id="edit-type">
+                        <option value="">— None —</option>
+                        <option value="veg">Veg</option>
+                        <option value="non-veg">Non-Veg</option>
+                    </select>
+                </div>
+                <div class="admin-form-field">
+                    <label>Flavour</label>
+                    <select name="flavour" id="edit-flavour">
+                        <option value="spicy">Spicy</option>
+                        <option value="non-spicy">Non-Spicy</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-form-field">
+                <label>Image Path</label>
+                <input type="text" name="image" id="edit-image" required placeholder="Images/filename.jpg">
+                <img id="edit-image-preview" src="" alt="Preview"
+                    style="margin-top:8px; max-height:120px; border-radius:8px; display:none;"
+                    onerror="this.style.display='none';">
+            </div>
+
+            <button type="submit" class="admin-btn" style="align-self:flex-start;">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Read data from card's data attributes — avoids all Jinja/JS escaping issues
+document.querySelectorAll('.menu-card').forEach(card => {
+    const data = {
+        id:       card.dataset.id,
+        title:    card.dataset.title,
+        desc:     card.dataset.desc,
+        category: card.dataset.category,
+        type:     card.dataset.type,
+        flavour:  card.dataset.flavour,
+        price:    card.dataset.price,
+        image:    card.dataset.image
+    };
+
+    card.querySelector('.btn-preview').addEventListener('click', () => openPreview(data));
+    card.querySelector('.btn-edit').addEventListener('click', () => openEdit(data));
+});
+
+function openPreview(data) {
+    document.getElementById('preview-title').textContent = data.title;
+    document.getElementById('preview-desc').textContent = data.desc;
+    document.getElementById('preview-price').textContent = '₹' + parseFloat(data.price).toFixed(2);
+    document.getElementById('preview-category').textContent = data.category;
+    document.getElementById('preview-flavour').textContent = data.flavour;
+
+    const typeEl = document.getElementById('preview-type');
+    typeEl.textContent = data.type || '—';
+    typeEl.className = 'type-badge ' + (data.type === 'veg' ? 'veg' : data.type === 'non-veg' ? 'non-veg' : 'none');
+
+    const img = document.getElementById('preview-image');
+    img.src = '/static/' + data.image;
+    img.style.display = 'block';
+
+    document.getElementById('preview-modal').classList.add('active');
+}
+
+function openEdit(data) {
+    document.getElementById('edit-title').value = data.title;
+    document.getElementById('edit-desc').value = data.desc;
+    document.getElementById('edit-price').value = data.price;
+    document.getElementById('edit-image').value = data.image;
+    document.getElementById('edit-category').value = data.category;
+    document.getElementById('edit-type').value = data.type;
+    document.getElementById('edit-flavour').value = data.flavour;
+
+    const imgPreview = document.getElementById('edit-image-preview');
+    imgPreview.src = '/static/' + data.image;
+    imgPreview.style.display = 'block';
+
+    document.getElementById('edit-form').action = `/admin/menu/${data.id}/edit`;
+    document.getElementById('edit-modal').classList.add('active');
+}
+
+// Close modals
+document.getElementById('preview-close').addEventListener('click', () => closeModal('preview-modal'));
+document.getElementById('edit-close').addEventListener('click', () => closeModal('edit-modal'));
+
+document.querySelectorAll('.admin-modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+    });
+});
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+// Live image preview in edit modal
+document.getElementById('edit-image').addEventListener('input', function() {
+    const preview = document.getElementById('edit-image-preview');
+    preview.src = '/static/' + this.value;
+    preview.style.display = 'block';
+});
+</script>
+
 {% endblock %}
