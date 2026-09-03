@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import login_required
 from app.models import MenuItem
 
 menu_bp = Blueprint('menu', __name__)

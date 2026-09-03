@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, Reservation
 from datetime import datetime, timedelta
+from sqlalchemy import text
 
 main_bp = Blueprint('main', __name__)
 
@@ -18,20 +19,62 @@ def snap_to_slot(dt):
     return dt.replace(minute=minutes, second=0, microsecond=0)
 
 
-def is_slot_available(slot_time, people):
+def get_slot_status(slot_time):
+    """Single source of truth for a slot's current booking state.
+
+    Both is_slot_available() (used when someone submits a reservation)
+    and get_slots() (used to render the picker UI) call this, so the
+    two can never disagree about what "available" means.
+    """
     existing = Reservation.query.filter_by(
         slot_time=slot_time,
         status='confirmed'
     ).all()
 
-    if len(existing) >= MAX_RESERVATIONS_PER_SLOT:
+    reservations_count = len(existing)
+    total_people = sum(r.people for r in existing)
+
+    return {
+        "reservations_count": reservations_count,
+        "total_people": total_people,
+        "spots_left": MAX_PEOPLE_PER_SLOT - total_people,
+        "has_room_for_new_booking": reservations_count < MAX_RESERVATIONS_PER_SLOT,
+    }
+
+
+def is_slot_available(slot_time, people):
+    status = get_slot_status(slot_time)
+
+    if not status["has_room_for_new_booking"]:
         return False, "This time slot is fully booked. Please choose another time."
 
-    total_people = sum(r.people for r in existing) + people
-    if total_people > MAX_PEOPLE_PER_SLOT:
-        return False, f"This time slot can only accommodate {MAX_PEOPLE_PER_SLOT - sum(r.people for r in existing)} more people."
+    if status["total_people"] + people > MAX_PEOPLE_PER_SLOT:
+        return False, f"This time slot can only accommodate {status['spots_left']} more people."
 
     return True, None
+
+
+def acquire_slot_lock(slot_time):
+    """Serialize all reservation attempts for one exact slot_time.
+
+    Without this, two requests booking the same slot at the same
+    instant can both read "there's room" via get_slot_status() before
+    either has committed, and both succeed -- overbooking the slot.
+
+    A row lock (SELECT ... FOR UPDATE) on existing reservations doesn't
+    fully close this: if this is the very first booking for a brand
+    new slot_time, there are no existing rows to lock yet, so two
+    "first" bookings for that slot could still race past each other.
+
+    A Postgres advisory lock sidesteps that because it locks an
+    arbitrary integer we choose, not rows that may not exist yet. We
+    derive that integer from the slot's timestamp, so every request
+    for the same slot_time contends for the same lock. It's scoped to
+    the current transaction and is released automatically on commit
+    or rollback -- no manual unlock needed.
+    """
+    slot_key = int(slot_time.timestamp())
+    db.session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": slot_key})
 
 
 @main_bp.route('/')
@@ -65,24 +108,15 @@ def get_slots():
     current = start
 
     while current < end:
-        existing = Reservation.query.filter_by(
-            slot_time=current,
-            status='confirmed'
-        ).all()
+        status = get_slot_status(current)
 
-        total_people = sum(r.people for r in existing)
-        reservations_count = len(existing)
-
-        available = (
-            reservations_count < MAX_RESERVATIONS_PER_SLOT and
-            total_people < MAX_PEOPLE_PER_SLOT
-        )
+        available = status["has_room_for_new_booking"] and status["spots_left"] > 0
 
         slots.append({
             "time": current.strftime('%H:%M'),
             "display": current.strftime('%I:%M %p'),
             "available": available,
-            "spots_left": MAX_PEOPLE_PER_SLOT - total_people
+            "spots_left": status["spots_left"]
         })
 
         current += timedelta(minutes=SLOT_INTERVAL_MINUTES)
@@ -116,6 +150,12 @@ def reservations():
         people = int(data.get('people', 1))
         if people < 1 or people > 12:
             return jsonify({"success": False, "error": "Party size must be between 1 and 12."}), 400
+
+        # Everything above is cheap, request-only validation -- no need
+        # to touch the lock for a request that's going to fail anyway.
+        # From here on we're checking shared state, so lock this exact
+        # slot for the rest of the transaction before reading it.
+        acquire_slot_lock(slot_time)
 
         available, error = is_slot_available(slot_time, people)
         if not available:

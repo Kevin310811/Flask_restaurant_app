@@ -10,7 +10,7 @@ const breadRadio = document.getElementById("bread");
 const drinksRadio = document.getElementById("drinks");
 const dessertRadio = document.getElementById("dessert");
 
-// Local state — fetched from Flask API
+// Local state
 let foodItems = [];
 let cartState = { items: [], total: 0 };
 
@@ -82,48 +82,67 @@ function display_food() {
 
     foodItems.forEach(item => {
         const qty = getCartQty(item.id);
+        const isUnavailable = !item.is_available;
+        const hasDiscount = item.discount_percent > 0;
+
         const card = document.createElement("div");
-        card.className = "item";
+        card.className = "item" + (isUnavailable ? " item-unavailable" : "");
+
+        const priceHTML = hasDiscount
+            ? `<p class="price">
+                <span class="price-original">₹${item.price.toFixed(2)}</span>
+                <span class="price-discounted">₹${item.discounted_price.toFixed(2)}</span>
+                <span class="discount-badge">-${item.discount_percent}%</span>
+               </p>`
+            : `<p class="price">₹${item.price.toFixed(2)}</p>`;
+
+        const qtyHTML = isUnavailable
+            ? `<p class="out-of-stock-label">Out of Stock</p>`
+            : `<div class="qty-btn">
+                <button class="decrease">-</button>
+                <p class="count">${qty}</p>
+                <button class="increase">+</button>
+               </div>`;
+
         card.innerHTML = `
             <div class="item-image" style="background-image: url('/static/${item.image}')">
                 <div class="item-image-overlay">
                     <p class="item-image-category">${item.category.toUpperCase()}</p>
                     ${item.type ? `<p class="item-image-type ${item.type}">${item.type}</p>` : ''}
                 </div>
+                ${isUnavailable ? '<div class="item-unavailable-overlay">Out of Stock</div>' : ''}
             </div>
             <div class="item-text">
                 <h1>${item.title}</h1>
                 <p>${item.desc}</p>
-                <p class="price">₹${item.price}</p>
-                <div class="qty-btn">
-                    <button class="decrease">-</button>
-                    <p class="count">${qty}</p>
-                    <button class="increase">+</button>
-                </div>
+                ${priceHTML}
+                ${qtyHTML}
             </div>
         `;
 
         food_listing.append(card);
 
-        const decreaseBtn = card.querySelector(".decrease");
-        const increaseBtn = card.querySelector(".increase");
-        const countLabel = card.querySelector(".count");
+        if (!isUnavailable) {
+            const decreaseBtn = card.querySelector(".decrease");
+            const increaseBtn = card.querySelector(".increase");
+            const countLabel = card.querySelector(".count");
 
-        increaseBtn.addEventListener("click", async () => {
-            const currentQty = getCartQty(item.id);
-            if (currentQty < 20) {
-                await updateQty(item.id, currentQty + 1);
-                countLabel.textContent = getCartQty(item.id);
-            }
-        });
+            increaseBtn.addEventListener("click", async () => {
+                const currentQty = getCartQty(item.id);
+                if (currentQty < 20) {
+                    await updateQty(item.id, currentQty + 1);
+                    countLabel.textContent = getCartQty(item.id);
+                }
+            });
 
-        decreaseBtn.addEventListener("click", async () => {
-            const currentQty = getCartQty(item.id);
-            if (currentQty > 0) {
-                await updateQty(item.id, currentQty - 1);
-                countLabel.textContent = getCartQty(item.id);
-            }
-        });
+            decreaseBtn.addEventListener("click", async () => {
+                const currentQty = getCartQty(item.id);
+                if (currentQty > 0) {
+                    await updateQty(item.id, currentQty - 1);
+                    countLabel.textContent = getCartQty(item.id);
+                }
+            });
+        }
     });
 }
 
@@ -136,8 +155,10 @@ function updateCart() {
 
     cartState.items.forEach(item => {
         const li = document.createElement("li");
+        const hasDiscount = item.discount_percent > 0;
+
         li.innerHTML = `
-            <span class="cart-title">${item.title}</span>
+            <span class="cart-title">${item.title}${hasDiscount ? ` <span class="cart-discount-badge">-${item.discount_percent}%</span>` : ''}</span>
             <div class="cart-controls">
                 <button class="cart-decrease" data-id="${item.menu_item_id}">-</button>
                 <span class="cart-qty">${item.qty}</span>

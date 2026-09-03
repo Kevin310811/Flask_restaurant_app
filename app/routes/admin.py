@@ -126,6 +126,7 @@ def add_menu_item():
     flavour = request.form.get('flavour', '').strip()
     price = request.form.get('price', '0')
     image = request.form.get('image', '').strip()
+    discount_percent = float(request.form.get('discount_percent', 0) or 0)
 
     if not all([title, desc, category, flavour, price, image]):
         flash('All fields are required.', 'error')
@@ -138,7 +139,9 @@ def add_menu_item():
         type=food_type,
         flavour=flavour,
         price=float(price),
-        image=image
+        image=image,
+        is_available=True,
+        discount_percent=discount_percent
     )
     db.session.add(item)
     db.session.commit()
@@ -158,8 +161,21 @@ def edit_menu_item(item_id):
     item.flavour = request.form.get('flavour', item.flavour).strip()
     item.price = float(request.form.get('price', item.price))
     item.image = request.form.get('image', item.image).strip()
+    item.discount_percent = float(request.form.get('discount_percent', 0) or 0)
     db.session.commit()
     flash(f'"{item.title}" updated.', 'success')
+    return redirect(url_for('admin.menu'))
+
+
+@admin_bp.route('/menu/<int:item_id>/toggle', methods=['POST'])
+@login_required
+@admin_required
+def toggle_menu_item(item_id):
+    item = MenuItem.query.get_or_404(item_id)
+    item.is_available = not item.is_available
+    db.session.commit()
+    status = 'available' if item.is_available else 'unavailable'
+    flash(f'"{item.title}" marked as {status}.', 'success')
     return redirect(url_for('admin.menu'))
 
 

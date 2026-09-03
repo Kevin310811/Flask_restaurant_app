@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
             "created_at": self.created_at.isoformat()
         }
 
+
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
 
@@ -41,6 +42,13 @@ class MenuItem(db.Model):
     category = db.Column(db.String(20), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     image = db.Column(db.String(255), nullable=False)
+    is_available = db.Column(db.Boolean, default=True, nullable=False, server_default='true')
+    discount_percent = db.Column(db.Numeric(5, 2), default=0, nullable=False, server_default='0')
+
+    def discounted_price(self):
+        if self.discount_percent and self.discount_percent > 0:
+            return round(float(self.price) * (1 - float(self.discount_percent) / 100), 2)
+        return float(self.price)
 
     def to_dict(self):
         return {
@@ -51,7 +59,10 @@ class MenuItem(db.Model):
             "flavour": self.flavour,
             "category": self.category,
             "price": float(self.price),
-            "image": self.image
+            "discounted_price": self.discounted_price(),
+            "discount_percent": float(self.discount_percent),
+            "image": self.image,
+            "is_available": self.is_available
         }
 
 
@@ -66,13 +77,17 @@ class CartItem(db.Model):
     menu_item = db.relationship('MenuItem')
 
     def to_dict(self):
+        item = self.menu_item
+        effective_price = item.discounted_price()
         return {
             "id": self.id,
             "menu_item_id": self.menu_item_id,
-            "title": self.menu_item.title,
-            "price": float(self.menu_item.price),
+            "title": item.title,
+            "price": effective_price,
+            "original_price": float(item.price),
+            "discount_percent": float(item.discount_percent),
             "qty": self.qty,
-            "subtotal": float(self.menu_item.price) * self.qty
+            "subtotal": effective_price * self.qty
         }
 
 

@@ -9,7 +9,7 @@ cart_bp = Blueprint('cart', __name__)
 @login_required
 def get_cart():
     items = CartItem.query.filter_by(user_id=current_user.id).all()
-    total = sum(item.menu_item.price * item.qty for item in items)
+    total = sum(item.menu_item.discounted_price() * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
@@ -29,6 +29,9 @@ def add_to_cart():
     menu_item = MenuItem.query.get(menu_item_id)
     if not menu_item:
         return jsonify({"error": "Item not found"}), 404
+
+    if not menu_item.is_available:
+        return jsonify({"error": "Item is not available"}), 400
 
     cart_item = CartItem.query.filter_by(
         user_id=current_user.id,
@@ -51,7 +54,7 @@ def add_to_cart():
     db.session.commit()
 
     items = CartItem.query.filter_by(user_id=current_user.id).all()
-    total = sum(item.menu_item.price * item.qty for item in items)
+    total = sum(item.menu_item.discounted_price() * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
@@ -74,7 +77,7 @@ def remove_from_cart():
         db.session.commit()
 
     items = CartItem.query.filter_by(user_id=current_user.id).all()
-    total = sum(item.menu_item.price * item.qty for item in items)
+    total = sum(item.menu_item.discounted_price() * item.qty for item in items)
     return jsonify({
         "items": [item.to_dict() for item in items],
         "total": float(total)
