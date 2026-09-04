@@ -39,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const res = await fetch('/api/checkout', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
             body: JSON.stringify({ tip: tipAmount })
         });
 

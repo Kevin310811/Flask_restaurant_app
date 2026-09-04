@@ -9,12 +9,14 @@ from .routes.admin import admin_bp
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from flask_wtf.csrf import CSRFProtect
 from config import Config
 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please log in to access this page.'
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
@@ -24,6 +26,7 @@ def create_app():
     Migrate(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):

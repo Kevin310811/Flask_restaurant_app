@@ -1,3 +1,12 @@
+// Reads the CSRF token Flask-WTF renders into <meta name="csrf-token">
+// in base.html. Every JS file that POSTs JSON (this file, ordering.js,
+// payment.js) calls this and sends the result as the X-CSRFToken
+// header, since CSRFProtect can't read a token from a JSON body the
+// way it reads one from a form field.
+function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').content;
+}
+
 function showSidebar() {
     const sidebar = document.querySelector('.sidebar');
     sidebar.style.display = 'flex';
@@ -199,7 +208,10 @@ if (form) {
 
             const res = await fetch('/reservations', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
                 body: JSON.stringify({
                     first_name: firstName,
                     last_name: lastName,
