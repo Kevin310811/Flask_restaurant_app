@@ -40,7 +40,7 @@ async function fetchMenu() {
 // Fetch cart from Flask
 async function fetchCart() {
     const res = await fetch('/api/cart');
-    cartState = await res.json();
+    cartState = await res.json(); 
     updateCart();
     updateItemCount();
 }

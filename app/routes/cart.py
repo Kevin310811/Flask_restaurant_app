@@ -12,7 +12,7 @@ def cart_summary(user_id):
 
     get_cart(), add_to_cart(), and remove_from_cart() all used to run
     this same query-and-sum independently. Now they all call this, so
-    the calculation can't drift out of sync between them.
+    the calculation can't drift out of sync between them.   
     """
     items = CartItem.query.filter_by(user_id=user_id).all()
     total = sum(item.menu_item.price * item.qty for item in items)
