@@ -8,12 +8,7 @@ MAX_QTY_PER_ITEM = 20
 
 
 def cart_summary(user_id):
-    """Single place that computes a user's cart items + total.
-
-    get_cart(), add_to_cart(), and remove_from_cart() all used to run
-    this same query-and-sum independently. Now they all call this, so
-    the calculation can't drift out of sync between them.
-    """
+    """Single place that computes a user's cart items + total."""
     items = CartItem.query.filter_by(user_id=user_id).all()
     total = sum(item.menu_item.price * item.qty for item in items)
     return items, float(total)
@@ -39,10 +34,6 @@ def add_to_cart():
     if not menu_item_id:
         return jsonify({"error": "menu_item_id required"}), 400
 
-    # The frontend caps qty at MAX_QTY_PER_ITEM client-side, but that's
-    # only a UI nicety -- nothing stops someone from POSTing directly
-    # to this endpoint with an arbitrary or malformed value, so the
-    # real check has to live here.
     try:
         qty = int(qty)
     except (TypeError, ValueError):
@@ -54,6 +45,14 @@ def add_to_cart():
     menu_item = MenuItem.query.get(menu_item_id)
     if not menu_item:
         return jsonify({"error": "Item not found"}), 404
+
+    # This is the real enforcement point for availability. menu.py now
+    # shows unavailable items to customers (as "sold out") instead of
+    # hiding them, so nothing there stops a request from targeting one
+    # -- this check is what actually prevents it from being ordered,
+    # regardless of what the frontend does or doesn't disable.
+    if qty > 0 and not menu_item.is_available:
+        return jsonify({"error": "This item is currently unavailable."}), 400
 
     cart_item = CartItem.query.filter_by(
         user_id=current_user.id,

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import login_required
 from app.models import MenuItem
 
 menu_bp = Blueprint('menu', __name__)
@@ -20,14 +20,13 @@ def get_menu():
 
     query = MenuItem.query
 
-    # Customers should only ever see items an admin has marked
-    # available -- admins bypass this so they can still see
-    # unavailable items if this endpoint is ever reused for admin
-    # views. Without this check, toggling an item to "unavailable"
-    # in admin.py had no actual effect on what /api/menu returned.
-    if not current_user.is_admin:
-        query = query.filter_by(is_available=True)
-
+    # Return every item, available or not -- is_available is already
+    # exposed in to_dict(), so the frontend can show unavailable items
+    # as "sold out" rather than hiding them entirely. Actually
+    # preventing an unavailable item from being ordered happens
+    # server-side in cart.py's add_to_cart(), not here -- filtering
+    # visibility was never what made ordering safe, so removing the
+    # filter here doesn't reopen that gap.
     if category:
         query = query.filter_by(category=category)
     if food_type:
