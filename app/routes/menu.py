@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.models import MenuItem
 
 menu_bp = Blueprint('menu', __name__)
@@ -19,6 +19,14 @@ def get_menu():
     flavour = request.args.get('flavour')
 
     query = MenuItem.query
+
+    # Customers should only ever see items an admin has marked
+    # available -- admins bypass this so they can still see
+    # unavailable items if this endpoint is ever reused for admin
+    # views. Without this check, toggling an item to "unavailable"
+    # in admin.py had no actual effect on what /api/menu returned.
+    if not current_user.is_admin:
+        query = query.filter_by(is_available=True)
 
     if category:
         query = query.filter_by(category=category)

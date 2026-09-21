@@ -1,3 +1,5 @@
+import re
+from urllib.parse import urlparse, urljoin
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_bcrypt import Bcrypt
@@ -5,6 +7,25 @@ from app.models import db, User, Order, Reservation, CartItem
 
 bcrypt = Bcrypt()
 auth_bp = Blueprint('auth', __name__)
+
+EMAIL_PATTERN = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+
+
+def is_safe_redirect_url(target):
+    """Only allow redirecting to a path on this same site.
+
+    Without this, a login link like /login?next=https://evil.com sends
+    a successfully-authenticated user straight to an attacker's site --
+    a classic open redirect, often used in phishing (the link looks
+    like it points at your real domain, so it's more likely to be
+    clicked, then silently forwards the victim elsewhere right after
+    they've just typed in their password).
+    """
+    if not target:
+        return False
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -21,6 +42,10 @@ def register():
 
         if not all([first_name, last_name, email, password, confirm_password]):
             flash('All fields are required.', 'error')
+            return render_template('register.html')
+
+        if not EMAIL_PATTERN.match(email):
+            flash('Please enter a valid email address.', 'error')
             return render_template('register.html')
 
         if password != confirm_password:
@@ -70,6 +95,8 @@ def login():
 
         login_user(user, remember=remember)
         next_page = request.args.get('next')
+        if not is_safe_redirect_url(next_page):
+            next_page = None
         return redirect(next_page or url_for('main.index'))
 
     return render_template('login.html')
@@ -103,7 +130,7 @@ def profile():
         elif action == 'delete_account':
             user_id = current_user.id
             logout_user()
-            user = User.query.get(user_id)
+            user = db.session.get(User, user_id)
             db.session.delete(user)
             db.session.commit()
             return redirect(url_for('main.index'))

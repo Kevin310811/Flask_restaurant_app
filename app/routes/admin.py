@@ -15,13 +15,57 @@ def admin_required(f):
     return decorated_function
 
 
+def validate_menu_fields(title, desc, category, flavour, image):
+    """Shared blank-field check for both add and edit.
+
+    Previously only add_menu_item checked this -- edit_menu_item had
+    no equivalent, so an admin could save an edit with a blank title
+    (or any other required field) and it would go through silently.
+    """
+    if not all([title, desc, category, flavour, image]):
+        return 'All fields are required.'
+    return None
+
+
+def parse_price(raw_price):
+    """Validate and convert a raw form price string.
+
+    Both add_menu_item and edit_menu_item used to call float(price)
+    directly with no error handling -- a malformed value (stray text,
+    a typo like "12.5.0") raised an unhandled ValueError and crashed
+    the request with a 500 instead of a friendly message.
+    """
+    try:
+        price = float(raw_price)
+    except (TypeError, ValueError):
+        return None, 'Price must be a valid number.'
+    if price <= 0:
+        return None, 'Price must be greater than 0.'
+    return price, None
+
+
+def parse_discount(raw_discount):
+    """Same defensive parsing as parse_price, for discount_percent.
+
+    Both routes did float(request.form.get('discount_percent', 0) or 0)
+    with no error handling either -- same crash risk on bad input.
+    """
+    try:
+        discount = float(raw_discount or 0)
+    except (TypeError, ValueError):
+        return None, 'Discount must be a valid number.'
+    if not (0 <= discount <= 100):
+        return None, 'Discount must be between 0 and 100.'
+    return discount, None
+
+
 @admin_bp.route('/')
 @login_required
 @admin_required
 def dashboard():
     total_users = User.query.count()
     total_orders = Order.query.count()
-    total_revenue = db.session.query(db.func.sum(Order.total)).filter_by(status='paid').scalar() or 0
+    total_revenue = db.session.query(db.func.sum(Order.total)).filter(Order.status == 'paid').scalar() or 0
     total_reservations = Reservation.query.count()
     recent_orders = Order.query.order_by(Order.created_at.desc()).limit(5).all()
 
@@ -124,12 +168,23 @@ def add_menu_item():
     category = request.form.get('category', '').strip()
     food_type = request.form.get('type', '').strip() or None
     flavour = request.form.get('flavour', '').strip()
-    price = request.form.get('price', '0')
+    raw_price = request.form.get('price', '0')
     image = request.form.get('image', '').strip()
-    discount_percent = float(request.form.get('discount_percent', 0) or 0)
+    raw_discount = request.form.get('discount_percent', 0)
 
-    if not all([title, desc, category, flavour, price, image]):
-        flash('All fields are required.', 'error')
+    error = validate_menu_fields(title, desc, category, flavour, image)
+    if error:
+        flash(error, 'error')
+        return redirect(url_for('admin.menu'))
+
+    price, price_error = parse_price(raw_price)
+    if price_error:
+        flash(price_error, 'error')
+        return redirect(url_for('admin.menu'))
+
+    discount_percent, discount_error = parse_discount(raw_discount)
+    if discount_error:
+        flash(discount_error, 'error')
         return redirect(url_for('admin.menu'))
 
     item = MenuItem(
@@ -138,7 +193,7 @@ def add_menu_item():
         category=category,
         type=food_type,
         flavour=flavour,
-        price=float(price),
+        price=price,
         image=image,
         is_available=True,
         discount_percent=discount_percent
@@ -154,14 +209,39 @@ def add_menu_item():
 @admin_required
 def edit_menu_item(item_id):
     item = MenuItem.query.get_or_404(item_id)
-    item.title = request.form.get('title', item.title).strip()
-    item.desc = request.form.get('desc', item.desc).strip()
-    item.category = request.form.get('category', item.category).strip()
-    item.type = request.form.get('type', '').strip() or None
-    item.flavour = request.form.get('flavour', item.flavour).strip()
-    item.price = float(request.form.get('price', item.price))
-    item.image = request.form.get('image', item.image).strip()
-    item.discount_percent = float(request.form.get('discount_percent', 0) or 0)
+
+    title = request.form.get('title', item.title).strip()
+    desc = request.form.get('desc', item.desc).strip()
+    category = request.form.get('category', item.category).strip()
+    food_type = request.form.get('type', '').strip() or None
+    flavour = request.form.get('flavour', item.flavour).strip()
+    raw_price = request.form.get('price', item.price)
+    image = request.form.get('image', item.image).strip()
+    raw_discount = request.form.get('discount_percent', item.discount_percent)
+
+    error = validate_menu_fields(title, desc, category, flavour, image)
+    if error:
+        flash(error, 'error')
+        return redirect(url_for('admin.menu'))
+
+    price, price_error = parse_price(raw_price)
+    if price_error:
+        flash(price_error, 'error')
+        return redirect(url_for('admin.menu'))
+
+    discount_percent, discount_error = parse_discount(raw_discount)
+    if discount_error:
+        flash(discount_error, 'error')
+        return redirect(url_for('admin.menu'))
+
+    item.title = title
+    item.desc = desc
+    item.category = category
+    item.type = food_type
+    item.flavour = flavour
+    item.price = price
+    item.image = image
+    item.discount_percent = discount_percent
     db.session.commit()
     flash(f'"{item.title}" updated.', 'success')
     return redirect(url_for('admin.menu'))
