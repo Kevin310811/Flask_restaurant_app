@@ -45,20 +45,42 @@ async function fetchCart() {
     updateItemCount();
 }
 
-// Update qty on server
+// Update qty on server. Returns true if the server accepted the change.
 async function updateQty(menuItemId, qty) {
-    const res = await fetch('/api/cart/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify({ menu_item_id: menuItemId, qty })
-    });
-    cartState = await res.json();
+    let res, data;
+    try {
+        res = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({ menu_item_id: menuItemId, qty })
+        });
+        data = await res.json();
+    } catch (err) {
+        // Network failure, or a non-JSON response (e.g. an expired
+        // session redirecting to the login page).
+        alert('Could not update your cart. Please refresh the page and try again.');
+        return false;
+    }
+
+    // The server answers with {"error": ...} when it rejects a change
+    // (item sold out, quantity over the cap, ...). Previously that body
+    // was assigned straight to cartState, which broke every later
+    // cartState.items call. Now we show the message and resync instead.
+    if (!res.ok) {
+        alert(data.error || 'Could not update your cart. Please try again.');
+        await fetchCart();
+        await fetchMenu();
+        return false;
+    }
+
+    cartState = data;
     updateCart();
     updateItemCount();
     display_food();
+    return true;
 }
 
 function getSelectedCategory() {
@@ -85,23 +107,32 @@ function display_food() {
 
     foodItems.forEach(item => {
         const qty = getCartQty(item.id);
+        const soldOut = !item.is_available;
+        const hasDiscount = item.discount_percent > 0;
+
+        // Match the cart/checkout, which already charge the discounted price.
+        const priceHtml = hasDiscount
+            ? `<span class="price-original">₹${item.price}</span> ₹${item.discounted_price.toFixed(2)} <span class="price-discount">${item.discount_percent}% off</span>`
+            : `₹${item.price}`;
+
         const card = document.createElement("div");
-        card.className = "item";
+        card.className = soldOut ? "item sold-out" : "item";
         card.innerHTML = `
             <div class="item-image" style="background-image: url('/static/${item.image}')">
                 <div class="item-image-overlay">
                     <p class="item-image-category">${item.category.toUpperCase()}</p>
                     ${item.type ? `<p class="item-image-type ${item.type}">${item.type}</p>` : ''}
+                    ${soldOut ? `<p class="item-sold-out-badge">SOLD OUT</p>` : ''}
                 </div>
             </div>
             <div class="item-text">
                 <h1>${item.title}</h1>
                 <p>${item.desc}</p>
-                <p class="price">₹${item.price}</p>
+                <p class="price">${priceHtml}</p>
                 <div class="qty-btn">
                     <button class="decrease">-</button>
                     <p class="count">${qty}</p>
-                    <button class="increase">+</button>
+                    <button class="increase" ${soldOut ? 'disabled' : ''}>+</button>
                 </div>
             </div>
         `;
@@ -112,7 +143,10 @@ function display_food() {
         const increaseBtn = card.querySelector(".increase");
         const countLabel = card.querySelector(".count");
 
+        // The decrease button stays enabled on sold-out items so someone
+        // who already added one can still take it out of their cart.
         increaseBtn.addEventListener("click", async () => {
+            if (soldOut) return;
             const currentQty = getCartQty(item.id);
             if (currentQty < 20) {
                 await updateQty(item.id, currentQty + 1);

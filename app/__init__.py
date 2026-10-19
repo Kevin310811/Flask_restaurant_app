@@ -1,5 +1,6 @@
 from flask import Flask
 from .models import db, User
+from .extensions import bcrypt
 from .routes.main import main_bp
 from .routes.menu import menu_bp
 from .routes.cart import cart_bp
@@ -8,11 +9,9 @@ from .routes.auth import auth_bp
 from .routes.admin import admin_bp
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from config import Config
 
-bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Please log in to access this page.'
@@ -30,7 +29,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     @login_manager.unauthorized_handler
     def unauthorized():
