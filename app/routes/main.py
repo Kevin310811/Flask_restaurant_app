@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, Reservation
@@ -9,9 +10,13 @@ main_bp = Blueprint('main', __name__)
 SLOT_INTERVAL_MINUTES = 20
 MAX_RESERVATIONS_PER_SLOT = 2
 MAX_PEOPLE_PER_SLOT = 10
+MAX_PARTY_SIZE = 12
 OPENING_HOUR = 8
 OPENING_MINUTE = 40
 CLOSING_HOUR = 23
+
+EMAIL_PATTERN = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+PHONE_PATTERN = re.compile(r'^[+\d][\d\s\-\(\)]{5,19}$')
 
 
 def snap_to_slot(dt):
@@ -72,7 +77,14 @@ def acquire_slot_lock(slot_time):
     for the same slot_time contends for the same lock. It's scoped to
     the current transaction and is released automatically on commit
     or rollback -- no manual unlock needed.
+
+    The advisory lock is Postgres-only. SQLite (the local dev fallback)
+    serializes writes at the database level, so the same guard call is
+    a no-op there -- dev-only risk accepted in exchange for not 500ing
+    every reservation attempt without a Postgres server running.
     """
+    if db.engine.dialect.name != 'postgresql':
+        return
     slot_key = int(slot_time.timestamp())
     db.session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": slot_key})
 
@@ -128,7 +140,9 @@ def get_slots():
 @login_required
 def reservations():
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.get_json(silent=True)
+        if data is None:
+            return jsonify({"success": False, "error": "Invalid or missing JSON body."}), 400
 
         try:
             raw_time = datetime.fromisoformat(data.get('time'))
@@ -147,9 +161,28 @@ def reservations():
         if slot_time < datetime.now():
             return jsonify({"success": False, "error": "Please select a future date and time."}), 400
 
-        people = int(data.get('people', 1))
-        if people < 1 or people > 12:
-            return jsonify({"success": False, "error": "Party size must be between 1 and 12."}), 400
+        # int() used to run unguarded here: a body with people="abc"
+        # crashed the request with a 500.
+        try:
+            people = int(str(data.get('people', 1)).strip())
+        except (TypeError, ValueError):
+            return jsonify({"success": False, "error": "Party size must be a whole number."}), 400
+        if people < 1 or people > MAX_PARTY_SIZE:
+            return jsonify({"success": False, "error": f"Party size must be between 1 and {MAX_PARTY_SIZE}."}), 400
+
+        first_name = (data.get('first_name') or '').strip()
+        last_name = (data.get('last_name') or '').strip()
+        phone = (data.get('phone') or '').strip()
+        email = (data.get('email') or '').strip().lower()
+
+        if not first_name or not last_name:
+            return jsonify({"success": False, "error": "First and last name are required."}), 400
+        if len(first_name) > 50 or len(last_name) > 50:
+            return jsonify({"success": False, "error": "Name is too long."}), 400
+        if not PHONE_PATTERN.match(phone):
+            return jsonify({"success": False, "error": "Please enter a valid phone number."}), 400
+        if len(email) > 100 or not EMAIL_PATTERN.match(email):
+            return jsonify({"success": False, "error": "Please enter a valid email address."}), 400
 
         # Everything above is cheap, request-only validation -- no need
         # to touch the lock for a request that's going to fail anyway.
@@ -163,10 +196,10 @@ def reservations():
 
         reservation = Reservation(
             user_id=current_user.id,
-            first_name=data.get('first_name', '').strip(),
-            last_name=data.get('last_name', '').strip(),
-            phone=data.get('phone', '').strip(),
-            email=data.get('email', '').strip(),
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+            email=email,
             people=people,
             slot_time=slot_time,
             status='confirmed'

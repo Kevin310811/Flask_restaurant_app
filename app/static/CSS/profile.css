@@ -238,6 +238,23 @@
     color: #f5c542;
 }
 
+/* the " / M" ratio after your order number -- smaller and dimmer */
+.order-id-total {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.order-global {
+    font-family: var(--font-family-heading);
+    font-size: 11px;
+    font-weight: 600;
+    color: #b0b0b0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: -6px 0 0;
+}
+
 .order-date {
     font-family: var(--font-family-paragraph);
     font-size: 13px;
@@ -266,6 +283,11 @@
 
 .order-status.cancelled {
     background-color: #8b0000;
+    color: white;
+}
+
+.order-status.void {
+    background-color: #6b6b6b;
     color: white;
 }
 

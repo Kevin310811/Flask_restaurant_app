@@ -294,6 +294,12 @@ body {
     border: 1px solid #ff6b6b;
 }
 
+.status-badge.void {
+    background-color: rgba(107, 107, 107, 0.2);
+    color: #a0a0a0;
+    border: 1px solid #a0a0a0;
+}
+
 /* =====================
    VEG / NON-VEG BADGES
    ===================== */
@@ -813,3 +819,8 @@ body {
     padding: 2px 8px;
     border-radius: 20px;
 }
+/* Pagination */
+.admin-pagination { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+.admin-pagination-btn { padding: 6px 14px; border: 1px solid #444; border-radius: 6px; color: #eee; text-decoration: none; }
+.admin-pagination-btn:hover { background: #2c2c2c; }
+.admin-pagination-info { color: #999; font-size: 14px; }

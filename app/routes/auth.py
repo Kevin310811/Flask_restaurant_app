@@ -2,12 +2,27 @@ import re
 from urllib.parse import urlparse, urljoin
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from app.extensions import bcrypt
+from app.extensions import bcrypt, limiter
 from app.models import db, User, Order, Reservation, CartItem
 
 auth_bp = Blueprint('auth', __name__)
 
 EMAIL_PATTERN = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+
+# A throwaway hash so a login attempt for a non-existent email still runs
+# one full bcrypt check -- otherwise the fast "user not found" path is
+# measurably quicker than the slow "wrong password" path, which is a
+# cheap way for an attacker to find out who has an account.
+# Generated lazily (cached per process) because Flask-Bcrypt needs an
+# active app context to read BCRYPT_LOG_ROUNDS.
+_dummy_hash = None
+
+
+def _get_dummy_hash():
+    global _dummy_hash
+    if _dummy_hash is None:
+        _dummy_hash = bcrypt.generate_password_hash('timing-equalizer').decode('utf-8')
+    return _dummy_hash
 
 
 def is_safe_redirect_url(target):
@@ -28,6 +43,7 @@ def is_safe_redirect_url(target):
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
+@limiter.limit('10 per minute', methods=['POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -77,6 +93,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit('5 per minute', methods=['POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -88,9 +105,17 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        if not user or not bcrypt.check_password_hash(user.password_hash, password):
+        # Always run one bcrypt check, even when the email is unknown, so
+        # response timing doesn't reveal whether an account exists.
+        if user:
+            password_ok = bcrypt.check_password_hash(user.password_hash, password)
+        else:
+            bcrypt.check_password_hash(_get_dummy_hash(), password)
+            password_ok = False
+
+        if not password_ok:
             flash('Invalid email or password.', 'error')
-            return render_template('login.html')
+            return render_template('login.html', email=email)
 
         login_user(user, remember=remember)
         next_page = request.args.get('next')
@@ -101,11 +126,22 @@ def login():
     return render_template('login.html')
 
 
-@auth_bp.route('/logout')
+@auth_bp.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    # POST-only so a cross-site <img src="/logout"> or <a> can't silently
+    # log a user out (GET requests can't be CSRF-protected).
     logout_user()
     return redirect(url_for('main.index'))
+
+
+def _ordinal(n):
+    """1 -> '1st', 2 -> '2nd', 3 -> '3rd', 4 -> '4th', 21 -> '21st'..."""
+    if 10 <= n % 100 <= 20:
+        suffix = 'th'
+    else:
+        suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+    return f"{n}{suffix}"
 
 
 @auth_bp.route('/profile', methods=['GET', 'POST'])
@@ -137,5 +173,38 @@ def profile():
     orders = Order.query.filter_by(
         user_id=current_user.id
     ).order_by(Order.created_at.desc()).all()
+
+    # Display counters for the order-history cards. Both count
+    # chronologically (oldest first) and are computed fresh -- the
+    # raw id column is NOT used, because database ids accumulate
+    # gaps from other users' orders and deletions.
+    #   my_n / my_total  -> this user's n-th order of their M orders
+    #   global_label     -> the k-th order ever placed here, of T total
+    all_rows = (
+        db.session.query(Order.id, Order.created_at)
+        .order_by(Order.created_at.asc(), Order.id.asc())
+        .all()
+    )
+    all_rank = {order_id: i + 1 for i, (order_id, _created) in enumerate(all_rows)}
+    all_total = len(all_rows)
+
+    mine_sorted = sorted(orders, key=lambda o: (o.created_at, o.id))
+    my_rank = {o.id: i + 1 for i, o in enumerate(mine_sorted)}
+    my_total = len(mine_sorted)
+
+    for o in orders:
+        my_n = my_rank[o.id]
+        global_n = all_rank[o.id]
+        o.my_n = my_n
+        o.my_total = my_total
+        o.my_title = (
+            f"Your {_ordinal(my_n)} placed order (this account)"
+            if my_total else "No orders yet"
+        )
+        o.global_label = f"{_ordinal(global_n)} of {all_total}"
+        o.global_title = (
+            f"The {_ordinal(global_n)} order placed in total "
+            f"(of {all_total} in the database)"
+        )
 
     return render_template('profile.html', orders=orders)

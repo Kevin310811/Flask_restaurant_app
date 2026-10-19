@@ -59,6 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Restaurant',
                 description: 'Food Order Payment',
                 order_id: createData.order_id,
+                // Prefill from the logged-in account: spares the customer
+                // retyping name/email/mobile and lets the checkout validate
+                // the required contact field reliably.
+                prefill: {
+                    name: payBtn.dataset.name || '',
+                    email: payBtn.dataset.email || '',
+                    contact: payBtn.dataset.contact || ''
+                },
                 handler: async function (response) {
                     const verifyRes = await fetch('/api/payment/verify', {
                         method: 'POST',

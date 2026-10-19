@@ -3,8 +3,32 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def _env_bool(name, default=False):
+    val = os.environ.get(name)
+    if val is None:
+        return default
+    return val.strip().lower() in ('1', 'true', 'yes', 'on')
+
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
+    # The secret key signs Flask's session cookies. A known constant here
+    # would let anyone forge cookies -- including Flask-Login's user id --
+    # and impersonate any user or admin. Fail loudly instead.
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        raise RuntimeError(
+            "SECRET_KEY is not set. Add it to your .env file (local dev) "
+            "or the hosting environment. Sessions cannot be signed safely "
+            "without it."
+        )
+
+    # Cookie hardening. SameSite=Lax is safe for the login flow; the
+    # Secure flag is toggled via env so it can be enabled on HTTPS deployments
+    # (Render) while staying functional on local http://127.0.0.1 dev.
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = _env_bool('SESSION_COOKIE_SECURE', default=False)
+    # Don't accept giant request bodies (DoS guard); there is no upload feature.
+    MAX_CONTENT_LENGTH = 1 * 1024 * 1024
+
     raw_url = os.environ.get('DATABASE_URL') or 'sqlite:///restaurant.db'
     # Fix Render's postgres:// prefix
     if raw_url.startswith('postgres://'):

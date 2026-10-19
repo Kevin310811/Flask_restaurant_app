@@ -1,3 +1,4 @@
+from decimal import Decimal
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from app.models import db, CartItem, MenuItem
@@ -10,8 +11,11 @@ MAX_QTY_PER_ITEM = 20
 def cart_summary(user_id):
     """Single place that computes a user's cart items + total."""
     items = CartItem.query.filter_by(user_id=user_id).all()
-    total = sum(item.menu_item.price * item.qty for item in items)
-    return items, float(total)
+    # Use the discounted price so the total always matches the per-item
+    # subtotals and the payment page. (It previously used menu_item.price,
+    # silently charging full price for discounted items.)
+    total = sum((item.menu_item.discounted_price() * item.qty for item in items), Decimal('0.00'))
+    return items, total
 
 
 @cart_bp.route('/api/cart', methods=['GET'])
@@ -20,22 +24,28 @@ def get_cart():
     items, total = cart_summary(current_user.id)
     return jsonify({
         "items": [item.to_dict() for item in items],
-        "total": total
+        "total": float(total)
     })
 
 
 @cart_bp.route('/api/cart/add', methods=['POST'])
 @login_required
 def add_to_cart():
-    data = request.get_json()
+    # get_json(silent=True) returns None on a malformed/missing body instead
+    # of crashing the request; treat it as an explicit client error.
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify({"error": "Invalid or missing JSON body"}), 400
     menu_item_id = data.get('menu_item_id')
     qty = data.get('qty', 1)
 
     if not menu_item_id:
         return jsonify({"error": "menu_item_id required"}), 400
 
+    # Reject anything that isn't a whole number (floats like 1.5, bools,
+    # strings like "abc"). int(float) would silently truncate 1.9 to 1.
     try:
-        qty = int(qty)
+        qty = int(str(qty).strip())
     except (TypeError, ValueError):
         return jsonify({"error": "qty must be a whole number"}), 400
 
@@ -77,14 +87,16 @@ def add_to_cart():
     items, total = cart_summary(current_user.id)
     return jsonify({
         "items": [item.to_dict() for item in items],
-        "total": total
+        "total": float(total)
     })
 
 
 @cart_bp.route('/api/cart/remove', methods=['POST'])
 @login_required
 def remove_from_cart():
-    data = request.get_json()
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify({"error": "Invalid or missing JSON body"}), 400
     menu_item_id = data.get('menu_item_id')
 
     cart_item = CartItem.query.filter_by(
@@ -99,5 +111,5 @@ def remove_from_cart():
     items, total = cart_summary(current_user.id)
     return jsonify({
         "items": [item.to_dict() for item in items],
-        "total": total
+        "total": float(total)
     })

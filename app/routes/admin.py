@@ -83,11 +83,14 @@ def dashboard():
 @admin_required
 def orders():
     status_filter = request.args.get('status', '')
+    page = request.args.get('page', 1, type=int)
     query = Order.query.order_by(Order.created_at.desc())
     if status_filter:
         query = query.filter_by(status=status_filter)
-    all_orders = query.all()
-    return render_template('admin/orders.html', orders=all_orders, status_filter=status_filter)
+    # Paginate so a large order history doesn't load every row per visit.
+    pagination = query.paginate(page=page, per_page=50, error_out=False)
+    all_orders = pagination.items
+    return render_template('admin/orders.html', orders=all_orders, status_filter=status_filter, pagination=pagination)
 
 
 @admin_bp.route('/orders/<int:order_id>/status', methods=['POST'])
@@ -96,10 +99,12 @@ def orders():
 def update_order_status(order_id):
     order = Order.query.get_or_404(order_id)
     new_status = request.form.get('status')
-    if new_status in ['paid', 'pending', 'cancelled']:
+    if new_status in ['paid', 'pending', 'cancelled', 'void']:
         order.status = new_status
         db.session.commit()
         flash(f'Order #{order_id} status updated to {new_status}.', 'success')
+    else:
+        flash('Invalid status.', 'error')
     return redirect(url_for('admin.orders'))
 
 
@@ -107,8 +112,9 @@ def update_order_status(order_id):
 @login_required
 @admin_required
 def users():
-    all_users = User.query.order_by(User.created_at.desc()).all()
-    return render_template('admin/users.html', users=all_users)
+    page = request.args.get('page', 1, type=int)
+    pagination = User.query.order_by(User.created_at.desc()).paginate(page=page, per_page=50, error_out=False)
+    return render_template('admin/users.html', users=pagination.items, pagination=pagination)
 
 
 @admin_bp.route('/users/<int:user_id>/delete', methods=['POST'])
@@ -130,13 +136,15 @@ def delete_user(user_id):
 @admin_required
 def reservations():
     status_filter = request.args.get('status', '')
+    page = request.args.get('page', 1, type=int)
     query = Reservation.query.order_by(Reservation.slot_time.desc())
     if status_filter:
         query = query.filter_by(status=status_filter)
-    all_reservations = query.all()
+    pagination = query.paginate(page=page, per_page=50, error_out=False)
     return render_template('admin/reservations.html',
-        reservations=all_reservations,
-        status_filter=status_filter
+        reservations=pagination.items,
+        status_filter=status_filter,
+        pagination=pagination
     )
 
 

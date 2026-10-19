@@ -50,7 +50,10 @@
             <div class="profile-divider"></div>
 
             <!-- Logout -->
-            <a href="{{ url_for('auth.logout') }}" class="profile-btn profile-btn-secondary">Log Out</a>
+            <form method="POST" action="{{ url_for('auth.logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="profile-btn profile-btn-secondary">Log Out</button>
+            </form>
 
             <div class="profile-divider"></div>
 
@@ -72,10 +75,11 @@
                 {% for order in orders %}
                 <div class="order-card">
                     <div class="order-card-header">
-                        <span class="order-id">#{{ order.id }}</span>
+                        <span class="order-id" title="{{ order.my_title }}">#{{ order.my_n }}<span class="order-id-total">&nbsp;/&nbsp;{{ order.my_total }}</span></span>
                         <span class="order-date">{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</span>
-                        <span class="order-status {{ order.status }}">{{ order.status }}</span>
+                        <span class="order-status {{ order.status }}">{{ order.status|capitalize }}</span>
                     </div>
+                    <span class="order-global" title="{{ order.global_title }}">{{ order.global_label }} globally</span>
                     <ul class="order-items-list">
                         {% for item in order.items %}
                         <li>

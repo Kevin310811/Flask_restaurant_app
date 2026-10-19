@@ -1,6 +1,11 @@
+from decimal import Decimal, ROUND_HALF_UP
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timezone
+
+def utcnow():
+    """Naive UTC now (db.DateTime stores naive values; utcnow is deprecated in 3.12+)."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 db = SQLAlchemy()
 
@@ -14,7 +19,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default='false')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=utcnow)
 
     cart_items = db.relationship('CartItem', backref='user', cascade='all, delete-orphan')
     orders = db.relationship('Order', backref='user', cascade='all, delete-orphan')
@@ -46,9 +51,12 @@ class MenuItem(db.Model):
     discount_percent = db.Column(db.Numeric(5, 2), default=0, nullable=False, server_default='0')
 
     def discounted_price(self):
-        if self.discount_percent and self.discount_percent > 0:
-            return round(float(self.price) * (1 - float(self.discount_percent) / 100), 2)
-        return float(self.price)
+        """Effective price as Decimal, rounded to 2 places (half-up)."""
+        price = Decimal(self.price)
+        discount = Decimal(self.discount_percent or 0)
+        if discount > 0:
+            return (price * (1 - discount / 100)).quantize(Decimal('0.01'), ROUND_HALF_UP)
+        return price
 
     def to_dict(self):
         return {
@@ -59,7 +67,7 @@ class MenuItem(db.Model):
             "flavour": self.flavour,
             "category": self.category,
             "price": float(self.price),
-            "discounted_price": self.discounted_price(),
+            "discounted_price": float(self.discounted_price()),
             "discount_percent": float(self.discount_percent),
             "image": self.image,
             "is_available": self.is_available
@@ -71,7 +79,7 @@ class CartItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), nullable=False)
+    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id', ondelete='CASCADE'), nullable=False, index=True)
     qty = db.Column(db.Integer, nullable=False, default=1)
 
     menu_item = db.relationship('MenuItem')
@@ -83,11 +91,11 @@ class CartItem(db.Model):
             "id": self.id,
             "menu_item_id": self.menu_item_id,
             "title": item.title,
-            "price": effective_price,
+            "price": float(effective_price),
             "original_price": float(item.price),
             "discount_percent": float(item.discount_percent),
             "qty": self.qty,
-            "subtotal": effective_price * self.qty
+            "subtotal": float(effective_price * self.qty)
         }
 
 
@@ -99,9 +107,18 @@ class Order(db.Model):
     subtotal = db.Column(db.Numeric(10, 2), nullable=False)
     tip = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     total = db.Column(db.Numeric(10, 2), nullable=False)
+    # Razorpay charges in paise; store the exact integer amount fixed at
+    # create-order time so verify can compare it against what Razorpay
+    # reports the payment to be, instead of re-deriving it and hoping
+    # the cart/tip hasn't changed in between.
+    amount_paise = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(20), nullable=False, default='pending')
+    # The Razorpay Orders API id for this order. Unique + non-null once
+    # a payment is attempted, which makes one payment -> one order
+    # guaranteed at the schema level.
+    razorpay_order_id = db.Column(db.String(100), nullable=True, unique=True, index=True)
     razorpay_payment_id = db.Column(db.String(100), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=utcnow)
 
     items = db.relationship('OrderItem', backref='order', cascade='all, delete-orphan')
 
@@ -112,6 +129,7 @@ class Order(db.Model):
             "tip": float(self.tip),
             "total": float(self.total),
             "status": self.status,
+            "razorpay_order_id": self.razorpay_order_id,
             "created_at": self.created_at.isoformat(),
             "items": [item.to_dict() for item in self.items]
         }
@@ -121,8 +139,11 @@ class OrderItem(db.Model):
     __tablename__ = 'order_items'
 
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), nullable=False, index=True)
+    # menu_item_id is nullable: deleting a menu item from the admin panel
+    # must not break past orders. OrderItem snapshots title/price/qty at
+    # purchase time, so history stays intact when the FK is set NULL.
+    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id', ondelete='SET NULL'), nullable=True, index=True)
     title = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     qty = db.Column(db.Integer, nullable=False)
@@ -150,7 +171,7 @@ class Reservation(db.Model):
     people = db.Column(db.Integer, nullable=False)
     slot_time = db.Column(db.DateTime, nullable=False, index=True)
     status = db.Column(db.String(20), nullable=False, default='confirmed')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=utcnow)
 
     def to_dict(self):
         return {
