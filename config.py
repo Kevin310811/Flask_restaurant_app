@@ -22,15 +22,16 @@ class Config:
         )
 
     # Cookie hardening. SameSite=Lax is safe for the login flow; the
-    # Secure flag is toggled via env so it can be enabled on HTTPS deployments
-    # (Render) while staying functional on local http://127.0.0.1 dev.
+    # Secure flag is off here because local dev runs plain http://127.0.0.1,
+    # and stays off unless SESSION_COOKIE_SECURE is set (enable it if you
+    # ever run the app behind HTTPS).
     SESSION_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SECURE = _env_bool('SESSION_COOKIE_SECURE', default=False)
     # Don't accept giant request bodies (DoS guard); there is no upload feature.
     MAX_CONTENT_LENGTH = 1 * 1024 * 1024
 
     raw_url = os.environ.get('DATABASE_URL') or 'sqlite:///restaurant.db'
-    # Fix Render's postgres:// prefix
+    # Older URLs use postgres://; modern tooling needs postgresql://
     if raw_url.startswith('postgres://'):
         raw_url = raw_url.replace('postgres://', 'postgresql://', 1)
     SQLALCHEMY_DATABASE_URI = raw_url

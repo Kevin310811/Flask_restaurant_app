@@ -23,8 +23,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Render runs us behind a proxy: trust X-Forwarded-For so the rate
-    # limiter keys on the real client IP instead of the load balancer.
+    # If a reverse proxy (nginx, a cloud load balancer, ...) forwards the
+    # app, trust X-Forwarded-For so the rate limiter keys on the real
+    # client IP instead of the proxy address. Inert in local dev.
     if os.environ.get('TRUST_PROXY', '').lower() in ('1', 'true', 'yes'):
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
