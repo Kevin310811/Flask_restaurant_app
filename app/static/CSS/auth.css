@@ -1,48 +1,52 @@
+/* =====================================================
+   AUTH PAGES (login.html, register.html) and the small
+   rate-limit page, which reuses these classes.
+   ===================================================== */
+
 .auth-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 100px;
-    padding-bottom: 48px;
+    padding-top: var(--post-nav-padding);
+    padding-bottom: var(--space-7);
     padding-left: 20px;
     padding-right: 20px;
-    color: var(--color);
+    color: var(--text);
+    box-sizing: border-box;
 }
 
 .auth-box {
     width: 100%;
     max-width: 480px;
     border: var(--border);
-    border-radius: 12px;
-    padding: 36px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .auth-title {
-    font-family: var(--font-family-heading);
-    font-weight: var(--font-weight-heading);
-    font-size: 36px;
-    color: #f5c542;
+    font-size: clamp(28px, 3.2vw, 36px);
+    color: var(--accent);
     margin: 0;
 }
 
 .auth-subtitle {
-    font-family: var(--font-family-paragraph);
-    font-size: 16px;
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
     margin: 0;
     opacity: 0.7;
 }
 
 .auth-error {
-    font-family: var(--font-family-heading);
-    font-size: 14px;
-    color: #ff6b6b;
-    border: 1px solid #ff6b6b;
-    border-radius: 8px;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-md);
     padding: 10px;
     margin: 0;
 }
@@ -50,7 +54,7 @@
 .auth-box form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
     border: none;
     padding: 0;
     border-radius: 0;
@@ -58,37 +62,37 @@
 }
 
 .auth-box form label {
-    font-family: var(--font-family-heading);
-    font-size: 14px;
-    font-weight: 600;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
     margin: 0;
 }
 
 .auth-box form input[type="email"],
 .auth-box form input[type="password"],
 .auth-box form input[type="text"] {
-    font-family: var(--font-family-heading);
-    font-size: 16px;
-    background-color: var(--background-color);
-    color: var(--color);
+    font-family: var(--font-heading);
+    font-size: var(--fs-base);
+    background-color: var(--bg);
+    color: var(--text);
     border: var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 10px;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
     width: 100%;
     box-sizing: border-box;
 }
 
 .auth-name-row {
     display: flex;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .auth-field {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .auth-field input {
@@ -99,55 +103,55 @@
 .auth-remember {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: var(--space-1);
 }
 
 .remember-label {
-    font-family: var(--font-family-heading);
-    font-size: 14px;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
     cursor: pointer;
 }
 
 .auth-box form button {
-    font-family: var(--font-family-heading);
-    font-size: 18px;
+    font-family: var(--font-heading);
+    font-size: var(--fs-md);
     padding: 10px;
     border: var(--border);
-    border-radius: 8px;
-    background-color: var(--color);
-    color: var(--background-color);
+    border-radius: var(--radius-md);
+    background-color: var(--text);
+    color: var(--bg);
     cursor: pointer;
-    transition: .3s box-shadow ease;
-    margin-top: 8px;
-    font-weight: 700;
+    transition: box-shadow var(--trans-base);
+    margin-top: var(--space-2);
+    font-weight: var(--fw-bold);
 }
 
 @media (hover: hover) {
     .auth-box form button:hover {
-        box-shadow: 3px 3px white;
+        box-shadow: var(--shadow-pop);
     }
 }
 
 @media (hover: none) {
     .auth-box form button:active {
-        box-shadow: 3px 3px white;
+        box-shadow: var(--shadow-pop);
     }
 }
 
 .auth-switch {
-    font-family: var(--font-family-paragraph);
+    font-family: var(--font-body);
     font-size: 15px;
     text-align: center;
     margin: 0;
 }
 
 .auth-switch a {
-    color: #f5c542;
+    color: var(--accent);
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--trans-fast);
 }
 
 @media (hover: hover) {
@@ -156,13 +160,12 @@
     }
 }
 
+/* ================================================
+   RESPONSIVE
+   ================================================ */
 @media screen and (max-width: 768px) {
     .auth-box {
-        padding: 24px;
-    }
-
-    .auth-title {
-        font-size: 28px;
+        padding: var(--space-5);
     }
 
     .auth-name-row {

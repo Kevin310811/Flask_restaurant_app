@@ -1,60 +1,292 @@
+/* =====================================================
+   GLOBAL STYLESHEET
+   Consumes design tokens from tokens.css.
+
+   Contents:
+   1. Base styles & shared elements (hero, locations, footer)
+   2. Navbar + sidebar
+   3. Responsive
+   Page-specific styles live in their own files.
+   ===================================================== */
+
+/* ================================================
+   GLOBAL TYPOGRAPHY
+   ================================================ */
 body {
-    font-family: var(--font-family-paragraph);
+    font-family: var(--font-body);
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: var(--lh-body);
+}
+
+/* Heading defaults — Inter, tight tracking; class/section rules refine size */
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-extra);
+    line-height: var(--lh-tight);
+}
+
+/* Reusable select-none for logo/decorative imagery */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+/* Keyboard focus visibility (mouse clicks stay clean) */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .image-set {
+        animation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+    }
 }
 
 body::-webkit-scrollbar {
     display: none;
 }
 
-:root {
-    --color: rgb(255, 255, 255);
-    --font-weight-heading: 800;
-    --font-weight-paragraph: 100;
-    --font-family-heading: Inter;
-    --font-family-paragraph: Playfair Display;
-    --background-color: rgb(0, 0, 0);
-    --border: 1px solid rgb(255, 255, 255);
+/* ================================================
+   HERO (index, reservations)
+   ================================================ */
+.image-layering {
+    position: relative;
+    text-align: center;
+    color: var(--text);
 }
 
+.hero-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    background-color: var(--bg);
+    border-bottom: var(--border);
+    border-bottom-left-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+    margin-bottom: var(--space-7);
+}
+
+.text-content-hero > h1 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--fs-hero);
+    width: 100%;
+    backdrop-filter: blur(2px);
+}
+
+.text-content-hero > p {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--fs-md);
+    width: 75%;
+    backdrop-filter: blur(2px);
+    font-weight: var(--fw-regular);
+}
+
+.text-content-hero > a {
+    position: absolute;
+    font-size: var(--fs-md);
+    font-weight: var(--fw-regular);
+    border: var(--border);
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow var(--trans-base);
+    backdrop-filter: blur(2px);
+}
+
+@media (hover: hover) {
+    .text-content-hero > a:hover {
+        box-shadow: var(--shadow-pop);
+    }
+}
+
+@media (hover: none) {
+    .text-content-hero > a:active {
+        box-shadow: var(--shadow-pop);
+    }
+}
+
+/* ================================================
+   LOCATIONS (index, reservations)
+   ================================================ */
+.locations {
+    color: var(--text);
+    margin: 0 20px var(--space-7);
+}
+
+.locations > h1 {
+    font-size: var(--fs-h2);
+    margin-bottom: var(--space-4);
+}
+
+.location-content {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+}
+
+.location-content > iframe {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 450px;
+    border-radius: var(--radius-lg);
+    border: var(--border);
+}
+
+.address {
+    flex: 0 0 calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-3);
+}
+
+.address > p {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-regular);
+    border: var(--border);
+    padding: 10px;
+    border-radius: var(--radius-lg);
+    margin: 0;
+}
+
+.address > p > b {
+    color: var(--accent);
+}
+
+/* ================================================
+   FOOTER (shared markup lives in base.html)
+   ================================================ */
+footer {
+    position: relative;
+    color: var(--text);
+    overflow: hidden;
+}
+
+footer > img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: 0px -400px;
+    border-top: 2px solid var(--text);
+    filter: blur(4px);
+}
+
+footer > h1 {
+    position: absolute;
+    top: var(--space-2);
+    left: 0;
+    padding-left: var(--space-4);
+    border-bottom: var(--border);
+    font-size: var(--fs-display);
+    width: 100%;
+    margin: 0;
+    text-align: left;
+}
+
+.footer-links {
+    position: absolute;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--space-5);
+    width: 50%;
+    border-bottom: var(--border);
+}
+
+.footer-links.left {
+    left: 0;
+    padding-left: var(--space-4);
+    text-align: left;
+}
+
+.footer-links.right {
+    right: 0;
+    padding-right: var(--space-4);
+    text-align: right;
+}
+
+.footer-links > a {
+    text-decoration: none;
+    font-size: var(--fs-lg);
+    margin: 2px;
+    font-weight: var(--fw-regular);
+    color: var(--text);
+    transition: color var(--trans-base);
+}
+
+@media (hover: hover) {
+    .footer-links > a:hover {
+        color: var(--accent);
+    }
+}
+
+@media (hover: none) {
+    .footer-links > a:active {
+        color: var(--accent);
+    }
+}
+
+/* ================================================
+   NAVBAR
+   ================================================ */
 nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--background-color);
+    background-color: var(--bg);
     width: 100%;
     position: fixed;
     border-bottom: var(--border);
     z-index: 1;
 }
 
-nav > h1 {
-    color: var(--color);
+nav > h1.logo {
+    color: var(--text);
     text-align: left;
-    margin-left: 12px;
-    font-family: var(--font-family-heading);
+    margin-left: var(--space-3);
     position: absolute;
     left: 20px;
-    font-size: 42px;
+    font-size: var(--fs-logo);
+    line-height: var(--lh-tight);
 }
 
-nav > h1 > a {
-    color: var(--color);
+nav > h1.logo > a {
+    color: var(--text);
     text-decoration: none;
-    transition: .3s color ease;
+    transition: color var(--trans-base);
 }
 
 @media (hover: hover) {
-    nav > h1 > a:hover {
-        color: #f5c542;
-    }
-}
-
-@media (hover: none) {
-    nav > h1 > a:active {
-        color: #f5c542;
+    nav > h1.logo > a:hover {
+        color: var(--accent);
     }
 }
 
@@ -62,29 +294,27 @@ nav > ul {
     list-style-type: none;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-1);
     padding: 0;
     margin: 0;
 }
 
-/* =====================
-   PAGE LABELS
-   ===================== */
+/* Nav page links */
 .page-label {
-    font-size: 18px;
-    font-weight: var(--font-weight-paragraph);
+    font-size: var(--fs-md);
+    font-weight: var(--fw-regular);
     border: var(--border);
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: ease box-shadow 0.2s;
+    transition: box-shadow var(--trans-fast);
     font-style: italic;
-    margin: 12px 6px;
+    margin: var(--space-3) 6px;
 }
 
 .page-label > a {
     text-decoration: none;
-    color: var(--color);
+    color: var(--text);
     display: block;
     width: 100%;
     height: 100%;
@@ -102,9 +332,7 @@ nav > ul {
     }
 }
 
-/* =====================
-   NAV PROFILE (far right)
-   ===================== */
+/* Profile block (far right) */
 .nav-profile {
     position: absolute;
     right: 24px;
@@ -112,8 +340,16 @@ nav > ul {
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    color: var(--color);
-    transition: opacity 0.2s ease;
+    color: var(--text);
+    transition: opacity var(--trans-fast);
+}
+
+.nav-profile-admin {
+    right: 280px;
+}
+
+.nav-profile-admin-name {
+    color: var(--accent);
 }
 
 @media (hover: hover) {
@@ -135,28 +371,25 @@ nav > ul {
 }
 
 .nav-profile-name {
-    font-family: var(--font-family-heading);
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--color);
+    font-family: var(--font-heading);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    color: var(--text);
 }
 
 .nav-profile-sub {
-    font-family: var(--font-family-paragraph);
-    font-size: 12px;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
     opacity: 0.6;
 }
 
-/* Hide on mobile/tablet — sidebar handles it */
-@media (max-width: 1224px) {
-    .nav-profile {
-        display: none;
-    }
+.ham-menu {
+    display: none;
 }
 
-/* =====================
-   SIDEBAR
-   ===================== */
+/* ================================================
+   SIDEBAR (mobile navigation drawer)
+   ================================================ */
 .sidebar {
     position: fixed;
     top: 0;
@@ -164,7 +397,7 @@ nav > ul {
     height: 100vh;
     width: 40vh;
     z-index: 999;
-    background-color: var(--background-color);
+    background-color: var(--bg);
     display: none;
     flex-direction: column;
     border-left: var(--border);
@@ -179,7 +412,7 @@ nav > ul {
 .sidebar-close {
     display: flex;
     justify-content: flex-end;
-    padding: 16px;
+    padding: var(--space-4);
     cursor: pointer;
 }
 
@@ -187,20 +420,20 @@ nav > ul {
     display: block;
 }
 
-/* Profile row at top of sidebar */
+/* Profile row at top of drawer */
 .sidebar-profile {
-    padding: 16px;
+    padding: var(--space-4);
     border-bottom: var(--border);
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
 }
 
 .sidebar-profile > a {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
     text-decoration: none;
-    color: var(--color);
-    transition: opacity 0.2s ease;
+    color: var(--text);
+    transition: opacity var(--trans-fast);
 }
 
 @media (hover: hover) {
@@ -222,29 +455,29 @@ nav > ul {
 }
 
 .sidebar-profile-name {
-    font-family: var(--font-family-heading);
-    font-size: 16px;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
 }
 
 .sidebar-profile-sub {
-    font-family: var(--font-family-paragraph);
-    font-size: 12px;
+    font-family: var(--font-body);
+    font-size: var(--fs-xs);
     opacity: 0.6;
 }
 
 .sidebar > ul > li > a {
-    color: var(--color);
+    color: var(--text);
     text-decoration: none;
     font-size: 20px;
 }
 
 .sidebar-item {
-    margin: 10px 16px;
-    padding: 12px;
+    margin: 10px var(--space-4);
+    padding: var(--space-3);
     border: var(--border);
-    border-radius: 12px;
-    transition: ease box-shadow .3s;
+    border-radius: var(--radius-lg);
+    transition: box-shadow var(--trans-base);
     cursor: pointer;
 }
 
@@ -252,7 +485,7 @@ nav > ul {
     display: block;
     width: 100%;
     height: 100%;
-    color: var(--color);
+    color: var(--text);
     text-decoration: none;
     font-size: 20px;
 }
@@ -269,28 +502,25 @@ nav > ul {
     }
 }
 
-.ham-menu {
-    display: none;
-}
-
-/* =====================
-   RESPONSIVE — MOBILE (max 450px)
-   ===================== */
-@media (min-width: 310px) and (max-width: 450px) {
+/* ================================================
+   RESPONSIVE
+   Below 1224px the label pills are replaced by the
+   hamburger drawer (identical rules, one block).
+   ================================================ */
+@media (max-width: 1224px) {
     nav {
         height: 70px;
         justify-content: normal;
     }
 
-    .logo {
-        left: 12px;
-        margin: 0;
-        font-size: 28px;
-        font-family: var(--font-family-heading);
+    .page-label,
+    .nav-profile {
+        display: none;
     }
 
-    .page-label {
-        display: none;
+    .logo {
+        left: var(--space-3);
+        margin: 0;
     }
 
     .ham-menu {
@@ -303,62 +533,58 @@ nav > ul {
     }
 }
 
-/* =====================
-   RESPONSIVE — TABLET (max 769px)
-   ===================== */
-@media (min-width: 451px) and (max-width: 769px) {
+@media (max-width: 769px) {
     nav {
         height: 70px;
-        justify-content: normal;
-    }
-
-    .logo {
-        left: 12px;
-        margin: 0;
-        font-size: 32px;
-        font-family: var(--font-family-heading);
-    }
-
-    .page-label {
-        display: none;
-    }
-
-    .ham-menu {
-        display: block;
-        border: none;
-        position: absolute;
-        top: 30%;
-        right: 0;
-        padding-right: 20px;
     }
 }
 
-/* =====================
-   RESPONSIVE — LARGE TABLET (max 1224px)
-   ===================== */
+/* Larger tablets get a taller bar for breathing room */
 @media (min-width: 770px) and (max-width: 1224px) {
     nav {
         height: 100px;
-        justify-content: normal;
+    }
+}
+
+/* ================================================
+   SHARED PAGE RESPONSIVE
+   Hero / locations / footer scale via the fluid type
+   tokens; only layout changes are needed here.
+   ================================================ */
+@media screen and (max-width: 768px) {
+    .text-content-hero > p {
+        width: 90%;
+        top: 62%;
     }
 
-    .logo {
-        left: 12px;
-        margin: 0;
-        font-size: 36px;
-        font-family: var(--font-family-heading);
+    .locations,
+    .content-dinewithus {
+        margin-left: var(--space-3);
+        margin-right: var(--space-3);
+        margin-bottom: var(--space-6);
     }
 
-    .page-label {
-        display: none;
+    .location-content {
+        flex-direction: column;
     }
 
-    .ham-menu {
-        display: block;
-        border: none;
-        position: absolute;
-        top: 30%;
-        right: 0;
-        padding-right: 20px;
+    .location-content > iframe {
+        flex: none;
+        width: 100%;
+        height: 300px;
+    }
+
+    .address {
+        flex: none;
+        width: 100%;
+    }
+
+    .address > p {
+        padding: var(--space-2);
+    }
+
+    footer > img {
+        height: 300px;
+        object-position: -30px 0;
     }
 }

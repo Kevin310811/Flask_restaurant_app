@@ -30,7 +30,7 @@
             <tr>
                 <td>#{{ order.id }}</td>
                 <td>{{ order.user.first_name }} {{ order.user.last_name }}<br>
-                    <small style="opacity:0.5;">{{ order.user.email }}</small>
+                    <small class="muted">{{ order.user.email }}</small>
                 </td>
                 <td>
                     {% for item in order.items %}

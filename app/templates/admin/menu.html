@@ -44,11 +44,11 @@
             </div>
         </div>
         <div class="admin-form-row">
-            <div class="admin-form-field" style="flex:2">
+            <div class="admin-form-field admin-form-field-wide">
                 <label>Description</label>
                 <input type="text" name="desc" required placeholder="Item description">
             </div>
-            <div class="admin-form-field" style="flex:2">
+            <div class="admin-form-field admin-form-field-wide">
                 <label>Image path</label>
                 <input type="text" name="image" required placeholder="Images/filename.jpg">
             </div>
@@ -144,7 +144,7 @@
         <button class="admin-modal-close" id="edit-close">✕</button>
         <h2 class="admin-modal-title">Edit Item</h2>
 
-        <form method="POST" id="edit-form" class="admin-form" style="border:none; padding:0;">
+        <form method="POST" id="edit-form" class="admin-form admin-form-plain">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="admin-form-row">
                 <div class="admin-form-field">
@@ -192,12 +192,11 @@
             <div class="admin-form-field">
                 <label>Image Path</label>
                 <input type="text" name="image" id="edit-image" required placeholder="Images/filename.jpg">
-                <img id="edit-image-preview" src="" alt="Preview"
-                    style="margin-top:8px; max-height:120px; border-radius:8px; display:none;"
+                <img id="edit-image-preview" src="" alt="Preview" class="admin-image-preview"
                     onerror="this.style.display='none';">
             </div>
 
-            <button type="submit" class="admin-btn" style="align-self:flex-start;">Save Changes</button>
+            <button type="submit" class="admin-btn align-start">Save Changes</button>
         </form>
     </div>
 </div>

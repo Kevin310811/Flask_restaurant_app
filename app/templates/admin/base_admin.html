@@ -6,8 +6,10 @@
     <title>Admin — {% block title %}Dashboard{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin.css') }}">    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/tokens.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin.css') }}">
 </head>
 <body>
 
@@ -40,9 +42,9 @@
 
         <div class="admin-sidebar-footer">
             <a href="{{ url_for('main.index') }}" class="admin-back-link">← Back to Site</a>
-            <form method="POST" action="{{ url_for('auth.logout') }}" style="display:inline;">
+            <form method="POST" action="{{ url_for('auth.logout') }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button type="submit" class="admin-logout-link" style="background:none;border:none;cursor:pointer;font:inherit;">Logout</button>
+                <button type="submit" class="admin-logout-link">Logout</button>
             </form>
         </div>
     </aside>

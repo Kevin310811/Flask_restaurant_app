@@ -7,8 +7,10 @@
     <title>{% block title %}Restaurant{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/tokens.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/nav-styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
     {% block styles %}{% endblock %}
 </head>
 <body>
@@ -29,8 +31,8 @@
     </ul>
     
     {% if current_user.is_authenticated and current_user.is_admin %}
-        <a href="{{ url_for('admin.dashboard') }}" class="nav-profile" style="right: 280px;">
-            <span class="nav-profile-name" style="color: #f5c542;">Admin</span>
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-profile nav-profile-admin">
+            <span class="nav-profile-name nav-profile-admin-name">Admin</span>
         </a>
     {% endif %}
 
@@ -102,13 +104,13 @@
 <footer>
     <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="food" class="no-select">
     <h1>Restaurant Logo</h1>
-    <div class="quick-links">
+    <div class="footer-links left">
         <a href="{{ url_for('main.reservations') }}">Reservations</a>
         <a href="{{ url_for('menu.order') }}">Menu</a>
         <a href="{{ url_for('main.gallery') }}">Gallery</a>
         <a href="#">About</a>
     </div>
-    <div class="quick-links-2">
+    <div class="footer-links right">
         <a href="#">Youtube</a>
         <a href="#">Instagram</a>
         <a href="#">Facebook</a>
