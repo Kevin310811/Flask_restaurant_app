@@ -78,6 +78,16 @@ def dashboard():
     )
 
 
+@admin_bp.route('/dashboard')
+def dashboard_alias():
+    """Hand-typed /admin/dashboard lands on the dashboard (its real URL is /admin/).
+
+    Deliberately unguarded: the redirect target enforces login + admin,
+    so this never exposes the panel to anyone.
+    """
+    return redirect(url_for('admin.dashboard'))
+
+
 @admin_bp.route('/orders')
 @login_required
 @admin_required

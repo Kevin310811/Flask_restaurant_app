@@ -5,25 +5,28 @@
 {% block content %}
 <div class="admin-stats">
     <div class="stat-card">
-        <p class="stat-value">{{ total_users }}</p>
         <p class="stat-label">Total Users</p>
+        <p class="stat-value">{{ total_users }}</p>
     </div>
     <div class="stat-card">
-        <p class="stat-value">{{ total_orders }}</p>
         <p class="stat-label">Total Orders</p>
+        <p class="stat-value">{{ total_orders }}</p>
     </div>
     <div class="stat-card">
-        <p class="stat-value">₹{{ "%.2f"|format(total_revenue) }}</p>
         <p class="stat-label">Total Revenue</p>
+        <p class="stat-value">₹{{ "%.2f"|format(total_revenue) }}</p>
     </div>
     <div class="stat-card">
-        <p class="stat-value">{{ total_reservations }}</p>
         <p class="stat-label">Total Reservations</p>
+        <p class="stat-value">{{ total_reservations }}</p>
     </div>
 </div>
 
 <div class="admin-section">
-    <h2 class="admin-section-title">Recent Orders</h2>
+    <div class="admin-section-head">
+        <h2 class="admin-section-title">Recent Orders</h2>
+        <a class="admin-view-all" href="{{ url_for('admin.orders') }}">View all &rarr;</a>
+    </div>
     <table class="admin-table">
         <thead>
             <tr>
@@ -38,7 +41,9 @@
             {% for order in recent_orders %}
             <tr>
                 <td>#{{ order.id }}</td>
-                <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                <td>{{ order.user.first_name }} {{ order.user.last_name }}<br>
+                    <small class="muted">{{ order.user.email }}</small>
+                </td>
                 <td>₹{{ "%.2f"|format(order.total) }}</td>
                 <td><span class="status-badge {{ order.status }}">{{ order.status }}</span></td>
                 <td>{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
