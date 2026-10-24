@@ -8,6 +8,7 @@ from .routes.cart import cart_bp
 from .routes.payment import payment_bp
 from .routes.auth import auth_bp
 from .routes.admin import admin_bp
+from .routes.analytics import analytics_bp
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
@@ -60,5 +61,6 @@ def create_app():
     app.register_blueprint(payment_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(analytics_bp)
 
     return app

@@ -1,0 +1,172 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+
+{% block content %}
+<section class="analytics-page">
+
+    <!-- Global filter + refresh -->
+    <div class="analytics-controls">
+        <p class="analytics-subtitle">Monitor restaurant performance, orders, customers, and expenses.
+            <span class="analytics-tz-note">All times and dates are IST.</span>
+        </p>
+        <div class="analytics-controls-actions">
+            <select id="analytics-range" class="admin-select" aria-label="Date range">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="month">This month</option>
+                <option value="last_month">Last month</option>
+                <option value="year">This year</option>
+                <option value="all">All time</option>
+            </select>
+            <button type="button" id="analytics-refresh" class="admin-btn" aria-label="Refresh analytics">Refresh</button>
+        </div>
+    </div>
+    <p class="analytics-updated" id="analytics-updated" hidden></p>
+
+    <!-- Error banner (fetch failures clear the page states into this) -->
+    <div class="analytics-error" id="analytics-error" role="alert" hidden>
+        <p id="analytics-error-text"></p>
+    </div>
+
+    <!-- KPI cards: rendered by analytics.js; skeletons while first load -->
+    <div class="admin-stats analytics-kpis" id="analytics-kpis">
+        {% for _ in range(6) %}
+        <div class="stat-card kpi-skeleton" aria-hidden="true">
+            <span class="kpi-skeleton-line kpi-skeleton-label"></span>
+            <span class="kpi-skeleton-line kpi-skeleton-value"></span>
+            <span class="kpi-skeleton-line kpi-skeleton-caption"></span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Charts -->
+    <div class="analytics-charts">
+        <div class="admin-section analytics-chart-card analytics-span2">
+            <div class="admin-section-head">
+                <h2 class="admin-section-title">Order activity</h2>
+                <div class="analytics-seg" id="analytics-interval" role="group" aria-label="Chart granularity">
+                    <button type="button" data-interval="day" class="active">Daily</button>
+                    <button type="button" data-interval="week">Weekly</button>
+                    <button type="button" data-interval="month">Monthly</button>
+                </div>
+            </div>
+            <div class="analytics-canvas-wrap">
+                <canvas id="chart-orders" role="img" aria-label="Orders over time"></canvas>
+                <p class="analytics-empty" id="orders-empty" hidden>No orders in this period.</p>
+            </div>
+            <p class="analytics-caption" id="orders-caption" hidden></p>
+        </div>
+
+        <div class="admin-section analytics-chart-card">
+            <h2 class="admin-section-title">Orders by status</h2>
+            <div class="analytics-canvas-wrap analytics-canvas-square">
+                <canvas id="chart-status" role="img" aria-label="Orders by status"></canvas>
+                <p class="analytics-empty" id="status-empty" hidden>No orders in this period.</p>
+            </div>
+        </div>
+
+        <div class="admin-section analytics-chart-card analytics-span2">
+            <h2 class="admin-section-title">Revenue vs expenses</h2>
+            <div class="analytics-canvas-wrap">
+                <canvas id="chart-mix" role="img" aria-label="Revenue and expenses over time"></canvas>
+                <p class="analytics-empty" id="mix-empty" hidden>No revenue or expense activity in this period.</p>
+            </div>
+            <p class="analytics-caption" id="mix-caption" hidden></p>
+        </div>
+
+        <div class="admin-section analytics-chart-card">
+            <h2 class="admin-section-title">New accounts</h2>
+            <div class="analytics-canvas-wrap analytics-canvas-square">
+                <canvas id="chart-accounts" role="img" aria-label="New accounts over time"></canvas>
+                <p class="analytics-empty" id="accounts-empty" hidden>No new accounts in this period.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending + expense overview -->
+    <div class="analytics-grid2">
+        <div class="admin-section analytics-trending">
+            <div class="admin-section-head">
+                <h2 class="admin-section-title">Trending items</h2>
+                <div class="analytics-seg" id="trending-metric" role="group" aria-label="Ranking metric">
+                    <button type="button" data-metric="qty" class="active">By quantity</button>
+                    <button type="button" data-metric="revenue">By revenue</button>
+                </div>
+            </div>
+            <ol class="trending-list" id="trending-list"></ol>
+            <p class="analytics-empty" id="trending-empty" hidden>No item sales in this period.</p>
+        </div>
+
+        <div class="admin-section analytics-expense-overview">
+            <div class="admin-section-head">
+                <h2 class="admin-section-title">Expense overview</h2>
+                <span class="analytics-chip" id="expense-chip" hidden></span>
+            </div>
+            <div class="analytics-canvas-wrap analytics-canvas-slim">
+                <canvas id="chart-expenses" role="img" aria-label="Expenses by category"></canvas>
+                <p class="analytics-empty" id="expenses-empty" hidden>No expenses recorded in this period.</p>
+            </div>
+            <p class="analytics-caption" id="expense-caption" hidden></p>
+        </div>
+    </div>
+
+    <!-- Expense management -->
+    <div class="admin-section" id="manage-expenses">
+        <div class="admin-section-head">
+            <h2 class="admin-section-title">Manage expenses</h2>
+        </div>
+        <form id="expense-form" class="admin-form" novalidate>
+            <div class="admin-form-row">
+                <div class="admin-form-field admin-form-field-wide">
+                    <label for="expense-title">Title</label>
+                    <input id="expense-title" name="title" type="text" maxlength="100" required
+                           placeholder="e.g. Weekend produce order">
+                </div>
+                <div class="admin-form-field">
+                    <label for="expense-category">Category</label>
+                    <select id="expense-category" name="category" required>
+                        {% for category in expense_categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="admin-form-field">
+                    <label for="expense-amount">Amount (₹)</label>
+                    <input id="expense-amount" name="amount" type="number" min="0.01" step="0.01"
+                           required placeholder="0.00">
+                </div>
+                <div class="admin-form-field">
+                    <label for="expense-date">Date</label>
+                    <input id="expense-date" name="spent_on" type="date" value="{{ today_iso }}"
+                           max="{{ today_iso }}" required>
+                </div>
+            </div>
+            <div class="admin-form-row">
+                <button type="submit" id="expense-submit" class="admin-btn">Add expense</button>
+            </div>
+        </form>
+        <p class="analytics-form-msg" id="expense-form-msg" role="status" hidden></p>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Expense</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th><span class="visually-hidden">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody id="expense-rows"></tbody>
+        </table>
+        <p class="analytics-empty" id="expense-table-empty" hidden>No expenses recorded yet — add the first one above.</p>
+    </div>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='JS/vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='JS/analytics.js') }}" defer></script>
+{% endblock %}

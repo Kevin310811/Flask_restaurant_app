@@ -10,6 +10,7 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/tokens.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/admin.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
@@ -25,6 +26,9 @@
         <nav class="admin-nav">
             <a href="{{ url_for('admin.dashboard') }}" class="admin-nav-item {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
                 Dashboard
+            </a>
+            <a href="{{ url_for('analytics.page') }}" class="admin-nav-item {% if request.endpoint == 'analytics.page' %}active{% endif %}">
+                Analytics
             </a>
             <a href="{{ url_for('admin.orders') }}" class="admin-nav-item {% if request.endpoint == 'admin.orders' %}active{% endif %}">
                 Orders
@@ -69,5 +73,6 @@
 
 </div>
 
+{% block scripts %}{% endblock %}
 </body>
 </html>

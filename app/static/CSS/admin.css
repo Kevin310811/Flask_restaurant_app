@@ -894,11 +894,416 @@ button.admin-logout-link {
 }
 
 /* ================================================
+   ANALYTICS PAGE
+   Reuses tokens + the shared section/table/button/form
+   primitives above. Same visual language as the rest of
+   the panel: hairline borders, gold accent, Inter UI.
+   ================================================ */
+.analytics-page {
+    /* nothing to add yet — sections stack like elsewhere */
+}
+
+.analytics-subtitle {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.analytics-tz-note {
+    color: var(--text-faint);
+    font-size: var(--fs-xs);
+}
+
+.analytics-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.analytics-controls-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.analytics-updated {
+    color: var(--text-faint);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    margin: 0 0 var(--space-5);
+}
+
+.analytics-error {
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.analytics-error p {
+    margin: 0;
+    color: var(--danger);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+}
+
+/* Six KPI cards (vs the dashboard's four) */
+.analytics-kpis {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.kpi-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--accent);
+    opacity: 0.9;
+}
+
+.kpi-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+
+.kpi-caption {
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+    margin: 0;
+    line-height: var(--lh-tight);
+}
+
+.kpi-caption .kpi-delta-up {
+    color: var(--success);
+    font-weight: var(--fw-bold);
+}
+
+.kpi-caption .kpi-delta-down {
+    color: var(--danger);
+    font-weight: var(--fw-bold);
+}
+
+/* Skeleton pulse while the first fetch is pending */
+.kpi-skeleton-line {
+    display: block;
+    height: 12px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.07) 25%,
+        rgba(255, 255, 255, 0.16) 50%,
+        rgba(255, 255, 255, 0.07) 75%);
+    background-size: 200% 100%;
+    animation: kpi-shimmer 1.4s ease infinite;
+}
+
+.kpi-skeleton-label { width: 45%; }
+.kpi-skeleton-value { width: 70%; height: 30px; margin: var(--space-2) 0; }
+.kpi-skeleton-caption { width: 85%; }
+
+@keyframes kpi-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kpi-skeleton-line { animation: none; }
+}
+
+/* Chart panel grid */
+.analytics-charts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+    margin-bottom: var(--space-7);
+}
+
+.analytics-grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+    margin-bottom: var(--space-7);
+}
+
+/* Chart cards keep box-sizing but must NOT scroll-block like table sections */
+.admin-section.analytics-chart-card {
+    overflow-x: hidden;
+    overflow-y: visible;
+    border: var(--border-faint);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: 0;
+}
+
+.analytics-span2 {
+    grid-column: span 2;
+}
+
+.analytics-canvas-wrap {
+    position: relative;
+    height: 300px;
+}
+
+.analytics-canvas-square {
+    height: 260px;
+}
+
+.analytics-canvas-slim {
+    height: 220px;
+}
+
+.analytics-canvas-wrap canvas {
+    max-height: 100%;
+}
+
+.analytics-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-faint);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: var(--fs-base);
+    margin: 0;
+}
+
+.analytics-empty[hidden] {
+    display: none;
+}
+
+.analytics-caption {
+    color: var(--text-faint);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    margin: var(--space-3) 0 0;
+}
+
+/* Small segmented switches (granularity, trending metric) */
+.analytics-seg {
+    display: inline-flex;
+    border: var(--border-faint);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.analytics-seg button {
+    background: transparent;
+    border: none;
+    color: var(--text-faint);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color var(--trans-fast), color var(--trans-fast);
+}
+
+.analytics-seg button + button {
+    border-left: var(--border-faint);
+}
+
+.analytics-seg button:hover {
+    color: var(--text);
+}
+
+.analytics-seg button.active {
+    background-color: var(--accent-soft);
+    color: var(--accent);
+}
+
+.analytics-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    border: var(--border-faint);
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+}
+
+.analytics-chip[hidden] {
+    display: none;
+}
+
+/* Trending items list */
+.trending-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.trending-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.trending-item:last-child {
+    border-bottom: none;
+}
+
+.trending-rank {
+    flex: 0 0 24px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-faint);
+}
+
+.trending-item:nth-child(1) .trending-rank { color: var(--accent); }
+
+.trending-thumb {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: var(--border-faint);
+    object-fit: cover;
+}
+
+.trending-thumb-fallback {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: var(--border-faint);
+    background-color: var(--surface);
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+}
+
+.trending-name {
+    flex: 1;
+    min-width: 0;
+}
+
+.trending-name strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trending-name small {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+}
+
+.trending-value {
+    flex: 0 0 auto;
+    text-align: right;
+}
+
+.trending-value strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--accent);
+}
+
+.trending-value small {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+}
+
+.analytics-trending,
+.analytics-expense-overview {
+    border: var(--border-faint);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: 0;
+}
+
+/* Expense management uses the shared .admin-form primitives;
+   only the inline message + delete cell styling is new here */
+.analytics-form-msg {
+    margin: var(--space-3) 0;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+}
+
+.analytics-form-msg.success { color: var(--success); }
+.analytics-form-msg.error { color: var(--danger); }
+
+.analytics-delete-btn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--trans-fast);
+}
+
+.analytics-delete-btn:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+.analytics-delete-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ================================================
    RESPONSIVE
    ================================================ */
 @media screen and (max-width: 1024px) {
     .admin-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analytics-kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analytics-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-span2 {
+        grid-column: span 1;
+    }
+
+    .analytics-grid2 {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -184,3 +184,34 @@ class Reservation(db.Model):
             "slot_time": self.slot_time.strftime('%d %b %Y, %I:%M %p'),
             "status": self.status
         }
+
+
+class Expense(db.Model):
+    """Operating expense recorded by an admin for the analytics page.
+
+    The site never had an expense model; this is the minimal table the
+    analytics Expense Overview needs. spent_on is a plain date (not a
+    timestamp): expenses are booked for a whole calendar day, which is
+    also what makes day/week/month bucketing exact and timezone-safe.
+    created_by is SET NULL so removing an admin does not delete their
+    recorded expenses.
+    """
+    __tablename__ = 'expenses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(30), nullable=False, index=True)
+    amount = db.Column(db.Numeric(10, 2), nullable=False)
+    spent_on = db.Column(db.Date, nullable=False, index=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "category": self.category,
+            "amount": float(self.amount),
+            "spent_on": self.spent_on.isoformat(),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
