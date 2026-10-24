@@ -1355,17 +1355,26 @@ h1, h2, h3, h4 {
 }
 
 .analytics-empty {
-    position: absolute;
-    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 64px;
     text-align: center;
     color: var(--text-faint);
     font-family: var(--font-body);
     font-style: italic;
     font-size: var(--fs-base);
     margin: 0;
+}
+
+/* Overlay variant: floats over a chart canvas inside its wrapper.
+   Scope matters — as a bare `.analytics-empty` this element would pin
+   itself over the whole first viewport (no positioned ancestor) and act
+   as an invisible click barrier across the page. */
+.analytics-canvas-wrap .analytics-empty {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
 }
 
 .analytics-empty[hidden] {

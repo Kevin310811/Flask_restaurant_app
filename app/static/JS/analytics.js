@@ -7,6 +7,11 @@
  *   - trending items list
  *   - expense overview + expense management table
  *
+ * Every fetch is abortable: a newer load supersedes (aborts) the request
+ * in flight, so the Daily/Weekly/Monthly switch and the other controls
+ * always act immediately, and a per-request timeout unwinds the page if
+ * the server stalls or the connection dies.
+ *
  * Conventions: vanilla JS like the site's other scripts, CSRF read from
  * the base_admin meta tag, chart colors keyed to tokens.css palette.
  */
@@ -51,8 +56,18 @@
 
     var state = { range: '30', interval: 'day', metric: 'qty', custom: null };
     var charts = { orders: null, status: null, mix: null, accounts: null, expenses: null };
-    var pending = false;
     var firstLoad = true;
+
+    // Every load() call gets a sequence number; only the newest request may
+    // touch the busy state, and messages from older ones are ignored. A new
+    // call supersedes (aborts) the previous in-flight request so changing
+    // Daily/Weekly/Monthly mid-load always takes effect immediately.
+    var loadSeq = 0;
+    var loadAbort = null;
+    // Hard cap per request: if the server never answers (stale tab after a
+    // restart, stalled connection), the page must unwind instead of sitting
+    // dimmed with dead controls.
+    var REQUEST_TIMEOUT_MS = 15000;
 
     function pageSection() {
         return els.kpis ? els.kpis.closest('.analytics-page') : null;
@@ -505,9 +520,13 @@
     }
 
     function load() {
-        if (pending) return;
-        pending = true;
-        els.refresh.disabled = true;
+        // Supersede any in-flight request: the newest interaction always
+        // wins, and a hung request can no longer wedge the page.
+        var seq = ++loadSeq;
+        if (loadAbort) loadAbort.abort();
+        var controller = new AbortController();
+        loadAbort = controller;
+
         els.refresh.classList.add('is-loading');
         els.refresh.setAttribute('aria-busy', 'true');
         var section = pageSection();
@@ -520,11 +539,17 @@
             params.set('end', state.custom.end);
         }
 
-        fetch('/api/admin/analytics?' + params.toString(), { headers: { 'Accept': 'application/json' } })
+        var timeoutId = setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT_MS);
+
+        fetch('/api/admin/analytics?' + params.toString(), {
+            headers: { 'Accept': 'application/json' },
+            signal: controller.signal,
+        })
             .then(function (resp) {
                 return resp.json().then(function (json) { return { ok: resp.ok, json: json }; });
             })
             .then(function (result) {
+                if (seq !== loadSeq) return;   // superseded — newer request owns the page
                 if (!result.ok) {
                     // Server errors carry their own message; keep previous data visible.
                     showError((result.json && result.json.error) || '');
@@ -561,13 +586,20 @@
                 els.updated.textContent = 'Updated ' + new Date(data.generated_at).toLocaleTimeString('en-IN',
                     { hour: 'numeric', minute: '2-digit' }) + ' IST · range: ' + data.range_label;
             })
-            .catch(function () {
-                showError('Could not reach the server. Check your connection and press Refresh.');
+            .catch(function (err) {
+                if (seq !== loadSeq) return;   // request was replaced — ignore
+                if (err && err.name === 'AbortError') {
+                    showError('The server took too long to respond. Press Refresh to try again.');
+                } else {
+                    showError('Could not reach the server. Check your connection and press Refresh.');
+                }
             })
             .finally(function () {
-                pending = false;
+                clearTimeout(timeoutId);
+                if (seq !== loadSeq) return;   // never unwind a newer request's busy state
                 firstLoad = false;
-                els.refresh.disabled = false;
+                // Refresh stays clickable while busy: pressing it supersedes
+                // the current request, so it is never disabled.
                 els.refresh.classList.remove('is-loading');
                 els.refresh.removeAttribute('aria-busy');
                 if (section) section.classList.remove('analytics-busy');
