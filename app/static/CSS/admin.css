@@ -31,14 +31,18 @@ h1, h2, h3, h4 {
 
 /* ================================================
    ADMIN LAYOUT + SIDEBAR
+   The sidebar is a fixed 240px rail on desktop that
+   collapses to an icon rail (76px). Under 768px it
+   becomes a slide-in drawer (see RESPONSIVE).
    ================================================ */
 .admin-layout {
     display: flex;
     min-height: 100vh;
+    --sidebar-w: 240px;
 }
 
 .admin-sidebar {
-    width: 240px;
+    width: var(--sidebar-w);
     min-height: 100vh;
     background-color: var(--bg);
     border-right: var(--border-faint);
@@ -47,31 +51,56 @@ h1, h2, h3, h4 {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1100;
+    overflow: hidden;
 }
 
 .admin-sidebar-logo {
     padding: 28px 20px 20px;
     border-bottom: var(--border-faint);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
 }
 
 .admin-sidebar-logo a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.admin-logo-mark {
+    display: none;              /* appears only in the collapsed rail */
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: var(--fw-extra);
+    color: var(--accent);
+    border: 1px solid rgba(245, 197, 66, 0.35);
+    border-radius: var(--radius-md);
+}
+
+.admin-logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
     font-family: var(--font-heading);
     font-size: 22px;
     font-weight: var(--fw-extra);
     color: var(--text);
-    text-decoration: none;
+    line-height: 1.15;
     transition: color var(--trans-fast);
 }
 
-.admin-sidebar-logo a:hover {
+.admin-sidebar-logo a:hover .admin-logo-text {
     color: var(--accent);
 }
 
-.admin-sidebar-logo span {
-    font-family: var(--font-heading);
+.admin-logo-text span {
     font-size: var(--fs-2xs);
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -85,9 +114,13 @@ h1, h2, h3, h4 {
     padding: 20px var(--space-3);
     gap: var(--space-1);
     flex: 1;
+    overflow-y: auto;
 }
 
 .admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
     color: var(--text-faint);
     font-family: var(--font-body);
@@ -96,12 +129,15 @@ h1, h2, h3, h4 {
     padding: var(--space-3) 14px;
     border-radius: var(--radius-md);
     border: 1px solid transparent;
-    transition: color var(--trans-fast), border-color var(--trans-fast);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: color var(--trans-fast), border-color var(--trans-fast), background-color var(--trans-fast);
 }
 
 .admin-nav-item:hover {
     color: var(--text);
     border-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.02);
 }
 
 .admin-nav-item.active {
@@ -110,6 +146,18 @@ h1, h2, h3, h4 {
     background-color: rgba(245, 197, 66, 0.05);
 }
 
+.admin-nav-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    transition: opacity var(--trans-fast);
+}
+
+.admin-nav-label {
+    min-width: 0;
+}
+
+/* Sidebar footer: back-to-site, logout, and the collapse toggle */
 .admin-sidebar-footer {
     padding: var(--space-4) var(--space-3);
     border-top: var(--border-faint);
@@ -119,14 +167,24 @@ h1, h2, h3, h4 {
 }
 
 .admin-back-link,
-.admin-logout-link {
+.admin-logout-link,
+.admin-sidebar-collapse {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
     font-family: var(--font-heading);
     font-size: 13px;
     color: var(--text-faint);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
-    transition: color var(--trans-fast);
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+    transition: color var(--trans-fast), background-color var(--trans-fast);
 }
 
 .admin-back-link:hover {
@@ -135,13 +193,98 @@ h1, h2, h3, h4 {
 
 .admin-logout-link:hover {
     color: var(--danger);
+    background-color: rgba(255, 107, 107, 0.05);
+}
+
+.admin-sidebar-collapse:hover {
+    color: var(--text);
+}
+
+.admin-sidebar-collapse svg {
+    transition: transform var(--trans-base);
+}
+
+/* Collapsed desktop rail: scoped to wide viewports so the mobile
+   drawer always shows full labels. The early inline script in
+   base_admin.html adds html.admin-collapsed before first paint. */
+@media screen and (min-width: 769px) {
+    .admin-layout,
+    .admin-sidebar {
+        transition: width 0.25s ease;
+    }
+
+    .admin-main {
+        transition: margin-left 0.25s ease;
+    }
+
+    .admin-sidebar {
+        visibility: visible;
+    }
+
+    html.admin-collapsed .admin-layout,
+    html.admin-collapsed .admin-sidebar {
+        --sidebar-w: 76px;
+    }
+
+    html.admin-collapsed .admin-logo-mark {
+        display: inline-flex;
+    }
+
+    html.admin-collapsed .admin-logo-text {
+        display: none;
+    }
+
+    html.admin-collapsed .admin-nav-label {
+        display: none;
+    }
+
+    html.admin-collapsed .admin-nav-item,
+    html.admin-collapsed .admin-back-link,
+    html.admin-collapsed .admin-logout-link,
+    html.admin-collapsed .admin-sidebar-collapse {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+        gap: 0;
+    }
+
+    html.admin-collapsed .admin-sidebar-logo {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+    }
+
+    html.admin-collapsed .admin-sidebar-logo a {
+        justify-content: center;
+        padding: 0;
+    }
+
+    html.admin-collapsed .admin-sidebar-footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    html.admin-collapsed .admin-sidebar-collapse svg {
+        transform: rotate(180deg);
+    }
+}
+
+/* Dark scrim shown behind the mobile drawer */
+.admin-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 1090;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--trans-base);
 }
 
 /* ================================================
    MAIN CONTENT
    ================================================ */
 .admin-main {
-    margin-left: 240px;
+    margin-left: var(--sidebar-w);
     flex: 1;
     min-width: 0;   /* shrink below content width so wide tables scroll, not the page */
     padding: 36px;
@@ -151,16 +294,26 @@ h1, h2, h3, h4 {
 .admin-topbar {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
+    gap: var(--space-4);
     margin-bottom: 36px;
     border-bottom: var(--border-faint);
     padding-bottom: 20px;
+}
+
+.admin-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
 }
 
 .admin-page-title {
     font-size: clamp(24px, 3.2vw, 32px);
     margin: 0;
     color: var(--accent);
+    overflow-wrap: break-word;
+    min-width: 0;
 }
 
 .admin-user {
@@ -168,6 +321,39 @@ h1, h2, h3, h4 {
     font-size: 15px;
     font-style: italic;
     color: var(--text-faint);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* Mobile hamburger — hidden by default, shown under 768px */
+.admin-nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    background: none;
+    border: var(--border-faint);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--trans-fast), background-color var(--trans-fast);
+}
+
+.admin-nav-toggle:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.admin-nav-toggle:active {
+    transform: scale(0.96);
+}
+
+.admin-nav-toggle .admin-nav-icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
 }
 
 /* ================================================
@@ -179,6 +365,12 @@ h1, h2, h3, h4 {
     border-radius: var(--radius-md);
     font-size: var(--fs-sm);
     margin-bottom: var(--space-5);
+    animation: flash-in 0.3s ease both;
+}
+
+@keyframes flash-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .admin-flash.success {
@@ -453,13 +645,24 @@ h1, h2, h3, h4 {
     background-color: transparent;
     color: var(--text);
     cursor: pointer;
-    transition: border-color var(--trans-fast), background-color var(--trans-fast), box-shadow var(--trans-fast);
+    transition: border-color var(--trans-fast), background-color var(--trans-fast), box-shadow var(--trans-fast), transform var(--trans-fast), opacity var(--trans-fast);
 }
 
 .admin-btn:hover {
     border-color: rgba(255, 255, 255, 0.5);
     background-color: rgba(255, 255, 255, 0.05);
     box-shadow: 2px 2px white;
+}
+
+.admin-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.admin-btn:disabled {
+    opacity: 0.55;
+    cursor: default;
+    box-shadow: none;
 }
 
 .admin-btn-danger {
@@ -588,14 +791,8 @@ h1, h2, h3, h4 {
     display: none;
 }
 
-/* Logout is a <button> styled like the sidebar's text links */
-button.admin-logout-link {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font: inherit;
-    text-align: left;
-}
+/* Logout is a <button> styled identically to the sidebar's text links
+   (see the .admin-sidebar-footer shared rule above). */
 
 /* ================================================
    MENU CARDS
@@ -716,6 +913,12 @@ button.admin-logout-link {
     border-radius: var(--radius-pill);
 }
 
+.menu-meta-tag.sold-out {
+    color: var(--danger);
+    background-color: rgba(255, 107, 107, 0.08);
+    border-color: rgba(255, 107, 107, 0.35);
+}
+
 .menu-card-actions {
     display: flex;
     flex-direction: column;
@@ -746,6 +949,17 @@ button.admin-logout-link {
 
 .admin-modal-overlay.active {
     display: flex;
+    animation: modal-overlay-in 0.22s ease both;
+}
+
+@keyframes modal-overlay-in {
+    from { background-color: rgba(0, 0, 0, 0); }
+    to { background-color: rgba(0, 0, 0, 0.75); }
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .admin-modal {
@@ -758,6 +972,10 @@ button.admin-logout-link {
     max-height: 85vh;
     overflow-y: auto;
     position: relative;
+}
+
+.admin-modal-overlay.active .admin-modal {
+    animation: modal-in 0.25s ease both;
 }
 
 .admin-modal-close {
@@ -932,6 +1150,54 @@ button.admin-logout-link {
     flex-wrap: wrap;
 }
 
+/* Custom range row (revealed when range = "Custom…") */
+.analytics-custom-range {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-4);
+    flex-wrap: wrap;
+}
+
+.analytics-custom-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.analytics-custom-field label {
+    font-family: var(--font-heading);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.analytics-custom-range[hidden] {
+    display: none;
+}
+
+/* Spinning indicator inside the Refresh button while fetching */
+.admin-btn-spinner {
+    display: none;
+    width: 13px;
+    height: 13px;
+    border: 2px solid rgba(245, 197, 66, 0.35);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+    vertical-align: -2px;
+}
+
+.admin-btn.is-loading .admin-btn-spinner {
+    display: inline-block;
+}
+
+@keyframes btn-spin {
+    to { transform: rotate(360deg); }
+}
+
 .analytics-updated {
     color: var(--text-faint);
     font-family: var(--font-heading);
@@ -953,9 +1219,35 @@ button.admin-logout-link {
     font-size: var(--fs-sm);
 }
 
-/* Six KPI cards (vs the dashboard's four) */
+/* Seven KPI cards — 4-up rows (vs the dashboard's four cards) */
 .analytics-kpis {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Staggered entrance when cards (re)render with fresh data */
+.analytics-kpis.kpi-enter .stat-card {
+    animation: kpi-fade-up 0.35s ease both;
+}
+
+.analytics-kpis.kpi-enter .stat-card:nth-child(2) { animation-delay: 0.04s; }
+.analytics-kpis.kpi-enter .stat-card:nth-child(3) { animation-delay: 0.08s; }
+.analytics-kpis.kpi-enter .stat-card:nth-child(4) { animation-delay: 0.12s; }
+.analytics-kpis.kpi-enter .stat-card:nth-child(5) { animation-delay: 0.16s; }
+.analytics-kpis.kpi-enter .stat-card:nth-child(6) { animation-delay: 0.2s; }
+.analytics-kpis.kpi-enter .stat-card:nth-child(7) { animation-delay: 0.24s; }
+
+@keyframes kpi-fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fetch in progress: keep old data visible but quiet */
+.analytics-busy .stat-card,
+.analytics-busy .analytics-chart-card,
+.analytics-busy .analytics-trending,
+.analytics-busy .analytics-expense-overview {
+    opacity: 0.55;
+    transition: opacity var(--trans-base);
 }
 
 .kpi-icon {
@@ -1305,16 +1597,47 @@ button.admin-logout-link {
     .analytics-grid2 {
         grid-template-columns: 1fr;
     }
+
+    .admin-main {
+        padding: 28px 24px;
+    }
 }
 
 @media screen and (max-width: 768px) {
+    /* The sidebar becomes a slide-in drawer; the hamburger in the
+       topbar opens it, any nav click / overlay tap / Escape closes. */
     .admin-sidebar {
+        display: flex;
+        width: min(280px, 84vw);
+        transform: translateX(-105%);
+        visibility: hidden;
+        transition: transform var(--trans-base), visibility 0s linear var(--trans-base);
+        box-shadow: 8px 0 40px rgba(0, 0, 0, 0.55);
+    }
+
+    body.admin-drawer-open .admin-sidebar {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform var(--trans-base);
+    }
+
+    body.admin-drawer-open .admin-drawer-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* The desktop collapse toggle makes no sense in the drawer */
+    .admin-sidebar-collapse {
         display: none;
+    }
+
+    .admin-nav-toggle {
+        display: inline-flex;
     }
 
     .admin-main {
         margin-left: 0;
-        padding: 20px;
+        padding: 20px 16px;
     }
 
     .admin-page-title {
@@ -1323,5 +1646,52 @@ button.admin-logout-link {
 
     .admin-table {
         font-size: 13px;
+    }
+
+    .admin-table td,
+    .admin-table th {
+        padding: 10px 10px;
+    }
+
+    /* Comfortable touch targets; >=15px keeps mobile Safari from
+        zooming form fields on focus */
+    .admin-btn,
+    .analytics-delete-btn {
+        padding: 10px 16px;
+    }
+
+    .admin-select,
+    .admin-form-field input,
+    .admin-inline-form input,
+    .admin-inline-form select {
+        padding: 10px var(--space-3);
+        font-size: 15px;
+    }
+
+    .menu-card {
+        flex-wrap: wrap;
+    }
+
+    .menu-card-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+}
+
+/* ================================================
+   REDUCED MOTION
+   Anyone who asks the OS for less movement gets the
+   same interface with instant state changes.
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .kpi-skeleton-line {
+        animation: none !important;
     }
 }

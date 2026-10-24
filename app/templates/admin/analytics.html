@@ -19,9 +19,23 @@
                 <option value="last_month">Last month</option>
                 <option value="year">This year</option>
                 <option value="all">All time</option>
+                <option value="custom">Custom…</option>
             </select>
-            <button type="button" id="analytics-refresh" class="admin-btn" aria-label="Refresh analytics">Refresh</button>
+            <button type="button" id="analytics-refresh" class="admin-btn" aria-label="Refresh analytics">
+                <span class="admin-btn-spinner" aria-hidden="true"></span> Refresh
+            </button>
         </div>
+    </div>
+    <div class="analytics-custom-range" id="analytics-custom" hidden>
+        <div class="analytics-custom-field">
+            <label for="custom-start">From</label>
+            <input type="date" id="custom-start" value="{{ default_custom_start }}" max="{{ today_iso }}">
+        </div>
+        <div class="analytics-custom-field">
+            <label for="custom-end">Through</label>
+            <input type="date" id="custom-end" value="{{ default_custom_end }}" max="{{ today_iso }}">
+        </div>
+        <button type="button" id="custom-apply" class="admin-btn">Apply</button>
     </div>
     <p class="analytics-updated" id="analytics-updated" hidden></p>
 
@@ -32,7 +46,7 @@
 
     <!-- KPI cards: rendered by analytics.js; skeletons while first load -->
     <div class="admin-stats analytics-kpis" id="analytics-kpis">
-        {% for _ in range(6) %}
+        {% for _ in range(7) %}
         <div class="stat-card kpi-skeleton" aria-hidden="true">
             <span class="kpi-skeleton-line kpi-skeleton-label"></span>
             <span class="kpi-skeleton-line kpi-skeleton-value"></span>

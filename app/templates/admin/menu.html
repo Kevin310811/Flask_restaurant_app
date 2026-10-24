@@ -98,6 +98,11 @@
                     <span class="menu-card-price">₹{{ "%.2f"|format(item.price) }}</span>
                     <span class="menu-meta-tag">{{ item.category }}</span>
                     <span class="menu-meta-tag">{{ item.flavour }}</span>
+                    {% if item.is_available %}
+                    <span class="menu-meta-tag">Available</span>
+                    {% else %}
+                    <span class="menu-meta-tag sold-out">Sold out</span>
+                    {% endif %}
                 </div>
             </div>
 
@@ -105,6 +110,13 @@
             <div class="menu-card-actions">
                 <button class="admin-btn btn-preview">Preview</button>
                 <button class="admin-btn btn-edit">Edit</button>
+                <form method="POST" action="{{ url_for('admin.toggle_menu_item', item_id=item.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="admin-btn {% if item.is_available %}admin-btn-danger{% else %}admin-btn-success{% endif %}"
+                        aria-label="{% if item.is_available %}Mark {{ item.title | e }} as sold out{% else %}Mark {{ item.title | e }} as available{% endif %}">
+                        {% if item.is_available %}Mark sold out{% else %}Mark available{% endif %}
+                    </button>
+                </form>
                 <form method="POST" action="{{ url_for('admin.delete_menu_item', item_id=item.id) }}"
                     onsubmit="return confirm('Are you sure you want to delete this item?')">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -118,9 +130,9 @@
 </div>
 
 <!-- Preview Modal -->
-<div class="admin-modal-overlay" id="preview-modal">
+<div class="admin-modal-overlay" id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-title">
     <div class="admin-modal">
-        <button class="admin-modal-close" id="preview-close">✕</button>
+        <button class="admin-modal-close" id="preview-close" aria-label="Close preview">✕</button>
         <div class="preview-modal-content">
             <img id="preview-image" src="" alt="" class="preview-modal-image"
                 onerror="this.style.display='none';">
@@ -139,9 +151,9 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="admin-modal-overlay" id="edit-modal">
+<div class="admin-modal-overlay" id="edit-modal" role="dialog" aria-modal="true" aria-label="Edit item">
     <div class="admin-modal">
-        <button class="admin-modal-close" id="edit-close">✕</button>
+        <button class="admin-modal-close" id="edit-close" aria-label="Close editor">✕</button>
         <h2 class="admin-modal-title">Edit Item</h2>
 
         <form method="POST" id="edit-form" class="admin-form admin-form-plain">
@@ -234,7 +246,9 @@ function openPreview(data) {
     img.src = '/static/' + data.image;
     img.style.display = 'block';
 
-    document.getElementById('preview-modal').classList.add('active');
+    const overlay = document.getElementById('preview-modal');
+    overlay.classList.add('active');
+    overlay.querySelector('.admin-modal-close').focus();
 }
 
 function openEdit(data) {
@@ -251,7 +265,9 @@ function openEdit(data) {
     imgPreview.style.display = 'block';
 
     document.getElementById('edit-form').action = `/admin/menu/${data.id}/edit`;
-    document.getElementById('edit-modal').classList.add('active');
+    const overlay = document.getElementById('edit-modal');
+    overlay.classList.add('active');
+    overlay.querySelector('#edit-title').focus();
 }
 
 // Close modals

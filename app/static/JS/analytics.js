@@ -16,6 +16,10 @@
     var els = {
         range: document.getElementById('analytics-range'),
         refresh: document.getElementById('analytics-refresh'),
+        customRange: document.getElementById('analytics-custom'),
+        customStart: document.getElementById('custom-start'),
+        customEnd: document.getElementById('custom-end'),
+        customApply: document.getElementById('custom-apply'),
         updated: document.getElementById('analytics-updated'),
         error: document.getElementById('analytics-error'),
         errorText: document.getElementById('analytics-error-text'),
@@ -45,10 +49,14 @@
         expenseSubmit: document.getElementById('expense-submit'),
     };
 
-    var state = { range: '30', interval: 'day', metric: 'qty' };
+    var state = { range: '30', interval: 'day', metric: 'qty', custom: null };
     var charts = { orders: null, status: null, mix: null, accounts: null, expenses: null };
     var pending = false;
     var firstLoad = true;
+
+    function pageSection() {
+        return els.kpis ? els.kpis.closest('.analytics-page') : null;
+    }
 
     function getCsrfToken() {
         var meta = document.querySelector('meta[name="csrf-token"]');
@@ -288,6 +296,7 @@
         accounts: '<svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>',
         revenue: '<svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>',
         aov: '<svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2.2 2.5-2.2s2.5.8 2.5 2.1c0 2.6-5 2.2-5 4.6 0 1.3 1.1 2.1 2.5 2.1s2.5-.8 2.5-2.1"/></svg>',
+        expenses: '<svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg>',
     };
 
     function firstLineOfIconRow(icon, label) {
@@ -333,6 +342,12 @@
         html += '<div class="stat-card">' + firstLineOfIconRow(ICONS.aov, 'Avg Order Value') +
             '<p class="stat-value">' + (aov.value === null ? '—' : money(aov.value)) + '</p>' +
             '<p class="kpi-caption">' + aov.orders + ' paid ' + (aov.orders === 1 ? 'order' : 'orders') + '</p></div>';
+
+        var expenses = kpis.expenses;
+        html += '<div class="stat-card">' + firstLineOfIconRow(ICONS.expenses, 'Expenses in Period') +
+            '<p class="stat-value">' + money(expenses.total) + '</p>' +
+            '<p class="kpi-caption">' + pctText(expenses) +
+            (expenses.count ? ' · ' + expenses.count + ' ' + (expenses.count === 1 ? 'record' : 'records') : '') + '</p></div>';
 
         els.kpis.innerHTML = html;
     }
@@ -456,6 +471,9 @@
     els.expenseRows.addEventListener('click', function (ev) {
         var button = ev.target.closest('.analytics-delete-btn');
         if (!button || button.disabled) return;
+        // Same confirmation convention as the panel's other destructive
+        // actions (user delete, reservation cancel, menu delete).
+        if (!window.confirm('Delete this expense? This cannot be undone.')) return;
         button.disabled = true;
         fetch('/api/admin/expenses/' + button.getAttribute('data-expense-id') + '/delete', {
             method: 'POST',
@@ -490,9 +508,17 @@
         if (pending) return;
         pending = true;
         els.refresh.disabled = true;
+        els.refresh.classList.add('is-loading');
+        els.refresh.setAttribute('aria-busy', 'true');
+        var section = pageSection();
+        if (section) section.classList.add('analytics-busy');
 
         var params = new URLSearchParams({ range: state.range, metric: state.metric });
         if (state.interval) params.set('interval', state.interval);
+        if (state.range === 'custom' && state.custom) {
+            params.set('start', state.custom.start);
+            params.set('end', state.custom.end);
+        }
 
         fetch('/api/admin/analytics?' + params.toString(), { headers: { 'Accept': 'application/json' } })
             .then(function (resp) {
@@ -516,6 +542,7 @@
                     state.interval = data.interval;
                 }
                 renderKpis(data.kpis);
+                replayKpiEntrance();
                 renderOrdersChart(data.series);
                 renderStatusChart(data.status_counts);
                 renderMixChart(data.series);
@@ -523,6 +550,13 @@
                 renderTrending(data.trending);
                 renderExpenseSummary(data.expenses);
                 renderCaption(els.ordersCaption, data.coerced_note || '');
+                // Heights above changed during the first load; if the page
+                // was opened on the sidebar's Expenses anchor, keep the
+                // section in view. Later fetches never re-anchor.
+                if (firstLoad && location.hash) {
+                    var target = document.querySelector(location.hash);
+                    if (target) target.scrollIntoView();
+                }
                 els.updated.hidden = false;
                 els.updated.textContent = 'Updated ' + new Date(data.generated_at).toLocaleTimeString('en-IN',
                     { hour: 'numeric', minute: '2-digit' }) + ' IST · range: ' + data.range_label;
@@ -534,7 +568,18 @@
                 pending = false;
                 firstLoad = false;
                 els.refresh.disabled = false;
+                els.refresh.classList.remove('is-loading');
+                els.refresh.removeAttribute('aria-busy');
+                if (section) section.classList.remove('analytics-busy');
             });
+    }
+
+    /* Re-run the staggered card entrance each time data arrives. */
+    function replayKpiEntrance() {
+        if (!els.kpis) return;
+        els.kpis.classList.remove('kpi-enter');
+        void els.kpis.offsetWidth;   // reflow so the animation restarts
+        els.kpis.classList.add('kpi-enter');
     }
 
     /* ------------------------------------------------------------ events */
@@ -542,10 +587,40 @@
     els.range.addEventListener('change', function () {
         state.range = els.range.value;
         // Reset the manual interval choice to the default for this range.
-        state.interval = defaultIntervalFor(state.range);
-        syncSegment(els.interval, state.interval);
-        load();
+        state.interval = defaultIntervalFor(state.range) || state.interval;
+        if (state.interval) syncSegment(els.interval, state.interval);
+        toggleCustomRow(state.range === 'custom');
+        if (state.range !== 'custom') load();
     });
+
+    if (els.customApply) {
+        els.customApply.addEventListener('click', function () {
+            var start = els.customStart.value;
+            var end = els.customEnd.value;
+            if (!start || !end) {
+                showError('Pick both a start and an end date.');
+                return;
+            }
+            if (start > end) {
+                showError('The start date must be on or before the end date.');
+                return;
+            }
+            state.custom = { start: start, end: end };
+            // Mirror the server's auto interval for the chosen span.
+            var spanDays = Math.round((new Date(end + 'T00:00:00') - new Date(start + 'T00:00:00')) / 86400000) + 1;
+            state.interval = spanDays <= 45 ? 'day' : (spanDays <= 130 ? 'week' : 'month');
+            syncSegment(els.interval, state.interval);
+            load();
+        });
+    }
+
+    function toggleCustomRow(show) {
+        if (!els.customRange) return;
+        els.customRange.hidden = !show;
+        if (show) {
+            if (!els.customStart.value) els.customStart.value = els.customStart.getAttribute('value') || '';
+        }
+    }
 
     els.refresh.addEventListener('click', load);
 
@@ -579,7 +654,8 @@
     function defaultIntervalFor(range) {
         if (range === '7' || range === '30' || range === 'month' || range === 'last_month') return 'day';
         if (range === '90') return 'week';
-        return 'month'; // year, all time
+        if (range === 'year' || range === 'all') return 'month';
+        return null; // 'custom' decides from the picked span at apply-time
     }
 
     load();

@@ -60,7 +60,13 @@ RANGE_LABELS = {
     'last_month': 'Last month',
     'year': 'This year',
     'all': 'All time',
+    'custom': 'Custom period',
 }
+
+# How far back a hand-picked range may reach. The bucket coercion
+# guards cap chart clutter; this caps memory (window rows are read
+# into the server for bucketing).
+CUSTOM_RANGE_MAX_DAYS = 1826
 
 
 # --------------------------------------------------------------------------
@@ -113,21 +119,41 @@ def _pct_change(cur, prev):
 # Range / interval resolution
 # --------------------------------------------------------------------------
 
-def _resolve_range(key):
+def _resolve_range(key, custom_start=None, custom_end=None):
     """Turn a range key into [start, end) windows in naive UTC.
 
     Day-based ranges use full IST calendar days (the current day is
     partially elapsed); month/year ranges use real calendar bounds.
-    Every window also yields the previous equivalent window for the
-    period-over-period comparisons. All-time has no previous window.
+    'custom' takes inclusive IST dates (start .. end) supplied by the
+    date picker. Every window also yields the previous equivalent
+    window for the period-over-period comparisons and its IST dates
+    for the plain-date expense filters. All-time has no previous
+    window.
     """
     ist_today = _ist_now().date()
 
     if key == 'all':
         return dict(start=None, end=None, prev_start=None, prev_end=None,
-                    prev_label=None, start_ist_date=None, end_ist_date=None)
+                    prev_label=None, start_ist_date=None, end_ist_date=None,
+                    prev_start_ist_date=None, prev_end_ist_date=None)
 
-    if key in ('7', '30', '90'):
+    if key == 'custom':
+        if custom_start is None or custom_end is None:
+            raise ValueError('Custom range needs both a start and an end date.')
+        if custom_start > custom_end:
+            raise ValueError('The start date must be on or before the end date.')
+        if custom_end > ist_today:
+            raise ValueError('The end date cannot be in the future.')
+        if custom_start < date(2000, 1, 1):
+            raise ValueError('The start date is too far back.')
+        span_days = (custom_end - custom_start).days + 1
+        if span_days > CUSTOM_RANGE_MAX_DAYS:
+            raise ValueError('Custom ranges are limited to about five years.')
+        start_date = custom_start
+        end_date = custom_end + timedelta(days=1)  # end-exclusive, "through" semantics
+        prev_start_date = start_date - timedelta(days=span_days)
+        prev_label = 'previous equal period'
+    elif key in ('7', '30', '90'):
         days = int(key)
         start_date = ist_today - timedelta(days=days - 1)
         end_date = ist_today + timedelta(days=1)
@@ -159,6 +185,8 @@ def _resolve_range(key):
         prev_label=prev_label,
         start_ist_date=start_date,
         end_ist_date=end_date,
+        prev_start_ist_date=prev_start_date,
+        prev_end_ist_date=start_date,
     )
 
 
@@ -334,7 +362,7 @@ def _series_block(window, interval, orders, account_rows, expense_rows):
 # KPI assembly
 # --------------------------------------------------------------------------
 
-def _kpi_block(window, cur_rows, prev_rows):
+def _kpi_block(window, cur_rows, prev_rows, expense_total, expense_count, expense_prev_total):
     """KPI card values + period-over-period comparisons."""
     lifetime_status = dict(
         db.session.query(Order.status, func.count(Order.id)).group_by(Order.status).all())
@@ -390,6 +418,13 @@ def _kpi_block(window, cur_rows, prev_rows):
         'aov': {
             'value': aov,
             'orders': cur_paid,
+        },
+        'expenses': {
+            'total': _round2(expense_total),
+            'count': expense_count,
+            'prev': _round2(expense_prev_total) if prev_label else None,
+            'prev_label': prev_label,
+            'pct': _pct_change(float(_round2(expense_total)), float(_round2(expense_prev_total)) if prev_label else None),
         },
     }
 
@@ -525,9 +560,12 @@ def _authorize_admin():
 @login_required
 @admin_required
 def analytics_page():
+    ist_today = _ist_now().date()
     return render_template('admin/analytics.html',
                            expense_categories=EXPENSE_CATEGORIES,
-                           today_iso=_ist_now().date().isoformat())
+                           today_iso=ist_today.isoformat(),
+                           default_custom_start=(ist_today - timedelta(days=29)).isoformat(),
+                           default_custom_end=ist_today.isoformat())
 
 
 @analytics_bp.route('/api/admin/analytics', endpoint='data')
@@ -549,7 +587,19 @@ def analytics_data():
     if requested_interval is not None and requested_interval not in ('day', 'week', 'month'):
         return jsonify({'error': f'Unknown interval "{requested_interval}".'}), 400
 
-    window = _resolve_range(range_key)
+    # 'custom' carries its two inclusive IST dates as ISO strings.
+    custom_start = custom_end = None
+    if range_key == 'custom':
+        try:
+            custom_start = date.fromisoformat(request.args.get('start') or '')
+            custom_end = date.fromisoformat(request.args.get('end') or '')
+        except ValueError:
+            return jsonify({'error': 'Custom dates must be YYYY-MM-DD.'}), 400
+
+    try:
+        window = _resolve_range(range_key, custom_start, custom_end)
+    except ValueError as exc:
+        return jsonify({'error': str(exc)}), 400
 
     # All time: anchor the buckets at the earliest record.
     if window['start_ist_date'] is None:
@@ -573,17 +623,33 @@ def analytics_data():
         acct_q = acct_q.filter(User.created_at < window['end'])
     account_rows = acct_q.all()
 
+    # Expenses: one fetch covers the current AND the previous window
+    # (both sums feed the KPI comparison; the series bucketing below
+    # merely skips rows that fall before the current window).
     exp_q = db.session.query(Expense.spent_on, Expense.amount)
-    if window['start_ist_date'] is not None:
-        exp_q = exp_q.filter(Expense.spent_on >= window['start_ist_date'])
+    lower_ist = window['prev_start_ist_date'] or window['start_ist_date']
+    if lower_ist is not None:
+        exp_q = exp_q.filter(Expense.spent_on >= lower_ist)
     if window['end_ist_date'] is not None:
         exp_q = exp_q.filter(Expense.spent_on < window['end_ist_date'])
     expense_rows = exp_q.all()
 
+    start_ist = window['start_ist_date']
+    cur_expense_rows = [r for r in expense_rows if start_ist is None or r[0] >= start_ist]
+    prev_expense_rows = [
+        r for r in expense_rows
+        if window['prev_end_ist_date'] is not None and r[0] < window['prev_end_ist_date']
+    ]
+    expense_total_cur = _round2(sum((r[1] or 0) for r in cur_expense_rows))
+    expense_count_cur = len(cur_expense_rows)
+    expense_total_prev = _round2(sum((r[1] or 0) for r in prev_expense_rows)) \
+        if window['prev_label'] else 0
+
     series, bucket_count = _series_block(window, interval, cur_rows,
                                          account_rows, expense_rows)
 
-    kpis = _kpi_block(window, cur_rows, prev_rows)
+    kpis = _kpi_block(window, cur_rows, prev_rows,
+                      expense_total_cur, expense_count_cur, expense_total_prev)
     trending = _trending_block(_trending_rows(window['start'], window['end']), metric)
     expense_summary = _expense_summary(window['start_ist_date'], window['end_ist_date'])
 
