@@ -45,22 +45,52 @@
     </section>
 
     <section class="dine-with-us">
-        <h1 class="reveal">Dine with us</h1>
-        <div class="content-dinewithus">
-            <img src="{{ url_for('static', filename='Images/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="" loading="lazy">
-            <p class="reveal" data-delay="1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex nobis, molestiae temporibus ad deleniti, aliquam eius nam eos dolore nulla veniam incidunt eum optio sed. Delectus, debitis aliquid. Debitis, eum.</p>
-            <a href="{{ url_for('menu.order') }}" class="menu-cta">See Menu</a>
-        </div>
+        <header class="dine-intro">
+            <p class="dine-eyebrow reveal">Come on in &middot; Good food, good company</p>
+            <h1 class="reveal" data-delay="1">Dine with us</h1>
+            <p class="dine-lede reveal" data-delay="2">Stay a little longer.</p>
+            <p class="dine-copy reveal" data-delay="2">Good food, a welcoming atmosphere, and a table waiting for you.</p>
+            <div class="dine-actions reveal" data-delay="3">
+                <a href="{{ url_for('main.reservations') }}" class="menu-cta">Reserve a table</a>
+                <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Sheelaj%2C%20Ahmedabad" class="dine-directions" data-directions-link>Get directions</a>
+            </div>
+            <p class="dine-alternative reveal" data-delay="3">Prefer to browse first? <a href="{{ url_for('menu.order') }}">See the menu</a></p>
+        </header>
+        <figure class="dine-photo">
+            <img class="reveal-img no-select" src="{{ url_for('static', filename='Images/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="The restaurant dining room" loading="lazy">
+        </figure>
     </section>
 
-    <section class="locations">
-        <h1 class="reveal">Our locations:</h1>
-        <div class="location-content">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div class="address">
-                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
-                <p><b>Location 2:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
-                <p><b>Location 3:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Est deserunt maiores distinctio praesentium autem, nisi suscipit modi, officiis assumenda accusamus quasi? Pariatur est esse rem nostrum, cupiditate vel distinctio eos?</p>
+    <section class="location-picker" aria-labelledby="location-picker-title">
+        <h2 id="location-picker-title" class="reveal">Choose your location</h2>
+        <div class="location-grid">
+            <div class="location-cards" role="radiogroup" aria-label="Restaurant locations">
+                <button type="button" class="location-card reveal is-selected" role="radio" aria-checked="true"
+                        data-map="https://www.google.com/maps?q=Sheelaj%2C%20Ahmedabad&amp;output=embed"
+                        data-directions="https://www.google.com/maps/dir/?api=1&amp;destination=Sheelaj%2C%20Ahmedabad">
+                    <span class="location-card-num" aria-hidden="true">01</span>
+                    <span class="location-card-name">Sheelaj</span>
+                    <span class="location-card-arrow" aria-hidden="true">&rarr;</span>
+                </button>
+                <button type="button" class="location-card reveal" role="radio" aria-checked="false" data-delay="1" tabindex="-1"
+                        data-map="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin"
+                        data-directions="https://www.google.com/maps/dir/?api=1&amp;destination=Ashram%20Road%2C%20Ahmedabad">
+                    <span class="location-card-num" aria-hidden="true">02</span>
+                    <span class="location-card-name">Ashram Road</span>
+                    <span class="location-card-arrow" aria-hidden="true">&rarr;</span>
+                </button>
+                <button type="button" class="location-card reveal" role="radio" aria-checked="false" data-delay="2" tabindex="-1"
+                        data-map="https://www.google.com/maps?q=Chandkheda%2C%20Ahmedabad&amp;output=embed"
+                        data-directions="https://www.google.com/maps/dir/?api=1&amp;destination=Chandkheda%2C%20Ahmedabad">
+                    <span class="location-card-num" aria-hidden="true">03</span>
+                    <span class="location-card-name">Chandkheda</span>
+                    <span class="location-card-arrow" aria-hidden="true">&rarr;</span>
+                </button>
+            </div>
+            <div class="location-map reveal" data-delay="2">
+                <iframe id="location-map-frame" title="Map — Sheelaj" src="https://www.google.com/maps?q=Sheelaj%2C%20Ahmedabad&amp;output=embed" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="map-veil" aria-hidden="true"></div>
+                <p class="map-fail" hidden>The map could not be loaded. <a href="https://www.google.com/maps?q=Sheelaj%2C+Ahmedabad" target="_blank" rel="noopener">Open it in Google Maps</a></p>
             </div>
         </div>
     </section>
@@ -69,4 +99,5 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='JS/home-gallery.js') }}" defer></script>
+<script src="{{ url_for('static', filename='JS/dine.js') }}" defer></script>
 {% endblock %}

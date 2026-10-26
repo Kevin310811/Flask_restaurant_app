@@ -6,9 +6,11 @@
    Composition notes: the triple image strip is laid out
    as an uneven gallery wall with counter-numbered
    captions; each plate rotates image + caption every 3s
-   (home-gallery.js). "Dine with us" is an overlapping
-   plate/panel arrangement. All copy and assets are the
-   originals.
+   (home-gallery.js). "Dine with us" is an editorial
+   invitation — copy and actions left, matted interior
+   photograph right — followed by a three-location
+   selector with a live map (dine.js). All copy and
+   assets are the originals.
    ===================================================== */
 
 /* ================================================
@@ -120,55 +122,67 @@
 }
 
 /* ================================================
-   DINE WITH US — overlapping plate & panel
+   DINE WITH US — editorial invitation
+   Eyebrow, headline, supporting copy and actions on
+   the left; a matted interior photograph on the right.
    ================================================ */
 .dine-with-us {
-    color: var(--text);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(16px, 2.4vw, 36px);
+    align-items: start;
     margin: 0 var(--gutter) var(--space-9);
 }
 
-.dine-with-us > h1 {
-    font-size: var(--fs-h2);
+.dine-intro {
+    grid-column: 1 / 6;
+    padding-top: var(--space-4);
+}
+
+.dine-eyebrow {
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 var(--space-4);
+}
+
+.dine-intro > h1 {
+    font-size: var(--fs-h1);
     font-style: italic;
-    margin-bottom: var(--space-6);
+    color: var(--espresso);
+    margin: 0 0 var(--space-4);
 }
 
-.content-dinewithus {
-    position: relative;
-    max-width: 1320px;
+.dine-lede {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-style: italic;
+    color: var(--espresso);
+    margin: 0 0 var(--space-3);
 }
 
-.content-dinewithus > img {
-    display: block;
-    width: 62%;
-    height: 560px;
-    object-fit: cover;
-    object-position: 0px -1250px;
-}
-
-/* Chalk panel slides over the print edge */
-.content-dinewithus > p {
+.dine-copy {
     font-family: var(--font-heading);
     font-size: var(--fs-md);
     font-weight: var(--fw-regular);
-    line-height: 1.75;
+    line-height: 1.7;
     color: var(--text-muted);
-    position: absolute;
-    right: 0;
-    top: 18%;
-    width: 38%;
+    max-width: 42ch;
     margin: 0;
-    padding: var(--space-7) var(--space-6);
-    background-color: var(--surface);
-    border: var(--border-faint);
-    box-shadow: var(--shadow-pop);
 }
 
-/* CTA anchors the panel's lower edge */
+.dine-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 var(--space-4);
+}
+
 .menu-cta {
-    position: absolute;
-    right: calc(var(--space-6) + 0px);
-    bottom: 12%;
     display: inline-block;
     font-family: var(--font-heading);
     font-size: var(--fs-sm);
@@ -185,24 +199,274 @@
     transition: background-color var(--trans-base), color var(--trans-base), box-shadow var(--trans-base);
 }
 
+.dine-directions {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--espresso);
+    background-color: transparent;
+    border: var(--border-faint);
+    border-radius: var(--radius-pill);
+    padding: 12px 24px;
+    text-decoration: none;
+    transition: border-color var(--trans-base), background-color var(--trans-base);
+}
+
+.dine-alternative {
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.dine-alternative a {
+    color: var(--espresso);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-line);
+    text-underline-offset: 4px;
+    transition: color var(--trans-fast);
+}
+
 @media (hover: hover) {
     .menu-cta:hover {
         background-color: var(--espresso);
         color: var(--chalk);
         box-shadow: var(--shadow-lift);
     }
+
+    .dine-directions:hover {
+        border-color: var(--espresso);
+        background-color: var(--accent-soft);
+    }
+
+    .dine-alternative a:hover {
+        color: var(--accent-deep);
+    }
 }
 
 @media (hover: none) {
-    .menu-cta:active {
+    .menu-cta:active,
+    .dine-directions:active {
         background-color: var(--espresso);
         color: var(--chalk);
         box-shadow: var(--shadow-lift);
     }
+
+    .dine-alternative a:active {
+        color: var(--accent-deep);
+    }
 }
 
-/* Kicker labels for the two composed sections */
-.dine-with-us > h1::before,
+/* Matted print: the interior photo with an offset
+   champagne hairline frame behind it */
+.dine-photo {
+    grid-column: 6 / 13;
+    margin: 0;
+    position: relative;
+}
+
+.dine-photo::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: calc(-1 * var(--space-4));
+    left: calc(-1 * var(--space-4));
+    width: 100%;
+    height: 100%;
+    border: var(--border-hairline);
+}
+
+.dine-photo > img {
+    display: block;
+    width: 100%;
+    height: clamp(380px, 44vw, 600px);
+    object-fit: cover;
+    object-position: 50% 100%;
+    border: var(--border-faint);
+}
+
+/* ================================================
+   LOCATION PICKER — three rooms, one map
+   Selectable cards (≈38%) left, live Google map
+   (≈62%) right. dine.js drives the shared selection
+   state from data attributes in index.html.
+   ================================================ */
+.location-picker {
+    margin: 0 var(--gutter) var(--space-9);
+    max-width: 1320px;
+    color: var(--text);
+}
+
+.location-picker > h2 {
+    font-size: var(--fs-h2);
+    font-style: italic;
+    color: var(--espresso);
+    margin: 0 0 var(--space-5);
+}
+
+.location-picker > h2::before {
+    content: "Find Us";
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    font-style: normal;
+    color: var(--accent-deep);
+    margin-bottom: var(--space-3);
+}
+
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(16px, 2.4vw, 36px);
+    align-items: stretch;
+}
+
+.location-cards {
+    grid-column: 1 / 6;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.location-card {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 88px;
+    text-align: left;
+    font-family: inherit;
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--surface);
+    color: var(--espresso);
+    border: var(--border-faint);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition:
+        background-color var(--trans-fast),
+        border-color var(--trans-fast),
+        color var(--trans-fast),
+        box-shadow var(--trans-fast);
+}
+
+.location-card-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-style: italic;
+    color: var(--text-faint);
+    transition: color var(--trans-fast);
+}
+
+.location-card-name {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-display-strong);
+    font-style: italic;
+    color: var(--espresso);
+    transition: color var(--trans-fast);
+}
+
+.location-card-arrow {
+    margin-left: auto;
+    color: var(--text-faint);
+    transition: transform var(--trans-fast), color var(--trans-fast);
+}
+
+.location-card:focus-visible {
+    outline: 2px solid var(--olive);
+    outline-offset: 3px;
+}
+
+@media (hover: hover) {
+    .location-card:hover {
+        border-color: var(--espresso);
+    }
+
+    .location-card:hover .location-card-arrow {
+        transform: translateX(4px);
+        color: var(--espresso);
+    }
+}
+
+/* Selected room inverts to espresso ink — state is
+   carried by fill and weight, not color alone */
+.location-card.is-selected {
+    background-color: var(--espresso);
+    border-color: var(--espresso);
+    box-shadow: var(--shadow-pop);
+}
+
+.location-card.is-selected .location-card-num {
+    color: var(--ink-on-dark-muted);
+}
+
+.location-card.is-selected .location-card-name {
+    color: var(--ink-on-dark);
+}
+
+.location-card.is-selected .location-card-arrow {
+    color: var(--champagne);
+}
+
+.location-map {
+    grid-column: 6 / 13;
+    position: relative;
+    min-height: 440px;
+    background-color: var(--chalk);
+    border: var(--border);
+    overflow: hidden;
+}
+
+.location-map > iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: grayscale(0.25);
+}
+
+/* Chalk veil while a new embed loads */
+.map-veil {
+    position: absolute;
+    inset: 0;
+    background-color: var(--chalk);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--trans-base);
+}
+
+.location-map.is-loading .map-veil {
+    opacity: 1;
+}
+
+.map-fail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--espresso);
+    background-color: var(--surface);
+    border-top: var(--border-faint);
+}
+
+.map-fail a {
+    color: var(--accent-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Kicker label for the gallery-wall section; the
+   "Dine with us" section carries its eyebrow in markup */
 .food-gallery::before {
     content: "The Table";
     display: block;
@@ -237,17 +501,21 @@
         margin-top: var(--space-5);
     }
 
-    .content-dinewithus > img {
-        width: 70%;
+    .dine-intro {
+        grid-column: 1 / 7;
     }
 
-    .content-dinewithus > p {
-        width: 48%;
-        padding: var(--space-5) var(--space-4);
+    .dine-photo {
+        grid-column: 7 / 13;
     }
 
-    .menu-cta {
-        right: var(--space-4);
+    .location-cards {
+        grid-column: 1 / 6;
+    }
+
+    .location-map {
+        grid-column: 6 / 13;
+        min-height: 400px;
     }
 }
 
@@ -272,24 +540,41 @@
         max-width: none;
     }
 
-    /* Stack: plate, then panel beneath it */
-    .content-dinewithus > img {
-        width: 100%;
-        height: 420px;
-        object-position: 0px -900px;
+    /* Stack: invitation, photograph, cards, then map */
+    .dine-with-us {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-5);
+        margin: 0 var(--space-4) var(--space-7);
     }
 
-    .content-dinewithus > p {
-        position: static;
-        width: auto;
-        padding: var(--space-5) var(--space-4);
-        border-top: none;
-        box-shadow: none;
+    .dine-intro {
+        padding-top: 0;
     }
 
-    .menu-cta {
-        position: static;
-        display: inline-block;
-        margin: 0 0 var(--space-6) var(--space-4);
+    .dine-photo > img {
+        height: 340px;
+    }
+
+    .dine-photo::after {
+        display: none;
+    }
+
+    .location-picker {
+        margin: 0 var(--space-4) var(--space-7);
+    }
+
+    .location-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .location-card {
+        flex: none;
+    }
+
+    .location-map {
+        min-height: 340px;
     }
 }
