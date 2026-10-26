@@ -12,7 +12,8 @@
 
     <hero>
         <div class="image-layering">
-            <img src="{{ url_for('static', filename='Images/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="food" class="hero-img no-select">
+            <img src="{{ url_for('static', filename='Images/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="food" class="hero-img no-select reveal-img">
+            <div class="hero-img-overlay" aria-hidden="true"></div>
             <div class="text-content-hero">
                 <h1>Reservations</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur temporibus sit voluptatem, eum odit doloremque tempore facere aliquid, nam dolores blanditiis quae.</p>
@@ -21,7 +22,7 @@
     </hero>
 
     <section class="reserve-now">
-        <h1>Make a reservation now:</h1>
+        <h1 class="reveal">Make a reservation now:</h1>
         <div class="reservation-form-wrapper">
 
             <!-- Left: Personal Details -->

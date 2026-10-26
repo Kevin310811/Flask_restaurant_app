@@ -10,7 +10,8 @@
 
     <hero>
         <div class="image-layering">
-            <img src="{{ url_for('static', filename='Images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="food" class="hero-img no-select">
+            <img src="{{ url_for('static', filename='Images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="food" class="hero-img no-select reveal-img">
+            <div class="hero-img-overlay" aria-hidden="true"></div>
             <div class="text-content-hero">
                 <h1>Lorem Ipsum Dolor</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur temporibus sit voluptatem, eum odit doloremque tempore facere aliquid, nam dolores blanditiis quae.</p>
@@ -20,21 +21,21 @@
     </hero>
 
     <section class="food-gallery">
-        <div class="card">
+        <div class="card reveal">
             <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Delicious Food</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
-        <div class="card">
+        <div class="card reveal" data-delay="1">
             <img src="{{ url_for('static', filename='Images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Delicious Food</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
-        <div class="card">
+        <div class="card reveal" data-delay="2">
             <img src="{{ url_for('static', filename='Images/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Delicious Food</h1>
@@ -44,16 +45,16 @@
     </section>
 
     <section class="dine-with-us">
-        <h1>Dine with us</h1>
+        <h1 class="reveal">Dine with us</h1>
         <div class="content-dinewithus">
             <img src="{{ url_for('static', filename='Images/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="" loading="lazy">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex nobis, molestiae temporibus ad deleniti, aliquam eius nam eos dolore nulla veniam incidunt eum optio sed. Delectus, debitis aliquid. Debitis, eum.</p>
+            <p class="reveal" data-delay="1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex nobis, molestiae temporibus ad deleniti, aliquam eius nam eos dolore nulla veniam incidunt eum optio sed. Delectus, debitis aliquid. Debitis, eum.</p>
             <a href="{{ url_for('menu.order') }}" class="menu-cta">See Menu</a>
         </div>
     </section>
 
     <section class="locations">
-        <h1>Our locations:</h1>
+        <h1 class="reveal">Our locations:</h1>
         <div class="location-content">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="address">

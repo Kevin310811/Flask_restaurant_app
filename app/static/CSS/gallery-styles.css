@@ -2,26 +2,45 @@
    GALLERY PAGE (gallery.html)
    Footer is global — see nav-styles.css. This file
    covers the carousel sections.
+
+   Design: a culinary exhibition corridor — the marquee
+   rows read as gallery prints with hairline frames and
+   "exhibit label" captions reveal on interaction.
    ===================================================== */
 
 .gallery {
     padding-top: var(--post-nav-padding);
     padding-left: 20px;
     padding-right: 20px;
-    padding-bottom: var(--space-7);
+    padding-bottom: var(--space-8);
 }
 
 .gallery h1 {
-    color: var(--accent);
+    color: var(--espresso);
     font-size: var(--fs-h1);
-    margin-bottom: 20px;
+    font-style: italic;
+    margin-bottom: 6px;
+}
+
+/* Exhibit plaque above the headline */
+.gallery h1::before {
+    content: "Exhibition";
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    font-style: normal;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: var(--space-2);
 }
 
 /* Carousel rows animated in marquee loops (see @keyframes spin) */
 .carousels {
     display: flex;
     overflow-x: hidden;
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-8);
 }
 
 .carousel {
@@ -33,17 +52,26 @@
 .image-set {
     display: flex;
     gap: 10px;
-    animation: spin 10s infinite linear;
+    animation: spin 22s infinite linear;
 }
 
-/* Carousel item cards */
+/* Carousel item cards — framed prints */
 .carousel-item {
     position: relative;
     flex-shrink: 0;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    border: var(--border);
+    border: var(--border-faint);
+    box-shadow: var(--shadow-pop);
     cursor: pointer;
+    transition: box-shadow var(--trans-base), transform var(--trans-base);
+}
+
+@media (hover: hover) {
+    .carousel-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lift);
+    }
 }
 
 .carousel-item img {
@@ -51,7 +79,14 @@
     height: 70vh;
     width: 40vh;
     display: block;
-    border-radius: var(--radius-lg);
+    filter: saturate(0.92);
+    transition: filter var(--trans-slow);
+}
+
+@media (hover: hover) {
+    .carousel-item:hover img {
+        filter: saturate(1);
+    }
 }
 
 .carousel-desc {
@@ -61,12 +96,13 @@
     width: 100%;
     margin: 0;
     padding: var(--space-3);
-    font-size: var(--fs-base);
-    font-family: var(--font-body);
-    font-weight: var(--fw-regular);
-    color: var(--text);
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-slight);
+    color: var(--chalk);
+    background: linear-gradient(to top, rgba(25, 25, 25, 0.78), rgba(25, 25, 25, 0) 92%);
+    padding-bottom: 22px;
     border-bottom-left-radius: var(--radius-lg);
     border-bottom-right-radius: var(--radius-lg);
     opacity: 0;
@@ -108,7 +144,7 @@
     }
 
     .carousel-desc {
-        font-size: var(--fs-sm);
+        font-size: var(--fs-xs);
     }
 }
 
@@ -117,11 +153,11 @@
         padding-top: var(--post-nav-padding-mobile);
         padding-left: var(--space-3);
         padding-right: var(--space-3);
-        padding-bottom: var(--space-6);
+        padding-bottom: var(--space-7);
     }
 
     .gallery h1 {
-        font-size: var(--fs-h1);
+        font-size: clamp(32px, 9vw, 44px);
         margin-bottom: var(--space-3);
     }
 
@@ -137,5 +173,6 @@
     .carousel-desc {
         font-size: var(--fs-xs);
         padding: var(--space-2);
+        padding-bottom: 18px;
     }
 }

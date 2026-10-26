@@ -1,11 +1,15 @@
 /* =====================================================
    PAYMENT PAGE (payment.html) — order summary, tip
    selector, breakdown and Razorpay handoff buttons.
+
+   Design: a precise chalk bill — hairline rules, Manrope
+   figures, serif section titles. Checkout stays quiet and
+   trustworthy; structure over decoration.
    ===================================================== */
 
 .payment-page {
     padding-top: var(--post-nav-padding);
-    padding-bottom: var(--space-7);
+    padding-bottom: var(--space-8);
     padding-left: 20px;
     padding-right: 20px;
     color: var(--text);
@@ -15,25 +19,32 @@
 }
 
 .payment-box {
-    border: var(--border);
+    border: var(--border-faint);
+    border-top: 2px solid var(--espresso);
     border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    padding: clamp(24px, 3vw, 40px);
     width: 100%;
-    max-width: 600px;
+    max-width: 560px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    background-color: var(--surface);
+    box-shadow: var(--shadow-pop);
 }
 
 .payment-title {
+    font-family: var(--font-display);
     font-size: var(--fs-h3);
-    color: var(--accent);
+    font-weight: var(--fw-display-strong);
+    font-style: italic;
+    color: var(--espresso);
     margin: 0;
 }
 
 .payment-divider {
     border-bottom: var(--border-faint);
+    opacity: 1;
 }
 
 /* ================================================
@@ -45,16 +56,22 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0;
     font-family: var(--font-heading);
 }
 
 #payment-items li {
     display: flex;
     justify-content: space-between;
-    font-size: var(--fs-md);
-    padding: 6px 0;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    padding: 9px 0;
     border-bottom: var(--border-faint);
+}
+
+#payment-items li span:first-child {
+    color: var(--espresso);
+    font-weight: var(--fw-medium);
 }
 
 /* ================================================
@@ -67,31 +84,37 @@
 }
 
 .tip-btn {
-    padding: 10px 20px;
-    font-size: var(--fs-base);
-    border: var(--border);
-    border-radius: var(--radius-md);
-    background-color: var(--bg);
-    color: var(--text);
-    cursor: pointer;
-    transition: box-shadow var(--trans-base), background-color var(--trans-base), color var(--trans-base);
+    padding: 9px 18px;
     font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    border: var(--border-faint);
+    border-radius: var(--radius-pill);
+    background-color: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background-color var(--trans-base), color var(--trans-base), border-color var(--trans-base);
 }
 
 .tip-btn.active {
-    background-color: var(--text);
-    color: var(--bg);
+    background-color: var(--espresso);
+    color: var(--chalk);
+    border-color: var(--espresso);
 }
 
 @media (hover: hover) {
-    .tip-btn:hover {
-        box-shadow: var(--shadow-pop);
+    .tip-btn:hover:not(.active) {
+        border-color: var(--espresso);
+        color: var(--espresso);
     }
 }
 
 @media (hover: none) {
-    .tip-btn:active {
-        box-shadow: var(--shadow-pop);
+    .tip-btn:active:not(.active) {
+        border-color: var(--espresso);
+        color: var(--espresso);
     }
 }
 
@@ -102,17 +125,18 @@
 }
 
 .tip-custom label {
-    font-size: var(--fs-md);
-    font-family: var(--font-body);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
 }
 
 .tip-custom input {
-    font-size: var(--fs-md);
-    padding: var(--space-2);
-    border: var(--border);
+    font-size: var(--fs-base);
+    padding: 8px 10px;
+    border: var(--border-faint);
     border-radius: var(--radius-md);
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: var(--chalk);
+    color: var(--espresso);
     width: 140px;
     font-family: var(--font-heading);
 }
@@ -131,17 +155,24 @@
     justify-content: space-between;
     font-size: var(--fs-md);
     font-family: var(--font-heading);
+    color: var(--text-muted);
 }
 
 .breakdown-row span:last-child {
-    color: var(--accent);
+    color: var(--espresso);
+    font-weight: var(--fw-semibold);
 }
 
 .breakdown-total {
     font-size: 22px;
     font-weight: var(--fw-bold);
-    padding-top: var(--space-2);
-    border-top: var(--border-faint);
+    color: var(--espresso);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--espresso);
+}
+
+.breakdown-total span:last-child {
+    color: var(--accent-deep);
 }
 
 /* ================================================
@@ -154,37 +185,52 @@
 
 #edit-order-btn,
 #pay-btn {
-    padding: 10px;
-    font-size: var(--fs-md);
-    border: var(--border);
-    border-radius: var(--radius-md);
+    padding: 12px;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
     width: 100%;
     cursor: pointer;
-    transition: box-shadow var(--trans-base);
-    font-family: var(--font-heading);
+    transition: background-color var(--trans-base), color var(--trans-base), box-shadow var(--trans-base), transform var(--trans-base);
 }
 
 #edit-order-btn {
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: var(--surface);
+    color: var(--espresso);
+    border: var(--border-faint);
 }
 
 #pay-btn {
-    background-color: var(--text);
-    color: var(--bg);
+    background-color: var(--espresso);
+    color: var(--chalk);
+    border-color: var(--espresso);
+    border-width: 1px;
+    border-style: solid;
 }
 
 @media (hover: hover) {
-    #edit-order-btn:hover,
+    #edit-order-btn:hover {
+        background-color: var(--ivory);
+    }
+
     #pay-btn:hover {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--gallery-black);
+        box-shadow: var(--shadow-lift);
+        transform: translateY(-1px);
     }
 }
 
 @media (hover: none) {
-    #edit-order-btn:active,
+    #edit-order-btn:active {
+        background-color: var(--ivory);
+    }
+
     #pay-btn:active {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--gallery-black);
+        box-shadow: var(--shadow-lift);
     }
 }
 
@@ -202,21 +248,13 @@
         padding: var(--space-4);
     }
 
-    .payment-title {
-        font-size: var(--fs-h3);
-    }
-
     #payment-items li {
         font-size: var(--fs-base);
     }
 
     .tip-btn {
-        font-size: var(--fs-sm);
+        font-size: var(--fs-2xs);
         padding: var(--space-2) 14px;
-    }
-
-    .tip-custom label {
-        font-size: var(--fs-base);
     }
 
     .tip-custom input {
@@ -229,11 +267,6 @@
     }
 
     .breakdown-total {
-        font-size: var(--fs-md);
-    }
-
-    #edit-order-btn,
-    #pay-btn {
-        font-size: var(--fs-base);
+        font-size: 20px;
     }
 }

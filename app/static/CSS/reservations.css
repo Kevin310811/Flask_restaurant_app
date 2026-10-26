@@ -2,6 +2,10 @@
    RESERVATIONS PAGE (reservations.html)
    Hero, locations and footer are global — see
    nav-styles.css. This file covers reservation flows.
+
+   Design: calm ivory surfaces, hairline-framed chalk
+   panels, serif display heading, precise Manrope
+   controls. The confirm modal matches the bill modal.
    ===================================================== */
 
 /* Dark overlay behind the confirm modal (toggled by main.js) */
@@ -11,7 +15,8 @@
     height: 100vh;
     width: 100%;
     z-index: 2;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
+    background-color: rgba(25, 25, 25, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,13 +26,15 @@
    RESERVE NOW
    ================================================ */
 .reserve-now {
-    margin: 0 20px var(--space-7);
+    margin: 0 var(--gutter) var(--space-9);
     color: var(--text);
+    max-width: 1320px;
 }
 
 .reserve-now > h1 {
     font-size: var(--fs-h2);
-    margin-bottom: var(--space-4);
+    font-style: italic;
+    margin-bottom: var(--space-5);
 }
 
 /* ================================================
@@ -35,8 +42,8 @@
    ================================================ */
 .reservation-form-wrapper {
     display: flex;
-    gap: var(--space-5);
-    margin-bottom: var(--space-7);
+    gap: clamp(24px, 4vw, 56px);
+    margin-bottom: var(--space-8);
     align-items: flex-start;
 }
 
@@ -49,51 +56,70 @@
 .form-left form {
     display: flex;
     flex-direction: column;
-    border: var(--border);
-    padding: 20px;
+    border: var(--border-faint);
+    border-top: 2px solid var(--espresso);
+    padding: var(--space-6) var(--space-5);
     border-radius: var(--radius-lg);
     margin-bottom: 0;
+    background-color: var(--surface);
 }
 
 .form-left form label {
-    font-family: var(--font-body);
-    font-size: var(--fs-md);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--text-muted);
     margin-bottom: 6px;
 }
 
 .form-left form input {
     font-family: var(--font-heading);
-    font-size: var(--fs-md);
-    background-color: var(--bg);
+    font-size: var(--fs-base);
+    background-color: var(--chalk);
     color: var(--text);
-    border: var(--border);
+    border: var(--border-faint);
+    border-bottom: 1px solid var(--espresso);
     border-radius: var(--radius-md);
-    padding: 10px;
+    padding: 11px 12px;
     margin-bottom: var(--space-4);
 }
 
+.form-left form input:focus {
+    outline: none;
+    background-color: var(--ivory);
+}
+
 .form-left form button {
-    background-color: var(--bg);
-    color: var(--text);
-    border: var(--border);
-    font-size: var(--fs-md);
-    border-radius: var(--radius-md);
-    padding: 10px 20px;
+    background-color: var(--espresso);
+    color: var(--chalk);
+    border: none;
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    padding: 12px 28px;
     cursor: pointer;
-    transition: box-shadow var(--trans-base);
+    transition: background-color var(--trans-base), box-shadow var(--trans-base), transform var(--trans-base);
     align-self: center;
     margin-top: var(--space-2);
 }
 
 @media (hover: hover) {
     .form-left form button:hover {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--gallery-black);
+        box-shadow: var(--shadow-lift);
+        transform: translateY(-1px);
     }
 }
 
 @media (hover: none) {
     .form-left form button:active {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--gallery-black);
+        box-shadow: var(--shadow-lift);
     }
 }
 
@@ -105,14 +131,15 @@
    SLOT CARD
    ================================================ */
 .slot-card {
-    border: var(--border);
+    border: var(--border-faint);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: var(--space-5);
     display: flex;
     flex-direction: column;
     gap: 20px;
     height: 100%;
     box-sizing: border-box;
+    background-color: var(--surface);
 }
 
 /* Date Picker */
@@ -124,27 +151,30 @@
 }
 
 .slot-date-picker button {
-    background: var(--bg);
-    color: var(--text);
-    border: var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-2) 14px;
-    font-size: var(--fs-md);
+    background: var(--surface);
+    color: var(--espresso);
+    border: var(--border-faint);
+    border-radius: var(--radius-pill);
+    padding: 8px 16px;
     font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
     cursor: pointer;
-    transition: box-shadow var(--trans-base);
     flex-shrink: 0;
+    transition: background-color var(--trans-fast), color var(--trans-fast);
 }
 
 @media (hover: hover) {
     .slot-date-picker button:hover {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--espresso);
+        color: var(--chalk);
     }
 }
 
 @media (hover: none) {
     .slot-date-picker button:active {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--espresso);
+        color: var(--chalk);
     }
 }
 
@@ -157,17 +187,18 @@
 }
 
 #slot-date-label {
-    font-family: var(--font-heading);
-    font-size: var(--fs-md);
-    font-weight: var(--fw-bold);
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-display-strong);
+    font-style: italic;
     margin: 0;
     text-align: center;
 }
 
 #slot-date-input {
-    background: var(--bg);
-    color: var(--text);
-    border: var(--border);
+    background: var(--surface);
+    color: var(--espresso);
+    border: var(--border-faint);
     border-radius: var(--radius-md);
     padding: 6px 10px;
     font-size: var(--fs-sm);
@@ -184,32 +215,36 @@
 .period-btn {
     flex: 1;
     padding: 10px;
-    font-size: var(--fs-base);
     font-family: var(--font-heading);
-    font-weight: var(--fw-bold);
-    border: var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg);
-    color: var(--text);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    border: var(--border-faint);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--text-muted);
     cursor: pointer;
-    transition: box-shadow var(--trans-base);
-    letter-spacing: 1px;
+    transition: background-color var(--trans-base), color var(--trans-base), border-color var(--trans-base);
 }
 
 .period-btn.active {
-    background: var(--text);
-    color: var(--bg);
+    background: var(--espresso);
+    color: var(--chalk);
+    border-color: var(--espresso);
 }
 
 @media (hover: hover) {
-    .period-btn:hover {
-        box-shadow: var(--shadow-pop);
+    .period-btn:hover:not(.active) {
+        border-color: var(--espresso);
+        color: var(--espresso);
     }
 }
 
 @media (hover: none) {
-    .period-btn:active {
-        box-shadow: var(--shadow-pop);
+    .period-btn:active:not(.active) {
+        border-color: var(--espresso);
+        color: var(--espresso);
     }
 }
 
@@ -221,22 +256,23 @@
 }
 
 .slot-placeholder {
-    font-size: var(--fs-base);
-    opacity: 0.6;
-    font-family: var(--font-body);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--text-faint);
     margin: 0;
 }
 
 .slot-btn {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--fs-sm);
+    padding: 7px 12px;
     font-family: var(--font-heading);
-    border: var(--border);
-    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    border: var(--border-faint);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: box-shadow var(--trans-base);
-    background: var(--bg);
-    color: var(--text);
+    transition: background-color var(--trans-fast), color var(--trans-fast);
+    background: var(--surface);
+    color: var(--espresso);
 }
 
 .slot-btn.unavailable {
@@ -246,19 +282,20 @@
 }
 
 .slot-btn.selected {
-    background: var(--text);
-    color: var(--bg);
+    background: var(--espresso);
+    color: var(--chalk);
+    border-color: var(--espresso);
 }
 
 @media (hover: hover) {
-    .slot-btn:not(.unavailable):hover {
-        box-shadow: var(--shadow-pop);
+    .slot-btn:not(.unavailable):not(.selected):hover {
+        border-color: var(--espresso);
     }
 }
 
 @media (hover: none) {
-    .slot-btn:not(.unavailable):active {
-        box-shadow: var(--shadow-pop);
+    .slot-btn:not(.unavailable):not(.selected):active {
+        border-color: var(--espresso);
     }
 }
 
@@ -268,11 +305,13 @@
     font-size: var(--fs-base);
     border-top: var(--border);
     padding-top: var(--space-3);
-    color: var(--accent);
+    color: var(--espresso);
 }
 
 .slot-selected p {
     margin: 0;
+    color: var(--accent-deep);
+    font-weight: var(--fw-semibold);
 }
 
 /* ================================================
@@ -282,9 +321,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: var(--border);
+    border: var(--border-faint);
     border-radius: var(--radius-lg);
     min-height: 40vh;
+    background-color: var(--surface);
+    padding: var(--space-5);
+    box-sizing: border-box;
+}
+
+#has-reservation {
+    font-family: var(--font-heading);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-regular);
+    color: var(--text-muted);
+    opacity: 1;
 }
 
 #reservations {
@@ -295,22 +345,21 @@
     padding: 20px;
 }
 
-#has-reservation {
-    font-size: var(--fs-md);
-    font-weight: var(--fw-regular);
-    opacity: 0.8;
-}
-
 .reservation-card {
-    padding: var(--space-3);
-    border: var(--border);
+    padding: var(--space-4);
+    border: var(--border-faint);
     border-radius: var(--radius-lg);
+    background-color: var(--ivory);
+    min-width: 240px;
 }
 
 /* .card-title is shared with the confirm modal below */
 .card-title {
+    font-family: var(--font-display);
     font-size: clamp(20px, 2.4vw, 28px);
-    color: var(--accent);
+    font-weight: var(--fw-display-strong);
+    font-style: italic;
+    color: var(--espresso);
     margin-bottom: 10px;
 }
 
@@ -322,7 +371,10 @@
 }
 
 .card-details-li {
-    font-size: var(--fs-md);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    line-height: 1.7;
 }
 
 /* ================================================
@@ -331,36 +383,51 @@
    ================================================ */
 .card-modal {
     position: absolute;
-    border: var(--border);
+    border: var(--border-faint);
     z-index: 2;
     color: var(--text);
     border-radius: var(--radius-lg);
-    padding: 20px;
-    background-color: var(--bg);
+    padding: var(--space-6);
+    background-color: var(--surface);
+    box-shadow: var(--shadow-lift);
 }
 
 .card-modal > button {
-    font-family: var(--font-body);
-    font-size: var(--fs-md);
-    border: var(--border);
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    border: var(--border-faint);
     padding: 10px 20px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
     cursor: pointer;
-    color: var(--text);
-    transition: box-shadow var(--trans-base);
-    background-color: var(--bg);
+    color: var(--espresso);
+    background-color: var(--surface);
     margin-right: var(--space-2);
+    transition: background-color var(--trans-base), color var(--trans-base), border-color var(--trans-base);
+}
+
+.card-modal > button:last-child {
+    background-color: var(--espresso);
+    color: var(--chalk);
+    border-color: var(--espresso);
 }
 
 @media (hover: hover) {
-    .card-modal > button:hover {
-        box-shadow: var(--shadow-pop);
+    .card-modal > button:not(:last-child):hover {
+        background-color: var(--ivory);
+    }
+
+    .card-modal > button:last-child:hover {
+        background-color: var(--gallery-black);
     }
 }
 
 @media (hover: none) {
     .card-modal > button:active {
-        box-shadow: var(--shadow-pop);
+        background-color: var(--espresso);
+        color: var(--chalk);
     }
 }
 
@@ -379,19 +446,19 @@
 
 @media screen and (max-width: 768px) {
     .reserve-now {
-        margin: 0 var(--space-3) var(--space-6);
+        margin: 0 var(--space-4) var(--space-7);
     }
 
     .reserve-now > h1 {
-        font-size: var(--fs-h1);
+        font-size: clamp(34px, 9vw, 44px);
     }
 
     .form-left form {
-        padding: var(--space-3);
+        padding: var(--space-4);
     }
 
     .form-left form label {
-        font-size: var(--fs-sm);
+        font-size: var(--fs-2xs);
     }
 
     .form-left form input {
@@ -400,16 +467,16 @@
     }
 
     .form-left form button {
-        font-size: var(--fs-sm);
+        font-size: var(--fs-xs);
         padding: var(--space-2) var(--space-4);
     }
 
     .slot-card {
-        padding: 14px;
+        padding: 16px;
     }
 
     #slot-date-label {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     .slot-btn {
@@ -418,7 +485,7 @@
     }
 
     .card-title {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .card-details-li {

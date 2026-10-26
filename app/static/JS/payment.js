@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 theme: {
-                    color: '#f5c542'
+                    color: '#30251F'
                 }
             };
 

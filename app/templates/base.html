@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <title>{% block title %}Restaurant{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/tokens.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/nav-styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='Images/favicon.png') }}">
@@ -25,7 +25,7 @@
         <li class="page-label"><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
         <li class="page-label"><a href="#">About</a></li>
         <li onclick="showSidebar()" class="ham-menu"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px"
-                    viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                    viewBox="0 -960 960 960" width="26px" fill="currentColor">
                     <path d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z" />
                 </svg></a></li>
     </ul>
@@ -38,7 +38,7 @@
 
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('auth.profile') }}" class="nav-profile">
-        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="#FFFFFF">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="currentColor">
             <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
         </svg>
         <div class="nav-profile-text">
@@ -48,7 +48,7 @@
     </a>
     {% else %}
     <a href="{{ url_for('auth.login') }}" class="nav-profile">
-        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="#FFFFFF">
+        <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 512 512" fill="currentColor">
             <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
         </svg>
         <div class="nav-profile-text">
@@ -61,7 +61,7 @@
         <ul>
             <li onclick="hideSidebar()" class="sidebar-close">
                 <a href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#FFFFFF">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="currentColor">
                         <path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
                     </svg>
                 </a>
@@ -70,7 +70,7 @@
             <li class="sidebar-profile">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('auth.profile') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="#FFFFFF">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
                         </svg>
                         <div class="sidebar-profile-text">
@@ -80,7 +80,7 @@
                     </a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="#FFFFFF">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 512 512" fill="currentColor">
                             <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
                         </svg>
                         <div class="sidebar-profile-text">

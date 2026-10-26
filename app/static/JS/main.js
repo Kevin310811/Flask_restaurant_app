@@ -258,7 +258,7 @@ if (form) {
                 if (existing) existing.remove();
                 const errMsg = document.createElement('p');
                 errMsg.className = 'error-msg';
-                errMsg.style.cssText = 'color: #ff6b6b; font-size:14px; margin-top:10px;';
+                errMsg.style.cssText = 'color: var(--danger); font-size:14px; margin-top:10px;';
                 errMsg.textContent = data.error;
                 modal.appendChild(errMsg);
             }
@@ -270,3 +270,39 @@ if (form) {
         });
     });
 }
+
+/* =====================================================
+   SCROLL REVEALS — quiet editorial entrances.
+   Progressive enhancement: without JS nothing is hidden
+   (`.js-ready` must be present before `.reveal` can hide).
+   ===================================================== */
+(function () {
+    var docEl = document.documentElement;
+    docEl.classList.add('js-ready');
+
+    var targets = document.querySelectorAll('.reveal, .reveal-img');
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach(function (el) { el.classList.add('is-in'); });
+        return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                io.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+
+    targets.forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+            // Already on screen — reveal on next frame, staggered naturally.
+            requestAnimationFrame(function () { el.classList.add('is-in'); });
+        } else {
+            io.observe(el);
+        }
+    });
+})();

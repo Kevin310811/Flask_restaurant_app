@@ -3,43 +3,71 @@
    Loaded by base.html and admin/base_admin.html, always
    first, so every stylesheet can rely on these variables.
 
-   Brand direction: near-black canvas, warm gold accent,
-   Inter for UI/headings, Playfair Display for elegant
-   serif body copy. Do not hardcode these values in other
-   files — use the variables.
+   Brand direction: "Editorial Sophistication × Contemporary
+   Art Gallery" — warm ivory paper, espresso ink, hairline
+   rules, Cormorant Garamond for expression, Manrope for
+   everything operational. Muted olive/champagne/blush as
+   small supporting accents. Do not hardcode these values
+   in other files — use the variables.
    ===================================================== */
 :root {
     /* ---------- Color palette ---------- */
-    --bg: #000000;                            /* page background */
-    --surface: #0a0a0a;                       /* raised surfaces (modals) */
-    --text: #ffffff;                          /* primary text */
-    --text-muted: rgba(255, 255, 255, 0.7);   /* secondary copy */
-    --text-faint: rgba(255, 255, 255, 0.5);   /* labels, metadata */
+    --ivory: #F5F0E7;              /* warm paper — primary page bg */
+    --chalk: #FAF9F6;              /* chalk white — cards, forms, calm panels */
+    --espresso: #30251F;           /* ink — text, headings, hairlines */
+    --gallery-black: #191919;      /* immersive / footer surfaces */
 
-    --accent: #f5c542;                        /* brand gold */
-    --accent-soft: rgba(245, 197, 66, 0.15);  /* gold tint fills */
+    --olive: #777C5A;              /* muted olive accent */
+    --olive-deep: #5B6143;         /* hover/pressed accent */
+    --champagne: #D6C5A7;          /* fine borders, quiet highlights */
+    --blush: #D8B9B5;              /* occasional artistic accent */
+    --silver: #D6D5D1;             /* subtle dividers, secondary surfaces */
 
-    --success: #4caf50;
-    --danger: #ff6b6b;
-    --veg: #2d6a2d;                           /* veg food badge */
-    --nonveg: #8b0000;                        /* non-veg food badge */
+    /* Semantic aliases (names kept from the previous theme) */
+    --bg: var(--ivory);                       /* page background */
+    --surface: var(--chalk);                  /* raised surfaces (modals, forms) */
+    --text: var(--espresso);                  /* primary text */
+    --text-muted: rgba(48, 37, 31, 0.72);     /* secondary copy */
+    --text-faint: rgba(48, 37, 31, 0.5);      /* labels, metadata */
+
+    --accent: var(--olive);                   /* brand accent */
+    --accent-deep: var(--olive-deep);
+    --accent-soft: rgba(119, 124, 90, 0.14);  /* olive tint fills */
+    --accent-line: var(--champagne);          /* fine decorative rules */
+
+    --ink-on-dark: var(--ivory);              /* text on gallery-black blocks */
+    --ink-on-dark-muted: rgba(250, 249, 246, 0.72);
+
+    --success: #5F7D5A;
+    --danger: #A35050;
+    --veg: #6B7545;                           /* veg food badge */
+    --nonveg: #9A5850;                        /* non-veg food badge */
 
     /* ---------- Borders ---------- */
-    --border-color: #ffffff;
+    --border-color: var(--espresso);
     --border: 1px solid var(--border-color);  /* signature crisp hairline */
-    --border-faint: 1px solid rgba(255, 255, 255, 0.15);
+    --border-faint: 1px solid rgba(48, 37, 31, 0.18);
+    --border-hairline: 1px solid var(--accent-line);
 
     /* ---------- Typography ---------- */
-    --font-heading: 'Inter', system-ui, sans-serif;
-    --font-body: 'Playfair Display', Georgia, serif;
+    --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-heading: 'Manrope', system-ui, -apple-system, sans-serif;   /* UI sans */
+    --font-body: 'Manrope', system-ui, -apple-system, sans-serif;     /* reading text */
 
     --fw-regular: 400;
+    --fw-medium: 500;
     --fw-semibold: 600;
     --fw-bold: 700;
     --fw-extra: 800;
+    /* Expressive display weights (Cormorant reads best at 500–600) */
+    --fw-display: 500;
+    --fw-display-strong: 600;
 
     --lh-tight: 1.2;
     --lh-body: 1.6;
+    --lh-display: 1.05;          /* oversized headlines */
+    --ls-caps: .16em;            /* uppercase kicker labels */
+    --ls-slight: .02em;
 
     /* Fluid type scale — no per-breakpoint overrides needed */
     --fs-2xs: 11px;
@@ -49,11 +77,12 @@
     --fs-md: 18px;
     --fs-lg: clamp(17px, 2.2vw, 24px);         /* footer / large body links */
     --fs-h3: clamp(20px, 2.4vw, 28px);
-    --fs-h2: clamp(24px, 3.2vw, 36px);
-    --fs-h1: clamp(28px, 4vw, 48px);
-    --fs-display: clamp(36px, 5vw, 64px);     /* footer brand line */
-    --fs-hero: clamp(44px, 7.5vw, 80px);
-    --fs-logo: clamp(28px, 3.5vw, 42px);      /* navbar logo */
+    --fs-h2: clamp(26px, 3.2vw, 40px);
+    --fs-h1: clamp(30px, 4vw, 52px);
+    --fs-display: clamp(32px, 4.6vw, 60px);    /* footer brand line / big statements */
+    --fs-hero: clamp(46px, 7.2vw, 96px);       /* hero headline */
+    --fs-mega: clamp(56px, 9vw, 128px);        /* oversized editorial numerals */
+    --fs-logo: clamp(24px, 3vw, 34px);         /* navbar wordmark */
 
     /* ---------- Spacing ---------- */
     --space-1: 4px;
@@ -63,20 +92,35 @@
     --space-5: 24px;
     --space-6: 32px;
     --space-7: 48px;
+    --space-8: 72px;
+    --space-9: 112px;
+    --gutter: clamp(20px, 4vw, 64px);          /* editorial page margins */
 
     /* Clearance below the fixed navbar (navbar is ~70px tall) */
     --post-nav-padding: 120px;
     --post-nav-padding-mobile: 92px;
 
     /* ---------- Radii ---------- */
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 18px;
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 6px;
+    --radius-xl: 10px;
     --radius-pill: 999px;
 
     /* ---------- Shadows / motion ---------- */
-    --shadow-pop: 3px 3px 0 var(--border-color);   /* signature offset shadow */
-    --trans-fast: 0.2s ease;
-    --trans-base: 0.3s ease;
+    --shadow-pop: 0 10px 28px rgba(25, 25, 25, 0.10);    /* restrained lift */
+    --shadow-lift: 0 16px 40px rgba(25, 25, 25, 0.16);
+    --trans-fast: 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    --trans-base: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    --trans-slow: 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    --reveal-mask: cubic-bezier(0.65, 0, 0.35, 1);       /* image clip reveals */
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --trans-fast: 0.01ms linear;
+        --trans-base: 0.01ms linear;
+        --trans-slow: 0.01ms linear;
+        --reveal-mask: linear;
+    }
 }

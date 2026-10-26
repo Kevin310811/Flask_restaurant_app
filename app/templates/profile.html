@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}My Profile{% endblock %}
 
@@ -11,7 +11,7 @@
 
     <!-- Profile Header -->
     <div class="profile-header">
-        <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 0 512 512" fill="#FFFFFF">
+        <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 0 512 512" fill="currentColor">
             <path d="M256 48a208 208 0 1 1 0 416A208 208 0 1 1 256 48zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm-80-224a80 80 0 1 1 160 0 80 80 0 1 1-160 0zm80 112c-52.8 0-100.4 21.4-134.9 56H391c-34.5-34.6-82.1-56-134.9-56z"/>
         </svg>
         <div class="profile-header-text">
@@ -83,15 +83,15 @@
                         {% for item in order.items %}
                         <li>
                             <span>{{ item.title }} x{{ item.qty }}</span>
-                            <span>₹{{ "%.2f"|format(item.price * item.qty) }}</span>
+                            <span>â‚¹{{ "%.2f"|format(item.price * item.qty) }}</span>
                         </li>
                         {% endfor %}
                     </ul>
                     <div class="order-card-footer">
                         {% if order.tip > 0 %}
-                        <span class="order-tip">Tip: ₹{{ "%.2f"|format(order.tip) }}</span>
+                        <span class="order-tip">Tip: â‚¹{{ "%.2f"|format(order.tip) }}</span>
                         {% endif %}
-                        <span class="order-total">Total: ₹{{ "%.2f"|format(order.total) }}</span>
+                        <span class="order-total">Total: â‚¹{{ "%.2f"|format(order.total) }}</span>
                     </div>
                 </div>
                 {% endfor %}

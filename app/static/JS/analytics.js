@@ -126,7 +126,7 @@
                     backgroundColor: 'rgba(10,10,10,0.95)',
                     borderColor: 'rgba(255,255,255,0.2)',
                     borderWidth: 1,
-                    titleColor: '#f5c542',
+                    titleColor: '#D6C5A7',
                     bodyColor: 'rgba(255,255,255,0.9)',
                     titleFont: { family: 'Inter', weight: 'bold' },
                     bodyFont: { family: 'Inter' },
@@ -134,13 +134,13 @@
             },
             scales: {
                 x: {
-                    ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } },
-                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: { color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } },
+                    grid: { color: 'rgba(48,37,31,0.08)' },
                 },
                 y: {
                     beginAtZero: true,
-                    ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } },
-                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: { color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } },
+                    grid: { color: 'rgba(48,37,31,0.08)' },
                 },
             },
         };
@@ -160,8 +160,8 @@
 
     function renderOrdersChart(series) {
         var opts = baseOptions();
-        opts.scales.x.title = { display: true, text: series.interval === 'month' ? 'Month' : (series.interval === 'week' ? 'Week' : 'Day'), color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } };
-        opts.scales.y.title = { display: true, text: 'Orders', color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } };
+        opts.scales.x.title = { display: true, text: series.interval === 'month' ? 'Month' : (series.interval === 'week' ? 'Week' : 'Day'), color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } };
+        opts.scales.y.title = { display: true, text: 'Orders', color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } };
         opts.plugins.tooltip.callbacks = {
             title: function (items) { return items[0].label; },
             label: function (item) {
@@ -183,8 +183,8 @@
             data: {
                 labels: series.labels,
                 datasets: [
-                    { label: 'Paid', data: series.orders_paid, backgroundColor: 'rgba(76,175,80,0.55)', hoverBackgroundColor: 'rgba(76,175,80,0.8)', borderRadius: 3, stack: 'orders' },
-                    { label: 'Not paid', data: series.orders_other, backgroundColor: 'rgba(245,197,66,0.45)', hoverBackgroundColor: 'rgba(245,197,66,0.7)', borderRadius: 3, stack: 'orders' },
+                    { label: 'Paid', data: series.orders_paid, backgroundColor: 'rgba(119,124,90,0.65)', hoverBackgroundColor: 'rgba(119,124,90,0.9)', borderRadius: 3, stack: 'orders' },
+                    { label: 'Not paid', data: series.orders_other, backgroundColor: 'rgba(198,178,142,0.75)', hoverBackgroundColor: 'rgba(198,178,142,0.95)', borderRadius: 3, stack: 'orders' },
                 ],
             },
             options: opts,
@@ -193,7 +193,7 @@
 
     function renderMixChart(series) {
         var opts = moneyAxis(baseOptions());
-        opts.scales.y.title = { display: true, text: 'Amount (₹)', color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } };
+        opts.scales.y.title = { display: true, text: 'Amount (₹)', color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } };
         opts.plugins.tooltip.callbacks = {
             title: function (items) { return items[0].label; },
             label: function (item) { return item.dataset.label + ': ' + money(item.parsed.y); },
@@ -210,8 +210,8 @@
             data: {
                 labels: series.labels,
                 datasets: [
-                    { type: 'bar', label: 'Expenses', data: series.expenses, backgroundColor: 'rgba(255,107,107,0.5)', hoverBackgroundColor: 'rgba(255,107,107,0.75)', borderRadius: 3 },
-                    { type: 'line', label: 'Revenue (paid orders)', data: series.revenue, borderColor: '#f5c542', backgroundColor: 'rgba(245,197,66,0.15)', fill: true, tension: 0.35, pointRadius: 2, pointBackgroundColor: '#f5c542', borderWidth: 2 },
+                    { type: 'bar', label: 'Expenses', data: series.expenses, backgroundColor: 'rgba(163,80,80,0.5)', hoverBackgroundColor: 'rgba(163,80,80,0.75)', borderRadius: 3 },
+                    { type: 'line', label: 'Revenue (paid orders)', data: series.revenue, borderColor: '#30251F', backgroundColor: 'rgba(48,37,31,0.06)', fill: true, tension: 0.35, pointRadius: 2, pointBackgroundColor: '#30251F', borderWidth: 2 },
                 ],
             },
             options: opts,
@@ -220,7 +220,7 @@
 
     function renderAccountsChart(series) {
         var opts = baseOptions();
-        opts.scales.y.title = { display: true, text: 'New accounts', color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } };
+        opts.scales.y.title = { display: true, text: 'New accounts', color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } };
         opts.plugins.legend.display = false;
         opts.plugins.tooltip.callbacks = {
             title: function (items) { return items[0].label; },
@@ -240,19 +240,19 @@
             type: 'line',
             data: {
                 labels: series.labels,
-                datasets: [{ label: 'New accounts', data: series.new_accounts, borderColor: 'rgba(255,255,255,0.85)', backgroundColor: 'rgba(255,255,255,0.08)', fill: true, tension: 0.35, pointRadius: 2, pointBackgroundColor: 'rgba(255,255,255,0.9)', borderWidth: 2 }],
+                datasets: [{ label: 'New accounts', data: series.new_accounts, borderColor: '#5B6143', backgroundColor: 'rgba(119,124,90,0.12)', fill: true, tension: 0.35, pointRadius: 2, pointBackgroundColor: '#5B6143', borderWidth: 2 }],
             },
             options: opts,
         });
     }
 
     var STATUS_COLORS = {
-        paid: 'rgba(76,175,80,0.75)',
-        pending: 'rgba(245,197,66,0.75)',
-        cancelled: 'rgba(255,107,107,0.75)',
-        void: 'rgba(255,255,255,0.3)',
+        paid: 'rgba(119,124,90,0.85)',
+        pending: 'rgba(214,197,167,0.95)',
+        cancelled: 'rgba(163,80,80,0.7)',
+        void: 'rgba(214,213,209,0.95)',
     };
-    var FALLBACK_COLORS = ['rgba(245,197,66,0.75)', 'rgba(255,255,255,0.3)', 'rgba(255,107,107,0.75)', 'rgba(76,175,80,0.75)'];
+    var FALLBACK_COLORS = ['rgba(198,178,142,0.95)', 'rgba(214,213,209,0.95)', 'rgba(163,80,80,0.7)', 'rgba(119,124,90,0.85)'];
 
     function renderStatusChart(statusCounts) {
         var labels = Object.keys(statusCounts);
@@ -275,7 +275,7 @@
         destroy(charts, 'status');
         charts.status = new Chart(els.statusCanvas, {
             type: 'doughnut',
-            data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderColor: 'rgba(0,0,0,0.6)', borderWidth: 2 }] },
+            data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderColor: 'rgba(250,249,246,0.9)', borderWidth: 2 }] },
             options: opts,
         });
     }
@@ -289,7 +289,7 @@
         var values = labels.map(function (c) { return byCategory[c]; });
         var opts = moneyAxis(baseOptions());
         opts.indexAxis = 'y';
-        opts.scales.x.title = { display: true, text: 'Amount (₹)', color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 10 } };
+        opts.scales.x.title = { display: true, text: 'Amount (₹)', color: 'rgba(48,37,31,0.55)', font: { family: 'Manrope', size: 10 } };
         opts.plugins.legend.display = false;
         opts.plugins.tooltip.callbacks = {
             label: function (item) { return 'Spent: ' + money(item.parsed.x); },
@@ -297,7 +297,7 @@
         destroy(charts, 'expenses');
         charts.expenses = new Chart(els.expenseCanvas, {
             type: 'bar',
-            data: { labels: labels, datasets: [{ data: values, backgroundColor: 'rgba(255,107,107,0.55)', hoverBackgroundColor: 'rgba(255,107,107,0.8)', borderRadius: 3 }] },
+            data: { labels: labels, datasets: [{ data: values, backgroundColor: 'rgba(163,80,80,0.55)', hoverBackgroundColor: 'rgba(163,80,80,0.8)', borderRadius: 3 }] },
             options: opts,
         });
     }
