@@ -3,7 +3,7 @@ from urllib.parse import urlparse, urljoin
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.extensions import bcrypt, limiter
-from app.models import db, User, Order, Reservation, CartItem
+from app.models import db, User, Order, Reservation
 
 auth_bp = Blueprint('auth', __name__)
 

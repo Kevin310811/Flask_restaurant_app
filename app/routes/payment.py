@@ -1,6 +1,7 @@
 from decimal import Decimal, ROUND_HALF_UP
 from flask import Blueprint, render_template, jsonify, request, redirect, url_for, current_app
 from flask_login import login_required, current_user
+from sqlalchemy.orm import joinedload
 from app.models import db, CartItem, Order, OrderItem, Reservation
 import razorpay
 
@@ -53,7 +54,9 @@ def _cart_totals(cart_items):
 @payment_bp.route('/payment')
 @login_required
 def payment():
-    items = CartItem.query.filter_by(user_id=current_user.id).all()
+    # joinedload: to_dict() reads menu_item on every cart row.
+    items = (CartItem.query.options(joinedload(CartItem.menu_item))
+             .filter_by(user_id=current_user.id).all())
     if not items:
         return redirect(url_for('menu.order'))
 
@@ -91,7 +94,9 @@ def create_order():
     if error:
         return jsonify({"error": error}), 400
 
-    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    # joinedload: line-item snapshots below read title/price off menu_item.
+    cart_items = (CartItem.query.options(joinedload(CartItem.menu_item))
+                  .filter_by(user_id=current_user.id).all())
     if not cart_items:
         return jsonify({"error": "Cart is empty"}), 400
 

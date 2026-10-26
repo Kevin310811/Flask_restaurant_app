@@ -47,6 +47,38 @@ def get_slot_status(slot_time):
     }
 
 
+def slot_statuses_for_window(start, end):
+    """Per-slot booking state for every confirmed reservation in [start, end).
+
+    The slot picker renders one row per 20-minute slot; querying each
+    slot separately made the PM grid cost one SELECT per slot. This
+    fetches the whole window once and groups it in Python — the exact
+    same rows get_slot_status() would have returned per slot, so the
+    rendered availability is unchanged.
+    """
+    rows = Reservation.query.filter(
+        Reservation.slot_time >= start,
+        Reservation.slot_time < end,
+        Reservation.status == 'confirmed',
+    ).all()
+
+    by_slot = {}
+    for r in rows:
+        by_slot.setdefault(r.slot_time, []).append(r)
+
+    out = {}
+    for slot_time, existing in by_slot.items():
+        reservations_count = len(existing)
+        total_people = sum(r.people for r in existing)
+        out[slot_time] = {
+            "reservations_count": reservations_count,
+            "total_people": total_people,
+            "spots_left": MAX_PEOPLE_PER_SLOT - total_people,
+            "has_room_for_new_booking": reservations_count < MAX_RESERVATIONS_PER_SLOT,
+        }
+    return out
+
+
 def is_slot_available(slot_time, people):
     status = get_slot_status(slot_time)
 
@@ -118,9 +150,15 @@ def get_slots():
 
     slots = []
     current = start
+    statuses = slot_statuses_for_window(start, end)
 
     while current < end:
-        status = get_slot_status(current)
+        status = statuses.get(current) or {
+            "reservations_count": 0,
+            "total_people": 0,
+            "spots_left": MAX_PEOPLE_PER_SLOT,
+            "has_room_for_new_booking": True,
+        }
 
         available = status["has_room_for_new_booking"] and status["spots_left"] > 0
 

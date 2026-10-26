@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
-from app.models import db, User, Order, OrderItem, Reservation, MenuItem, CartItem
+from sqlalchemy import func
+from app.models import db, User, Order, Reservation, MenuItem
 from functools import wraps
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -107,7 +108,7 @@ def orders():
 @login_required
 @admin_required
 def update_order_status(order_id):
-    order = Order.query.get_or_404(order_id)
+    order = db.get_or_404(Order, order_id)
     new_status = request.form.get('status')
     if new_status in ['paid', 'pending', 'cancelled', 'void']:
         order.status = new_status
@@ -124,7 +125,27 @@ def update_order_status(order_id):
 def users():
     page = request.args.get('page', 1, type=int)
     pagination = User.query.order_by(User.created_at.desc()).paginate(page=page, per_page=50, error_out=False)
-    return render_template('admin/users.html', users=pagination.items, pagination=pagination)
+    page_users = pagination.items
+
+    # The page shows each user's order/reservation count. The template's
+    # lazy relationship reads used to fire one SELECT per user per table
+    # (2N queries); these GROUP BY queries answer the same counts in two,
+    # scoped to the users actually on this page.
+    ids = [u.id for u in page_users]
+    if ids:
+        order_counts = dict(
+            db.session.query(Order.user_id, func.count(Order.id))
+            .filter(Order.user_id.in_(ids)).group_by(Order.user_id).all())
+        reservation_counts = dict(
+            db.session.query(Reservation.user_id, func.count(Reservation.id))
+            .filter(Reservation.user_id.in_(ids)).group_by(Reservation.user_id).all())
+    else:
+        order_counts, reservation_counts = {}, {}
+
+    return render_template('admin/users.html', users=page_users,
+                           order_counts=order_counts,
+                           reservation_counts=reservation_counts,
+                           pagination=pagination)
 
 
 @admin_bp.route('/users/<int:user_id>/delete', methods=['POST'])
@@ -134,7 +155,7 @@ def delete_user(user_id):
     if user_id == current_user.id:
         flash('You cannot delete your own account.', 'error')
         return redirect(url_for('admin.users'))
-    user = User.query.get_or_404(user_id)
+    user = db.get_or_404(User, user_id)
     db.session.delete(user)
     db.session.commit()
     flash(f'User {user.email} deleted.', 'success')
@@ -162,7 +183,7 @@ def reservations():
 @login_required
 @admin_required
 def cancel_reservation(reservation_id):
-    reservation = Reservation.query.get_or_404(reservation_id)
+    reservation = db.get_or_404(Reservation, reservation_id)
     reservation.status = 'cancelled'
     db.session.commit()
     flash(f'Reservation #{reservation_id} cancelled.', 'success')
@@ -226,7 +247,7 @@ def add_menu_item():
 @login_required
 @admin_required
 def edit_menu_item(item_id):
-    item = MenuItem.query.get_or_404(item_id)
+    item = db.get_or_404(MenuItem, item_id)
 
     title = request.form.get('title', item.title).strip()
     desc = request.form.get('desc', item.desc).strip()
@@ -269,7 +290,7 @@ def edit_menu_item(item_id):
 @login_required
 @admin_required
 def toggle_menu_item(item_id):
-    item = MenuItem.query.get_or_404(item_id)
+    item = db.get_or_404(MenuItem, item_id)
     item.is_available = not item.is_available
     db.session.commit()
     status = 'available' if item.is_available else 'unavailable'
@@ -281,7 +302,7 @@ def toggle_menu_item(item_id):
 @login_required
 @admin_required
 def delete_menu_item(item_id):
-    item = MenuItem.query.get_or_404(item_id)
+    item = db.get_or_404(MenuItem, item_id)
     title = item.title
     db.session.delete(item)
     db.session.commit()

@@ -1,6 +1,7 @@
 from decimal import Decimal
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
+from sqlalchemy.orm import joinedload
 from app.models import db, CartItem, MenuItem
 
 cart_bp = Blueprint('cart', __name__)
@@ -10,7 +11,10 @@ MAX_QTY_PER_ITEM = 20
 
 def cart_summary(user_id):
     """Single place that computes a user's cart items + total."""
-    items = CartItem.query.filter_by(user_id=user_id).all()
+    # joinedload fetches every referenced menu item in the same round
+    # trip; to_dict() and the total read menu_item on each row.
+    items = (CartItem.query.options(joinedload(CartItem.menu_item))
+             .filter_by(user_id=user_id).all())
     # Use the discounted price so the total always matches the per-item
     # subtotals and the payment page. (It previously used menu_item.price,
     # silently charging full price for discounted items.)
@@ -52,7 +56,9 @@ def add_to_cart():
     if qty > MAX_QTY_PER_ITEM:
         return jsonify({"error": f"qty cannot exceed {MAX_QTY_PER_ITEM} per item"}), 400
 
-    menu_item = MenuItem.query.get(menu_item_id)
+    # db.session.get is the modern Session.get API (same identity-map
+    # semantics and None-on-miss as the legacy Query.get it replaces).
+    menu_item = db.session.get(MenuItem, menu_item_id)
     if not menu_item:
         return jsonify({"error": "Item not found"}), 404
 

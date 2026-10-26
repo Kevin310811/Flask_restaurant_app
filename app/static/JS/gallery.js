@@ -1,12 +1,6 @@
-function showSidebar(){
-    const sidebar = document.querySelector(`.sidebar`);
-    sidebar.style.display = 'flex'
-}
-
-function hideSidebar() {
-    const sidebar = document.querySelector(`.sidebar`);
-    sidebar.style.display = 'none'
-}
+// Sidebar open/close (showSidebar/hideSidebar) is provided globally by
+// the nav's main.js, which loads on every page — no need to redefine it
+// here or the two definitions would drift apart.
 
 document.querySelectorAll('.carousel-item').forEach(item => {
     item.addEventListener('click', () => {

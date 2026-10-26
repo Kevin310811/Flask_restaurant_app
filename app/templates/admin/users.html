@@ -24,8 +24,8 @@
                 <td>{{ user.first_name }} {{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{% if user.is_admin %}<span class="status-badge paid">Yes</span>{% else %}—{% endif %}</td>
-                <td>{{ user.orders | length }}</td>
-                <td>{{ user.reservations | length }}</td>
+                <td>{{ order_counts.get(user.id, 0) }}</td>
+                <td>{{ reservation_counts.get(user.id, 0) }}</td>
                 <td>{{ user.created_at.strftime('%d %b %Y') }}</td>
                 <td>
                     {% if not user.is_admin %}

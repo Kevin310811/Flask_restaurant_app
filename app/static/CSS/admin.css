@@ -1117,10 +1117,6 @@ h1, h2, h3, h4 {
    primitives above. Same visual language as the rest of
    the panel: hairline borders, gold accent, Inter UI.
    ================================================ */
-.analytics-page {
-    /* nothing to add yet — sections stack like elsewhere */
-}
-
 .analytics-subtitle {
     font-family: var(--font-body);
     font-style: italic;
@@ -1219,10 +1215,8 @@ h1, h2, h3, h4 {
     font-size: var(--fs-sm);
 }
 
-/* Seven KPI cards — 4-up rows (vs the dashboard's four cards) */
-.analytics-kpis {
-    grid-template-columns: repeat(4, 1fr);
-}
+/* (The KPI container reuses .admin-stats above for its 4-up grid — both
+   desktop and the ≤1024px two-column fallback — no separate rule needed.) */
 
 /* Staggered entrance when cards (re)render with fresh data */
 .analytics-kpis.kpi-enter .stat-card {
@@ -1588,10 +1582,6 @@ h1, h2, h3, h4 {
    ================================================ */
 @media screen and (max-width: 1024px) {
     .admin-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .analytics-kpis {
         grid-template-columns: repeat(2, 1fr);
     }
 

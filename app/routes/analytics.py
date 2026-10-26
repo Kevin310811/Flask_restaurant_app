@@ -30,14 +30,14 @@ Design decisions (matching the existing app's rules):
 import calendar
 from bisect import bisect_right
 from collections import Counter
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import func
 
-from app.models import db, Expense, MenuItem, Order, OrderItem, User
+from app.models import db, Expense, MenuItem, Order, OrderItem, User, utcnow
 from app.routes.admin import admin_required
 
 # India Standard Time: UTC+05:30, fixed all year (no DST).
@@ -74,8 +74,8 @@ CUSTOM_RANGE_MAX_DAYS = 1826
 # --------------------------------------------------------------------------
 
 def _now_utc():
-    """Naive UTC now, matching utcnow() in models.py."""
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    """Naive UTC now, from the shared utcnow() helper in models.py."""
+    return utcnow()
 
 
 def _ist_now():
@@ -510,32 +510,30 @@ def _trending_block(rows, metric):
 
 def _expense_summary(start_ist, end_ist):
     """Totals, category breakdown and the recent list for the window."""
-    q = db.session.query(Expense.category, func.sum(Expense.amount)) \
+    def in_window(q):
+        if start_ist is not None:
+            q = q.filter(Expense.spent_on >= start_ist)
+        if end_ist is not None:
+            q = q.filter(Expense.spent_on < end_ist)
+        return q
+
+    # One GROUP BY answers both the per-category sums and the record
+    # count: category is NOT NULL, so per-category counts partition the
+    # window exactly like a standalone COUNT would.
+    grouped = in_window(
+        db.session.query(Expense.category, func.sum(Expense.amount), func.count(Expense.id))
         .group_by(Expense.category)
-    if start_ist is not None:
-        q = q.filter(Expense.spent_on >= start_ist)
-    if end_ist is not None:
-        q = q.filter(Expense.spent_on < end_ist)
-    by_category = {cat: _round2(total) for cat, total in q.all()}
+    ).all()
+    by_category = {cat: _round2(total) for cat, total, count in grouped}
 
-    count_q = db.session.query(func.count(Expense.id))
-    if start_ist is not None:
-        count_q = count_q.filter(Expense.spent_on >= start_ist)
-    if end_ist is not None:
-        count_q = count_q.filter(Expense.spent_on < end_ist)
-
-    recent_q = Expense.query.order_by(Expense.spent_on.desc(), Expense.id.desc())
-    if start_ist is not None:
-        recent_q = recent_q.filter(Expense.spent_on >= start_ist)
-    if end_ist is not None:
-        recent_q = recent_q.filter(Expense.spent_on < end_ist)
+    recent = in_window(Expense.query.order_by(Expense.spent_on.desc(), Expense.id.desc()))
 
     return {
         'categories': list(EXPENSE_CATEGORIES),
         'total': _round2(sum(by_category.values())),
-        'count': count_q.scalar() or 0,
+        'count': sum(n for _, _, n in grouped),
         'by_category': by_category,
-        'recent': [e.to_dict() for e in recent_q.limit(8)],
+        'recent': [e.to_dict() for e in recent.limit(8)],
     }
 
 

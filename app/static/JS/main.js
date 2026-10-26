@@ -251,9 +251,6 @@ if (form) {
                 slotGrid.innerHTML = '<p class="slot-placeholder">Pick a date to see available slots</p>';
                 slotSelected.style.display = 'none';
 
-                // Refresh slots to show newly booked slot as unavailable
-                if (selectedDate) fetchSlots();
-
             } else {
                 confirmBtn.disabled = false;
                 confirmBtn.textContent = 'Confirm';
