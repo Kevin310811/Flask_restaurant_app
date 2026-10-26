@@ -403,6 +403,7 @@ nav {
     position: fixed;
     border-bottom: var(--border-faint);
     z-index: 1;
+    padding: 12px;
 }
 
 nav > h1.logo {
@@ -498,7 +499,7 @@ nav > ul {
 /* Profile block (far right) */
 .nav-profile {
     position: absolute;
-    right: 24px;
+    right: 32px;
     display: flex;
     align-items: center;
     gap: 12px;
