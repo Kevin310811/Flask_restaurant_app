@@ -21,24 +21,24 @@
     </hero>
 
     <section class="food-gallery">
-        <div class="card reveal">
-            <img src="{{ url_for('static', filename='Images/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="" loading="lazy">
+        <div class="card reveal" data-rotator>
+            <img src="{{ url_for('static', filename='Images/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
-                <h1>Delicious Food</h1>
+                <h1>Fresh Naan</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
-        <div class="card reveal" data-delay="1">
-            <img src="{{ url_for('static', filename='Images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="" loading="lazy">
-            <div class="card-content">
-                <h1>Delicious Food</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
-            </div>
-        </div>
-        <div class="card reveal" data-delay="2">
+        <div class="card reveal" data-rotator data-delay="1">
             <img src="{{ url_for('static', filename='Images/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
-                <h1>Delicious Food</h1>
+                <h1>Seared &amp; Glazed</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
+            </div>
+        </div>
+        <div class="card reveal" data-rotator data-delay="2">
+            <img src="{{ url_for('static', filename='Images/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+            <div class="card-content">
+                <h1>Small Plates</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
@@ -65,4 +65,8 @@
         </div>
     </section>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='JS/home-gallery.js') }}" defer></script>
 {% endblock %}

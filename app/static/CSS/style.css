@@ -5,8 +5,10 @@
 
    Composition notes: the triple image strip is laid out
    as an uneven gallery wall with counter-numbered
-   captions; "Dine with us" is an overlapping plate/panel
-   arrangement. All copy and assets are the originals.
+   captions; each plate rotates image + caption every 3s
+   (home-gallery.js). "Dine with us" is an overlapping
+   plate/panel arrangement. All copy and assets are the
+   originals.
    ===================================================== */
 
 /* ================================================
@@ -53,8 +55,29 @@
     height: 400px;
 }
 
-.card > img {
-    transition: opacity var(--trans-base);
+/* Rotating plates (home-gallery.js): each card re-hangs a
+   new photo + caption every 3 seconds — a wipe-out, then a
+   top-down reveal, like swapping prints on a gallery wall.
+   Hovering a card pauses its rotation; the tokens make the
+   swap instant for reduced-motion users. */
+.card[data-rotator] > img,
+.card[data-rotator] .card-content > h1,
+.card[data-rotator] .card-content > p {
+    transition:
+        opacity var(--trans-base),
+        clip-path var(--trans-slow),
+        transform var(--trans-slow);
+}
+
+.card[data-rotator].is-out > img {
+    opacity: 0;
+    clip-path: inset(0 0 92% 0);
+}
+
+.card[data-rotator].is-out .card-content > h1,
+.card[data-rotator].is-out .card-content > p {
+    opacity: 0;
+    transform: translateY(var(--space-2));
 }
 
 /* Counter-numbered caption, gallery catalog style */
