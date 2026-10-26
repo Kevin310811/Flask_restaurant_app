@@ -24,24 +24,26 @@
         return { src: src, title: title, text: text };
     }
 
-    /* Decks drawn from existing project photography; titles
-       simply describe what each photo shows. Bread, drink
-       and sweet rotate through the columns like courses. */
+    /* Decks drawn from project photography; titles describe
+       what each photo shows. Bread, drink and sweet rotate
+       through every column like courses. Sources are the
+       web-sized copies in Images/opt (originals stay for
+       the gallery page and menu thumbnails). */
     var DECKS = [
         [
-            plate('/static/Images/ajeet-panesar-WrE3ruckrwI-unsplash.jpg', 'Fresh Naan', LOREM_A),
-            plate('/static/Images/chai.jpg', 'Masala Chai', LOREM_B),
-            plate('/static/Images/gulabjamun.jpg', 'Gulab Jamun', LOREM_A)
+            plate('/static/Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg', 'Fresh Naan', LOREM_A),
+            plate('/static/Images/opt/chai.jpg', 'Masala Chai', LOREM_B),
+            plate('/static/Images/opt/gulabjamun.jpg', 'Gulab Jamun', LOREM_A)
         ],
         [
-            plate('/static/Images/alex-munsell-Yr4n8O_3UPc-unsplash.jpg', 'Seared & Glazed', LOREM_A),
-            plate('/static/Images/yosuke-ota-lA3xO5pGctc-unsplash.jpg', 'Warm Naan', LOREM_B),
-            plate('/static/Images/lassi.jpg', 'Mango Lassi', LOREM_A)
+            plate('/static/Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg', 'Seared & Glazed', LOREM_A),
+            plate('/static/Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg', 'Warm Naan', LOREM_B),
+            plate('/static/Images/opt/lassi.jpg', 'Mango Lassi', LOREM_A)
         ],
         [
-            plate('/static/Images/lily-banse--YHSwy6uqvk-unsplash.jpg', 'Small Plates', LOREM_A),
-            plate('/static/Images/rasgulla.jpg', 'Rasgulla', LOREM_B),
-            plate('/static/Images/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg', 'Everyday Rotis', LOREM_A)
+            plate('/static/Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg', 'Small Plates', LOREM_A),
+            plate('/static/Images/opt/rasgulla.jpg', 'Rasgulla', LOREM_B),
+            plate('/static/Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg', 'Everyday Rotis', LOREM_A)
         ]
     ];
 
