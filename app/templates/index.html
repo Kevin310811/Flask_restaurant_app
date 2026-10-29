@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<main>
 
     <hero>
         <div class="image-layering">
@@ -22,21 +23,21 @@
 
     <section class="food-gallery">
         <div class="card reveal" data-rotator>
-            <img src="{{ url_for('static', filename='Images/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Fresh Naan</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
         <div class="card reveal" data-rotator data-delay="1">
-            <img src="{{ url_for('static', filename='Images/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Seared &amp; Glazed</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
             </div>
         </div>
         <div class="card reveal" data-rotator data-delay="2">
-            <img src="{{ url_for('static', filename='Images/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
             <div class="card-content">
                 <h1>Small Plates</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
@@ -57,7 +58,7 @@
             <p class="dine-alternative reveal" data-delay="3">Prefer to browse first? <a href="{{ url_for('menu.order') }}">See the menu</a></p>
         </header>
         <figure class="dine-photo">
-            <img class="reveal-img no-select" src="{{ url_for('static', filename='Images/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="The restaurant dining room" loading="lazy">
+            <img class="reveal-img no-select" src="{{ url_for('static', filename='Images/opt/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="The restaurant dining room" loading="lazy">
         </figure>
     </section>
 
@@ -95,6 +96,7 @@
         </div>
     </section>
 
+</main>
 {% endblock %}
 
 {% block scripts %}
