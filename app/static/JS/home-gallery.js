@@ -15,11 +15,9 @@
     var OUT_MS = 380;     /* wipe-out duration before each swap */
     var LOAD_CAP = 1200;  /* never hold a swap waiting on a slow fetch */
 
-    /* Body copy reuses the site's existing placeholder
-       sentences verbatim — no new content is invented. */
-    var LOREM_A = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?';
-    var LOREM_B = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex nobis, molestiae temporibus ad deleniti, aliquam eius nam eos dolore nulla veniam incidunt eum optio sed. Delectus, debitis aliquid. Debitis, eum.';
-
+    /* Captions describe what each photograph actually shows.
+       Dish images reuse the site's existing gallery captions
+       verbatim where they exist — no new content is invented. */
     function plate(src, title, text) {
         return { src: src, title: title, text: text };
     }
@@ -31,19 +29,19 @@
        the gallery page and menu thumbnails). */
     var DECKS = [
         [
-            plate('/static/Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg', 'Fresh Naan', LOREM_A),
-            plate('/static/Images/opt/chai.jpg', 'Masala Chai', LOREM_B),
-            plate('/static/Images/opt/gulabjamun.jpg', 'Gulab Jamun', LOREM_A)
+            plate('/static/Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg', 'Fresh Naan', 'Blistered naan, straight off the griddle.'),
+            plate('/static/Images/opt/chai.jpg', 'Masala Chai', 'A warm cup of masala chai to start your day.'),
+            plate('/static/Images/opt/gulabjamun.jpg', 'Gulab Jamun', 'Soft gulab jamun soaked in rose syrup.')
         ],
         [
-            plate('/static/Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg', 'Seared & Glazed', LOREM_A),
-            plate('/static/Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg', 'Warm Naan', LOREM_B),
-            plate('/static/Images/opt/lassi.jpg', 'Mango Lassi', LOREM_A)
+            plate('/static/Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg', 'Seared & Glazed', 'Glazed from the pan, finished with bright greens.'),
+            plate('/static/Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg', 'Warm Naan', 'Pillow-soft, straight from the basket.'),
+            plate('/static/Images/opt/lassi.jpg', 'Mango Lassi', 'Refreshing mango lassi, made fresh daily.')
         ],
         [
-            plate('/static/Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg', 'Small Plates', LOREM_A),
-            plate('/static/Images/opt/rasgulla.jpg', 'Rasgulla', LOREM_B),
-            plate('/static/Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg', 'Everyday Rotis', LOREM_A)
+            plate('/static/Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg', 'Small Plates', 'Three small plates, one long table.'),
+            plate('/static/Images/opt/rasgulla.jpg', 'Rasgulla', 'Light and spongy rasgulla, a Bengali classic.'),
+            plate('/static/Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg', 'Everyday Rotis', 'A clean stack of everyday rotis.')
         ]
     ];
 

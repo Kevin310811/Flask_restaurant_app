@@ -8,16 +8,17 @@
 
 {% block content %}
 
+<main>
     <div class="blur-filter"></div>
 
     <section class="menu">
         <aside class="menu-sidebar">
             <h1 class="menu-title">Menu</h1>
             <ul class="food-type">
-                <li><input type="radio" id="sabjis" name="food" value="sabji" checked>Sabjis</li>
-                <li><input type="radio" id="bread" name="food" value="bread">Indian Bread</li>
-                <li><input type="radio" id="drinks" name="food" value="drink">Drinks</li>
-                <li><input type="radio" id="dessert" name="food" value="dessert">Desserts</li>
+                <li><label for="sabjis"><input type="radio" id="sabjis" name="food" value="sabji" checked>Sabjis</label></li>
+                <li><label for="bread"><input type="radio" id="bread" name="food" value="bread">Indian Bread</label></li>
+                <li><label for="drinks"><input type="radio" id="drinks" name="food" value="drink">Drinks</label></li>
+                <li><label for="dessert"><input type="radio" id="dessert" name="food" value="dessert">Desserts</label></li>
             </ul>
             <div class="cart">
                 <h2>Cart</h2>
@@ -61,6 +62,7 @@
             <button id="empty-cart-close">Close</button>
         </div>
     </div>
+</main>
 
 {% endblock %}
 

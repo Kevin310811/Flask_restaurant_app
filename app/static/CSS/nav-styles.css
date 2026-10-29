@@ -299,6 +299,91 @@ body::-webkit-scrollbar {
     letter-spacing: var(--ls-slight);
 }
 
+/* Editorial location ledger — hairline rows carrying the
+   numbering motif shared with the homepage location
+   cards: 01/02/03, serif names, arrow directions. */
+.location-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    border-top: var(--border-faint);
+    padding: var(--space-4) 0 0;
+}
+
+.location-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.location-item-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-style: italic;
+    color: var(--text-faint);
+}
+
+.location-item-body {
+    flex: 1;
+}
+
+.location-item-name {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-display-strong);
+    font-style: italic;
+    color: var(--espresso);
+    margin: 0;
+}
+
+.location-item-note {
+    font-family: var(--font-heading);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin: var(--space-1) 0 0;
+    max-width: 34ch;
+}
+
+.location-item-name a {
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    font-style: normal;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--espresso);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-line);
+    text-underline-offset: 4px;
+    transition: color var(--trans-fast);
+}
+
+.location-item-name a span {
+    display: inline-block;
+    transition: transform var(--trans-fast);
+}
+
+@media (hover: hover) {
+    .location-item-name a:hover {
+        color: var(--accent-deep);
+    }
+
+    .location-item-name a:hover span {
+        transform: translateX(4px);
+    }
+}
+
+@media (hover: none) {
+    .location-item-name a:active {
+        color: var(--accent-deep);
+    }
+}
+
 /* ================================================
    FOOTER (shared markup lives in base.html)
    Gallery-black wall — the brand line and two
@@ -484,6 +569,15 @@ nav > ul {
     .page-label:hover::after {
         transform: scaleX(1);
     }
+}
+
+/* Current page stays underlined in the nav */
+.page-label:has(> a[aria-current="page"]) {
+    color: var(--espresso);
+}
+
+.page-label:has(> a[aria-current="page"])::after {
+    transform: scaleX(1);
 }
 
 @media (hover: none) {

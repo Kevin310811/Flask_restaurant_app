@@ -8,15 +8,16 @@
 
 {% block content %}
 
+<main>
     <div class="blur-filter"></div>
 
     <hero>
         <div class="image-layering">
-            <img src="{{ url_for('static', filename='Images/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="food" class="hero-img no-select reveal-img">
+            <img src="{{ url_for('static', filename='Images/opt/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="Leather banquettes against a tiled, brass-lit wall" class="hero-img no-select reveal-img">
             <div class="hero-img-overlay" aria-hidden="true"></div>
             <div class="text-content-hero">
                 <h1>Reservations</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur temporibus sit voluptatem, eum odit doloremque tempore facere aliquid, nam dolores blanditiis quae.</p>
+                <p>Pick a date up to a month out and choose an open slot. Seats are saved the moment you confirm.</p>
             </div>
         </div>
     </hero>
@@ -51,7 +52,7 @@
                         <button id="prev-day" type="button">&#8592;</button>
                         <div class="slot-date-display">
                             <p id="slot-date-label">Select a date</p>
-                            <input type="date" id="slot-date-input">
+                            <input type="date" id="slot-date-input" aria-label="Reservation date">
                         </div>
                         <button id="next-day" type="button">&#8594;</button>
                     </div>
@@ -100,16 +101,35 @@
         </div>
     </section>
 
-    <section class="locations">
-        <h1>Our locations:</h1>
+    <section class="locations" aria-labelledby="locations-title">
+        <h1 id="locations-title">Our locations</h1>
         <div class="location-content">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3178.2620426796534!2d72.57383572487618!3d23.02329060697684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1758813897309!5m2!1sen!2sin" title="Map of the restaurant" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="address">
-                <p><b>Location 1:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
-                <p><b>Location 2:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
-                <p><b>Location 3:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta tenetur, dolorum deleniti esse incidunt optio veritatis debitis culpa, nulla earum inventore beatae. Alias veritatis laborum tenetur rem modi explicabo repellendus.</p>
+                <div class="location-item reveal">
+                    <span class="location-item-num" aria-hidden="true">01</span>
+                    <div class="location-item-body">
+                        <p class="location-item-name">Sheelaj <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Sheelaj%2C%20Ahmedabad" target="_blank" rel="noopener">Directions <span aria-hidden="true">&rarr;</span></a></p>
+                        <p class="location-item-note">Find us on the map — open in Google Maps for turn-by-turn directions.</p>
+                    </div>
+                </div>
+                <div class="location-item reveal" data-delay="1">
+                    <span class="location-item-num" aria-hidden="true">02</span>
+                    <div class="location-item-body">
+                        <p class="location-item-name">Ashram Road <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Ashram%20Road%2C%20Ahmedabad" target="_blank" rel="noopener">Directions <span aria-hidden="true">&rarr;</span></a></p>
+                        <p class="location-item-note">Find us on the map — open in Google Maps for turn-by-turn directions.</p>
+                    </div>
+                </div>
+                <div class="location-item reveal" data-delay="2">
+                    <span class="location-item-num" aria-hidden="true">03</span>
+                    <div class="location-item-body">
+                        <p class="location-item-name">Chandkheda <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Chandkheda%2C%20Ahmedabad" target="_blank" rel="noopener">Directions <span aria-hidden="true">&rarr;</span></a></p>
+                        <p class="location-item-note">Find us on the map — open in Google Maps for turn-by-turn directions.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+</main>
 
 {% endblock %}

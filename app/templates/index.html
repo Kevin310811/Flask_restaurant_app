@@ -11,11 +11,11 @@
 
     <hero>
         <div class="image-layering">
-            <img src="{{ url_for('static', filename='Images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="food" class="hero-img no-select reveal-img">
+            <img src="{{ url_for('static', filename='Images/opt/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="A bright bowl of fresh vegetables and tofu" class="hero-img no-select reveal-img">
             <div class="hero-img-overlay" aria-hidden="true"></div>
             <div class="text-content-hero">
-                <h1>Lorem Ipsum Dolor</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur temporibus sit voluptatem, eum odit doloremque tempore facere aliquid, nam dolores blanditiis quae.</p>
+                <h1>Good food takes<br>its time</h1>
+                <p>A neat bowl, a bright table, and an afternoon with nowhere to be.</p>
                 <a href="{{ url_for('main.reservations') }}">Book a Table</a>
             </div>
         </div>
@@ -23,25 +23,37 @@
 
     <section class="food-gallery">
         <div class="card reveal" data-rotator>
-            <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="A stack of blistered flatbreads on a plate" loading="lazy">
             <div class="card-content">
                 <h1>Fresh Naan</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
+                <p>Blistered naan, straight off the griddle.</p>
             </div>
         </div>
         <div class="card reveal" data-rotator data-delay="1">
-            <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="A glazed seared chop with bright greens" loading="lazy">
             <div class="card-content">
                 <h1>Seared &amp; Glazed</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
+                <p>Glazed from the pan, finished with bright greens.</p>
             </div>
         </div>
         <div class="card reveal" data-rotator data-delay="2">
-            <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+            <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="Three small bowls on a long wooden table" loading="lazy">
             <div class="card-content">
                 <h1>Small Plates</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore accusantium optio quo corrupti, dicta eum odio illum sapiente, consequatur quibusdam officiis mollitia nobis?</p>
+                <p>Three small plates, one long table.</p>
             </div>
+        </div>
+    </section>
+
+    <section class="kitchen-band" aria-labelledby="kitchen-band-title">
+        <figure class="band-photo">
+            <img class="reveal-img no-select" src="{{ url_for('static', filename='Images/opt/brooke-lark-M4E7X3z80PQ-unsplash.jpg') }}" alt="A marble board with strawberries, soft cheese, crackers and chutney" loading="lazy">
+        </figure>
+        <div class="band-panel">
+            <p class="band-eyebrow reveal">From the kitchen</p>
+            <h2 id="kitchen-band-title" class="reveal" data-delay="1">A table set for<br>slow afternoons</h2>
+            <p class="band-copy reveal" data-delay="2">Breads, sabjis and drinks from the day&rsquo;s menu &mdash; plus something sweet to finish.</p>
+            <a class="band-cta reveal" data-delay="3" href="{{ url_for('menu.order') }}">See the menu <span class="band-arrow" aria-hidden="true">&rarr;</span></a>
         </div>
     </section>
 

@@ -105,6 +105,15 @@ function display_food() {
     const disableFilters = (getSelectedCategory() !== "sabji");
     veg.disabled = non_veg.disabled = spicy.disabled = non_spicy.disabled = disableFilters;
 
+    // Render a menu-empty note when filters leave nothing
+    if (foodItems.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "menu-empty";
+        empty.textContent = "Nothing on the pass matches those filters \u2014 try another combination.";
+        food_listing.append(empty);
+        return;
+    }
+
     foodItems.forEach(item => {
         const qty = getCartQty(item.id);
         const soldOut = !item.is_available;
@@ -115,10 +124,20 @@ function display_food() {
             ? `<span class="price-original">₹${item.price}</span> ₹${item.discounted_price.toFixed(2)} <span class="price-discount">${item.discount_percent}% off</span>`
             : `₹${item.price}`;
 
+        // Dishes serve the web-sized opt/ copy of the catalog photo
+        // when one exists (same filename under Images/opt), falling
+        // back to the original catalog path. The photo is a real
+        // <img> so it lazy-loads and carries alt text.
+        const fileName = item.image.split('/').pop();
+        const primarySrc = `/static/Images/opt/${fileName}`;
+        const fallbackSrc = `/static/${item.image}`;
+
         const card = document.createElement("div");
         card.className = soldOut ? "item sold-out" : "item";
         card.innerHTML = `
-            <div class="item-image" style="background-image: url('/static/${item.image}')">
+            <div class="item-image">
+                <img class="item-image-photo" src="${primarySrc}" alt="${item.title}" loading="lazy"
+                     onerror="this.onerror=null;this.src='${fallbackSrc}'">
                 <div class="item-image-overlay">
                     <p class="item-image-category">${item.category.toUpperCase()}</p>
                     ${item.type ? `<p class="item-image-type ${item.type}">${item.type}</p>` : ''}
@@ -141,7 +160,6 @@ function display_food() {
 
         const decreaseBtn = card.querySelector(".decrease");
         const increaseBtn = card.querySelector(".increase");
-        const countLabel = card.querySelector(".count");
 
         // The decrease button stays enabled on sold-out items so someone
         // who already added one can still take it out of their cart.
@@ -150,7 +168,6 @@ function display_food() {
             const currentQty = getCartQty(item.id);
             if (currentQty < 20) {
                 await updateQty(item.id, currentQty + 1);
-                countLabel.textContent = getCartQty(item.id);
             }
         });
 
@@ -158,7 +175,6 @@ function display_food() {
             const currentQty = getCartQty(item.id);
             if (currentQty > 0) {
                 await updateQty(item.id, currentQty - 1);
-                countLabel.textContent = getCartQty(item.id);
             }
         });
     });

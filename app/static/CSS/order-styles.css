@@ -88,6 +88,8 @@
 
 /* ================================================
    ITEM CARDS (rendered by ordering.js)
+   The first dish of every category gets the featured
+   treatment — a wider plate, a taller photo.
    ================================================ */
 .item-cards {
     margin-left: 25vw;
@@ -97,6 +99,19 @@
     justify-content: center;
     margin-top: 18px;
     padding: 0 clamp(20px, 3vw, 40px) var(--space-7);
+}
+
+/* Quiet entrance as a category re-renders */
+@keyframes menu-rise {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 .item {
@@ -113,12 +128,55 @@
     margin-bottom: var(--space-3);
     overflow: hidden;
     transition: box-shadow var(--trans-base), transform var(--trans-base);
+    animation: menu-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.item:nth-child(1) { animation-delay: 0.02s; }
+.item:nth-child(2) { animation-delay: 0.08s; }
+.item:nth-child(3) { animation-delay: 0.14s; }
+.item:nth-child(n + 4) { animation-delay: 0.18s; }
+
+/* Featured plate — leads every category lineup */
+.item-cards > .item:first-child {
+    width: 38vw;
+    max-width: 620px;
+}
+
+.item-cards > .item:first-child .item-image {
+    height: 360px;
+}
+
+.item-cards > .item:first-child .item-text h1 {
+    font-size: clamp(26px, 2.6vw, 40px);
+}
+
+.item-cards > .item:first-child .item-text p {
+    font-size: var(--fs-base);
+    max-width: 52ch;
+}
+
+/* Empty state — filters can exclude every dish */
+.menu-empty {
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-style: italic;
+    color: var(--text-muted);
+    border-top: var(--border-hairline);
+    border-bottom: var(--border-hairline);
+    padding: var(--space-7) var(--space-5);
+    margin: var(--space-6) 0;
 }
 
 @media (hover: hover) {
     .item:hover {
         box-shadow: var(--shadow-pop);
         transform: translateY(-2px);
+    }
+
+    .item:hover .item-image-photo {
+        transform: scale(1.04);
     }
 }
 
@@ -129,7 +187,18 @@
     background-position: center;
     position: relative;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* Photo now a real <img> for lazy loading and alt text */
+.item-image-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     filter: saturate(0.94);
+    transition: transform var(--trans-slow), filter var(--trans-slow);
 }
 
 .item-image-overlay {
@@ -264,7 +333,11 @@
     border: var(--border-faint);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: background-color var(--trans-base), color var(--trans-base);
+    transition: background-color var(--trans-base), color var(--trans-base), transform var(--trans-fast);
+}
+
+.qty-btn button:active:not(:disabled) {
+    transform: scale(0.9);
 }
 
 .qty-btn button:disabled {
@@ -316,11 +389,27 @@
     margin: 0 0 var(--space-3) clamp(20px, 2vw, 32px);
 }
 
+/* Exhibit plaque above the word */
+.menu-title::before {
+    content: "Carte";
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    font-style: normal;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: var(--space-2);
+}
+
 .food-type {
     padding: 0 0 0 clamp(20px, 2vw, 32px);
     margin: 0;
 }
 
+/* Categories as an editorial index: hairline rules between
+   serif lines, the chosen one printed in full ink. */
 .food-type li {
     list-style-type: none;
     font-family: var(--font-display);
@@ -328,12 +417,29 @@
     font-weight: var(--fw-display-strong);
     margin-bottom: 10px;
     cursor: pointer;
+    padding: var(--space-2) 0;
+    border-bottom: var(--border-faint);
+    color: var(--text-muted);
     transition: color var(--trans-fast), padding-left var(--trans-fast);
+}
+
+.food-type li:last-child {
+    margin-bottom: var(--space-4);
+}
+
+.food-type li:has(input:checked) {
+    color: var(--espresso);
+    padding-left: var(--space-2);
+}
+
+.food-type li:has(input:focus-visible) {
+    outline: 2px solid var(--olive);
+    outline-offset: 3px;
 }
 
 .food-type li:hover {
     color: var(--accent-deep);
-    padding-left: 4px;
+    padding-left: var(--space-3);
 }
 
 .food-type input {
@@ -637,6 +743,11 @@
     .item {
         width: 26vw;
     }
+
+    .item-cards > .item:first-child {
+        width: 52vw;
+        max-width: 560px;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -661,6 +772,15 @@
         width: 92%;
         max-width: 420px;
         margin: 10px auto 18px;
+    }
+
+    .item-cards > .item:first-child {
+        width: 92%;
+        max-width: 460px;
+    }
+
+    .item-cards > .item:first-child .item-image {
+        height: 260px;
     }
 
     .item-image {

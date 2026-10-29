@@ -22,7 +22,7 @@
     margin-bottom: 6px;
 }
 
-/* Exhibit plaque above the headline */
+/* Exhibit plaque above each headline, numbered per row */
 .gallery h1::before {
     content: "Exhibition";
     display: block;
@@ -36,7 +36,27 @@
     margin-bottom: var(--space-2);
 }
 
-/* Carousel rows animated in marquee loops (see @keyframes spin) */
+.gallery > h1:nth-of-type(1)::before {
+    content: "Exhibition \00b7  I";
+}
+
+.gallery > h1:nth-of-type(2)::before {
+    content: "Exhibition \00b7  II";
+}
+
+.gallery > h1:nth-of-type(3)::before {
+    content: "Exhibition \00b7  III";
+}
+
+/* The room row hangs lower prints, for variation */
+.carousels.is-tall .carousel-item img {
+    height: 78vh;
+    width: 44vh;
+}
+
+/* Carousel rows animated in marquee loops (see @keyframes spin).
+   Rows drift at different speeds and directions so the corridor
+   never reads as three copies of the same strip. */
 .carousels {
     display: flex;
     overflow-x: hidden;
@@ -53,6 +73,21 @@
     display: flex;
     gap: 10px;
     animation: spin 22s infinite linear;
+}
+
+.carousels.is-slower .image-set {
+    animation-duration: 32s;
+}
+
+.carousels.is-reverse .image-set {
+    animation-direction: reverse;
+}
+
+/* Reading a caption shouldn't be a race — hover holds the row */
+@media (hover: hover) {
+    .carousels:hover .image-set {
+        animation-play-state: paused;
+    }
 }
 
 /* Carousel item cards — framed prints */

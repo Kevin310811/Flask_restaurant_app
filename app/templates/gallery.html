@@ -7,242 +7,295 @@
 {% endblock %}
 
 {% block content %}
-
+<main>
     <section class="gallery">
-        <h1>Our Best Moments</h1>
-        <div class="carousels">
+
+        <!-- Exhibition I — plates and bowls -->
+        <h1>On the Table</h1>
+        <div class="carousels is-slower">
             <div class="carousel">
                 <div class="image-set">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="A glazed seared chop with bright greens" loading="lazy">
+                        <p class="carousel-desc">Glazed from the pan, finished with bright greens.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="A grilled seafood plate with bread and drinks" loading="lazy">
+                        <p class="carousel-desc">The seafood plate, with a cold pour alongside.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="A bright bowl of fresh vegetables and tofu" loading="lazy">
+                        <p class="carousel-desc">A bowl with everything on it.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="Three small bowls on a long wooden table" loading="lazy">
+                        <p class="carousel-desc">Three small plates, one long table.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden="true">
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Glazed from the pan, finished with bright greens.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The seafood plate, with a cold pour alongside.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A bowl with everything on it.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Three small plates, one long table.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden="true">
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Glazed from the pan, finished with bright greens.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The seafood plate, with a cold pour alongside.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A bowl with everything on it.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Three small plates, one long table.</p>
+                    </div>
+                </div>
+                <div class="image-set" aria-hidden="true">
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/alex-munsell-Yr4n8O_3UPc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Glazed from the pan, finished with bright greens.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/davide-cantelli-jpkfc5_d-DI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The seafood plate, with a cold pour alongside.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/anh-nguyen-kcA-c3f_3FE-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A bowl with everything on it.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/lily-banse--YHSwy6uqvk-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Three small plates, one long table.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exhibition II — breads, sweets and drinks -->
+        <h1>Breads, Sweets &amp; Sips</h1>
+        <div class="carousels is-reverse">
+            <div class="carousel">
+                <div class="image-set">
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="A stack of blistered flatbreads on a plate" loading="lazy">
+                        <p class="carousel-desc">Blistered naan, straight off the griddle.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg') }}" alt="Warm naan in a lined basket" loading="lazy">
+                        <p class="carousel-desc">Pillow-soft, straight from the basket.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg') }}" alt="A stack of folded everyday rotis" loading="lazy">
+                        <p class="carousel-desc">A clean stack of everyday rotis.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/chai.jpg') }}" alt="A warm cup of masala chai" loading="lazy">
                         <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/lassi.jpg') }}" alt="A glass of mango lassi" loading="lazy">
                         <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/gulabjamun.jpg') }}" alt="Soft gulab jamun in syrup" loading="lazy">
                         <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/rasgulla.jpg') }}" alt="Spongy rasgulla in syrup" loading="lazy">
                         <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
                     </div>
                 </div>
-                <div class="image-set" aria-hidden>
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Blistered naan, straight off the griddle.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Pillow-soft, straight from the basket.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A clean stack of everyday rotis.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/chai.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/lassi.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/gulabjamun.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/rasgulla.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
                     </div>
                 </div>
-                <div class="image-set" aria-hidden>
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Blistered naan, straight off the griddle.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Pillow-soft, straight from the basket.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A clean stack of everyday rotis.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/chai.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/lassi.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/gulabjamun.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/rasgulla.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
                     </div>
                 </div>
-                <div class="image-set" aria-hidden>
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/ajeet-panesar-WrE3ruckrwI-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Blistered naan, straight off the griddle.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/yosuke-ota-lA3xO5pGctc-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Pillow-soft, straight from the basket.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/usman-yousaf-4GDW-Rt4BVQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A clean stack of everyday rotis.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='Images/opt/chai.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/lassi.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/gulabjamun.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
+                        <img src="{{ url_for('static', filename='Images/opt/rasgulla.jpg') }}" alt="" loading="lazy">
                         <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h1>Our Food</h1>
-        <div class="carousels">
+        <!-- Exhibition III — the room and its tables -->
+        <h1>Around the Table</h1>
+        <div class="carousels is-tall">
             <div class="carousel">
                 <div class="image-set">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="The restaurant dining room in evening light" loading="lazy">
+                        <p class="carousel-desc">Low light, laid tables, the room at its best.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/brooke-lark-M4E7X3z80PQ-unsplash.jpg') }}" alt="A marble board with strawberries, soft cheese, crackers and chutney" loading="lazy">
+                        <p class="carousel-desc">The side board: berries, cheese and something sweet.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/dan-gold-E6HjQaB7UEA-unsplash.jpg') }}" alt="Friends sharing burgers, fries and drinks, seen from above" loading="lazy">
+                        <p class="carousel-desc">A shared lunch, plates going round, no hurry.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
-                    </div>
-                </div>
-                <div class="image-set" aria-hidden>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="Leather banquettes against a tiled brass-lit wall" loading="lazy">
+                        <p class="carousel-desc">The banquette corner, waiting for you.</p>
                     </div>
                 </div>
-                <div class="image-set" aria-hidden>
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Low light, laid tables, the room at its best.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/brooke-lark-M4E7X3z80PQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The side board: berries, cheese and something sweet.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/dan-gold-E6HjQaB7UEA-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A shared lunch, plates going round, no hurry.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
-                    </div>
-                </div>
-                <div class="image-set" aria-hidden>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The banquette corner, waiting for you.</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <h1>Our Restaurant</h1>
-        <div class="carousels">
-            <div class="carousel">
-                <div class="image-set">
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Low light, laid tables, the room at its best.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/brooke-lark-M4E7X3z80PQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The side board: berries, cheese and something sweet.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/dan-gold-E6HjQaB7UEA-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A shared lunch, plates going round, no hurry.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The banquette corner, waiting for you.</p>
                     </div>
                 </div>
-                <div class="image-set" aria-hidden>
+                <div class="image-set" aria-hidden="true">
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/adrien-olichon-ZgREXhl8ER0-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">Low light, laid tables, the room at its best.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/brooke-lark-M4E7X3z80PQ-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The side board: berries, cheese and something sweet.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/dan-gold-E6HjQaB7UEA-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">A shared lunch, plates going round, no hurry.</p>
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
-                    </div>
-                </div>
-                <div class="image-set" aria-hidden>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
-                    </div>
-                </div>
-                <div class="image-set" aria-hidden>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/chai.jpg') }}" alt="">
-                        <p class="carousel-desc">A warm cup of masala chai to start your day.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/lassi.jpg') }}" alt="">
-                        <p class="carousel-desc">Refreshing mango lassi, made fresh daily.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/gulabjamun.jpg') }}" alt="">
-                        <p class="carousel-desc">Soft gulab jamun soaked in rose syrup.</p>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='Images/rasgulla.jpg') }}" alt="">
-                        <p class="carousel-desc">Light and spongy rasgulla, a Bengali classic.</p>
+                        <img src="{{ url_for('static', filename='Images/opt/piotr-szulawski-DCmUhk54F6M-unsplash.jpg') }}" alt="" loading="lazy">
+                        <p class="carousel-desc">The banquette corner, waiting for you.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+</main>
 
 {% endblock %}
 
