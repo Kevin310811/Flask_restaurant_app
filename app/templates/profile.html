@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}My Profile{% endblock %}
 
@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<main>
 <section class="profile-page">
 
     <!-- Profile Header -->
@@ -83,15 +84,15 @@
                         {% for item in order.items %}
                         <li>
                             <span>{{ item.title }} x{{ item.qty }}</span>
-                            <span>â‚¹{{ "%.2f"|format(item.price * item.qty) }}</span>
+                            <span>₹{{ "%.2f"|format(item.price * item.qty) }}</span>
                         </li>
                         {% endfor %}
                     </ul>
                     <div class="order-card-footer">
                         {% if order.tip > 0 %}
-                        <span class="order-tip">Tip: â‚¹{{ "%.2f"|format(order.tip) }}</span>
+                        <span class="order-tip">Tip: ₹{{ "%.2f"|format(order.tip) }}</span>
                         {% endif %}
-                        <span class="order-total">Total: â‚¹{{ "%.2f"|format(order.total) }}</span>
+                        <span class="order-total">Total: ₹{{ "%.2f"|format(order.total) }}</span>
                     </div>
                 </div>
                 {% endfor %}
@@ -103,5 +104,6 @@
     </div>
 
 </section>
+</main>
 {% endblock %}
 {% block footer %}{% endblock %}

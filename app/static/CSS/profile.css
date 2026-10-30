@@ -55,7 +55,7 @@
     font-size: var(--fs-xs);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
-    color: var(--text-faint);
+    color: var(--text-muted);
     opacity: 1;
 }
 
@@ -274,7 +274,7 @@
 .order-id-total {
     font-size: var(--fs-xs);
     font-weight: var(--fw-semibold);
-    color: var(--text-faint);
+    color: var(--text-muted);
     opacity: 1;
 }
 
@@ -282,7 +282,7 @@
     font-family: var(--font-heading);
     font-size: var(--fs-2xs);
     font-weight: var(--fw-semibold);
-    color: var(--text-faint);
+    color: var(--text-muted);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     margin: -6px 0 0;
@@ -292,7 +292,7 @@
 .order-date {
     font-family: var(--font-heading);
     font-size: var(--fs-xs);
-    color: var(--text-faint);
+    color: var(--text-muted);
     opacity: 1;
 }
 
@@ -326,7 +326,7 @@
 
 .order-status.void {
     background-color: rgba(48, 37, 31, 0.05);
-    color: var(--text-faint);
+    color: var(--text-muted);
     border: 1px solid var(--text-faint);
 }
 
@@ -359,7 +359,7 @@
 .order-tip {
     font-family: var(--font-heading);
     font-size: var(--fs-xs);
-    color: var(--text-faint);
+    color: var(--text-muted);
     opacity: 1;
 }
 
