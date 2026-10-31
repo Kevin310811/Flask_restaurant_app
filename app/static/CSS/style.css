@@ -228,6 +228,11 @@
     text-decoration-color: var(--accent-line);
     text-underline-offset: 4px;
     transition: color var(--trans-fast);
+    /* Roomier tap frame; negative margins keep line and paragraph flow
+       exactly as before. */
+    display: inline-block;
+    padding: 5px 0 6px;
+    margin: -5px 0 -6px;
 }
 
 @media (hover: hover) {

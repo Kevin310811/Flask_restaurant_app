@@ -254,7 +254,7 @@
 
     .tip-btn {
         font-size: var(--fs-2xs);
-        padding: var(--space-2) 14px;
+        padding: 11px 14px;
     }
 
     .tip-custom input {

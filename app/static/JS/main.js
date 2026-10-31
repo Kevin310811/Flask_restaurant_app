@@ -7,14 +7,59 @@ function getCsrfToken() {
     return document.querySelector('meta[name="csrf-token"]').content;
 }
 
+// Mobile drawer conveniences: Escape / scrim click / nav-link click close,
+// the trigger never opens the drawer, and a resize past the hamburger
+// breakpoint never leaves the drawer stuck open.
+(function () {
+    const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+    const backdrop = document.querySelector('.sidebar-backdrop');
+    const opener = document.getElementById('nav-open');
+    const closer = document.getElementById('nav-close');
+
+    if (opener) opener.addEventListener('click', e => e.preventDefault());
+    if (closer) closer.addEventListener('click', e => e.preventDefault());
+    if (backdrop) backdrop.addEventListener('click', hideSidebar);
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') hideSidebar();
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1224) hideSidebar();
+    });
+
+    sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', hideSidebar));
+})();
+
 function showSidebar() {
     const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.querySelector('.sidebar-backdrop');
+    const opener = document.getElementById('nav-open');
     sidebar.style.display = 'flex';
+    if (backdrop) backdrop.classList.add('is-open');
+    document.body.classList.add('noscroll');
+    if (opener) opener.setAttribute('aria-expanded', 'true');
+    const firstLink = sidebar.querySelector('a');
+    if (firstLink) firstLink.focus({ preventScroll: true });
 }
 
 function hideSidebar() {
     const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.querySelector('.sidebar-backdrop');
+    if (sidebar.style.display !== 'flex') return;
     sidebar.style.display = 'none';
+    if (backdrop) backdrop.classList.remove('is-open');
+    document.body.classList.remove('noscroll');
+    const opener = document.getElementById('nav-open');
+    if (opener) {
+        opener.setAttribute('aria-expanded', 'false');
+        // Return focus to the trigger only when the drawer held it
+        // (Escape / backdrop-close), not when a link navigates away.
+        if (sidebar.contains(document.activeElement)) {
+            opener.focus({ preventScroll: true });
+        }
+    }
 }
 
 const form = document.getElementById('form');

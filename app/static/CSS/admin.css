@@ -1664,6 +1664,16 @@ h1, h2, h3, h4 {
         padding: 10px 10px;
     }
 
+    /* Comfortable tap sizes for the small linked controls */
+    .admin-view-all {
+        display: inline-block;
+        padding: 8px 0;
+    }
+
+    .analytics-seg button {
+        padding: 11px 16px;
+    }
+
     /* Comfortable touch targets; >=15px keeps mobile Safari from
         zooming form fields on focus */
     .admin-btn,
@@ -1687,6 +1697,14 @@ h1, h2, h3, h4 {
         flex-direction: row;
         flex-wrap: wrap;
         width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Full-width KPI cards: at 320-344px the 2-col grid's content
+       minimum pushed past the right edge of the viewport. */
+    .admin-stats {
+        grid-template-columns: 1fr;
     }
 }
 

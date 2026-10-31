@@ -47,7 +47,9 @@
     font-size: var(--fs-sm);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
-    color: var(--text-faint);
+    /* --text-muted rather than --text-faint: the subtitle must clear
+       WCAG AA contrast on the chalk card (5.7:1 vs 3.0:1). */
+    color: var(--text-muted);
     margin: 0;
 }
 

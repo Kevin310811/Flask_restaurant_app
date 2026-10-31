@@ -377,6 +377,12 @@
     line-height: 1.7;
 }
 
+/* Confirm modal content never exceeds a narrow phone's width */
+.card-modal {
+    max-width: min(92vw, 480px);
+    box-sizing: border-box;
+}
+
 /* ================================================
    CONFIRM CARD MODAL (created by main.js inside
    .blur-filter)
@@ -437,6 +443,10 @@
 @media screen and (max-width: 1024px) {
     .reservation-form-wrapper {
         flex-direction: column;
+        /* The stacked wrapper kept flex-start, which shrank the form to
+           its inputs' content width (~130px) and left a huge void beside
+           it on tablets/phones. Stretch restores the desktop-width form. */
+        align-items: stretch;
     }
 
     .form-right {
